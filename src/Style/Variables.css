@@ -1,0 +1,9 @@
+:root{
+    --background-color: #F6F6F6;
+    --toolbar-height: 40px;
+    --toolbar-width: 40px;
+    --vertical-offset: 60px;
+    --btn-size: 25px;
+    --chat-width: 300px;
+    --chat-height: 500px;
+}

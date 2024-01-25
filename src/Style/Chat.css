@@ -1,0 +1,12 @@
+@import "./Variables.css";
+
+.chat{
+    width: var(--chat-width);
+    height: var(--chat-height);
+    border: 1px solid black;
+    background-color: white;
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    right: 0;
+}

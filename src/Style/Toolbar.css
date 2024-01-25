@@ -1,0 +1,40 @@
+@import "./Variables.css";
+
+.toolbar-w{
+    width: 100%;
+    height: var(--toolbar-height);
+    background-color: white;
+    border: 1px solid black;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.toolbar-h{
+    height: 90%;
+    width: var(--toolbar-width);
+    background-color: white;
+    border: 1px solid black;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    top: var(--vertical-offset);
+}
+
+.toolbar-btn{
+    width: var(--btn-size);
+    height: var(--btn-size);
+    cursor: pointer;
+    background-size: cover;
+    border: 1px solid black;
+    outline: none;
+}
+
+.brush{
+    background: url("../Images/brush.png") no-repeat center center;
+}
