@@ -38,3 +38,7 @@
 .brush{
     background: url("../Images/brush.png") no-repeat center center;
 }
+
+.eraser{
+    background: url("../Images/eraser.png");
+}
