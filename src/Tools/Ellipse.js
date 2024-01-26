@@ -1,28 +1,6 @@
-import Tool from "./Tool";
+import Circle from "./Circle";
 
-class Ellipse extends Tool{
-    constructor(canvas) {
-        super(canvas);
-        this.Listen();
-    }
-
-    Listen(){
-        this.canvas.onmouseup = this.MouseUpHandler.bind(this);
-        this.canvas.onmousedown = this.MouseDownHandler.bind(this);
-        this.canvas.onmousemove = this.MouseMoveHandler.bind(this);
-    }
-
-    MouseUpHandler(e){
-        this.isMouseDown = false;
-    }
-
-    MouseDownHandler(e){
-        this.isMouseDown = true;
-        this.ctx.beginPath();
-        this.xStart = e.pageX - e.target.offsetLeft;
-        this.yStart = e.pageY - e.target.offsetTop;
-        this.oldCanvas = this.canvas.toDataURL();
-    }
+class Ellipse extends Circle{
 
     MouseMoveHandler(e){
         if (this.isMouseDown){
