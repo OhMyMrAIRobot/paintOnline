@@ -6,6 +6,7 @@ import canvasState from "../Store/CanvasState";
 import Eraser from "../Tools/Eraser";
 import Rect from "../Tools/Rect";
 import Circle from "../Tools/Circle";
+import Ellipse from "../Tools/Ellipse";
 
 const HorToolbar = () => {
     return (
@@ -16,15 +17,16 @@ const HorToolbar = () => {
             </button>
 
             <button
-                className = "toolbar-btn brush"
+                className = "toolbar-btn "
                 onClick={() => toolState.setTool(new Brush(canvasState.canvas))}>
-
+                Brush
             </button>
 
             <button
-                className = "toolbar-btn eraser"
+                className = "toolbar-btn "
                 onClick={() => toolState.setTool(new Eraser(canvasState.canvas))}
             >
+                Eraser
             </button>
 
             <button
@@ -39,6 +41,13 @@ const HorToolbar = () => {
                 onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
             >
                 Circle
+            </button>
+
+            <button
+                className = "toolbar-btn "
+                onClick={() => toolState.setTool(new Ellipse(canvasState.canvas))}
+            >
+                Ellipse
             </button>
         </div>
     );
