@@ -7,6 +7,7 @@ import Eraser from "../Tools/Eraser";
 import Rect from "../Tools/Rect";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
+import Square from "../Tools/Square";
 
 const HorToolbar = () => {
     return (
@@ -38,6 +39,13 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn "
+                onClick={() => toolState.setTool(new Square(canvasState.canvas))}
+            >
+                Square
+            </button>
+
+            <button
+                className = "toolbar-btn "
                 onClick={() => toolState.setTool(new Circle(canvasState.canvas))}
             >
                 Circle
@@ -49,6 +57,8 @@ const HorToolbar = () => {
             >
                 Ellipse
             </button>
+
+
         </div>
     );
 };
