@@ -1,6 +1,6 @@
 import Tool from "./Tool";
 
-class Rect extends Tool{
+class Circle extends Tool{
     constructor(canvas) {
         super(canvas);
         this.Listen();
@@ -12,11 +12,11 @@ class Rect extends Tool{
         this.canvas.onmousemove = this.MouseMoveHandler.bind(this);
     }
 
-    MouseUpHandler(e) {
+    MouseUpHandler(e){
         this.isMouseDown = false;
     }
 
-    MouseDownHandler(e) {
+    MouseDownHandler(e){
         this.isMouseDown = true;
         this.ctx.beginPath();
         this.xStart = e.pageX - e.target.offsetLeft;
@@ -24,28 +24,29 @@ class Rect extends Tool{
         this.oldCanvas = this.canvas.toDataURL();
     }
 
-    MouseMoveHandler(e) {
+    MouseMoveHandler(e){
         if (this.isMouseDown){
             let x = e.pageX - e.target.offsetLeft;
             let y = e.pageY - e.target.offsetTop;
-            this.height = y - this.yStart;
-            this.width = x - this.xStart;
-            this.Draw(this.xStart, this.yStart,this.width,this.height);
+            let width = x - this.xStart;
+            let height = y - this.yStart;
+            let radius = Math.sqrt(width*width + height*height);
+            this.Draw(this.xStart, this.yStart, radius);
         }
     }
 
-    Draw(x, y, w, h) {
+    Draw(x, y, r){
         const img = new Image();
         img.src = this.oldCanvas;
         img.onload = () => {
-            this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(img, 0 ,0, this.canvas.width, this.canvas.height);
             this.ctx.beginPath();
+            this.ctx.arc(x, y, r, 0, 2 * Math.PI);
             this.ctx.strokeStyle = "black";
-            this.ctx.rect(x,y,w,h);
             this.ctx.stroke();
         }
     }
 }
 
-export default Rect;
+export default Circle;
