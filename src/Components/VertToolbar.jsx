@@ -4,6 +4,7 @@ import toolState from "../Store/ToolState";
 import Brush from "../Tools/Brush";
 import canvasState from "../Store/CanvasState";
 import Eraser from "../Tools/Eraser";
+import Rect from "../Tools/Rect";
 
 const HorToolbar = () => {
     return (
@@ -25,7 +26,11 @@ const HorToolbar = () => {
             >
             </button>
 
-            <button className = "toolbar-btn "></button>
+            <button
+                className = "toolbar-btn "
+                onClick={() => toolState.setTool(new Rect(canvasState.canvas))}
+            >
+            </button>
         </div>
     );
 };
