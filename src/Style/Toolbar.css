@@ -20,8 +20,6 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 20px;
     align-items: center;
     top: var(--vertical-offset);
 }
@@ -33,6 +31,7 @@
     background-size: cover;
     border: 1px solid black;
     outline: none;
+    margin-top: 20px;
 }
 
 .brush{
@@ -41,4 +40,12 @@
 
 .eraser{
     background: url("../Images/eraser.png");
+}
+
+.next{
+    margin-top: auto;
+}
+
+.save{
+    margin-bottom: 20px;
 }

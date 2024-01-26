@@ -10,6 +10,7 @@ import Ellipse from "../Tools/Ellipse";
 import Square from "../Tools/Square";
 import Pointer from "../Tools/Pointer";
 import Line from "../Tools/Line";
+import Text from "../Tools/Text"
 
 const HorToolbar = () => {
     return (
@@ -66,6 +67,34 @@ const HorToolbar = () => {
                 onClick={() => toolState.setTool(new Ellipse(canvasState.canvas))}
             >
                 Ellipse
+            </button>
+
+            <button
+                className = "toolbar-btn "
+                onClick={() => toolState.setTool(new Text(canvasState.canvas))}
+            >
+                Text
+            </button>
+
+            <button
+                className = "toolbar-btn next"
+
+            >
+                Next
+            </button>
+
+            <button
+                className = "toolbar-btn "
+
+            >
+                Prev
+            </button>
+
+            <button
+                className = "toolbar-btn save"
+
+            >
+                Save
             </button>
 
 
