@@ -12,6 +12,7 @@ const App = () => {
             <HorToolbar />
             <VertToolbar/>
             {/*<Chat />*/}
+            <input id = 'test'/>
             <Canvas />
         </div>
     )

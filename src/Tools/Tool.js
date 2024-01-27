@@ -2,7 +2,7 @@ class Tool{
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
-        this.Destroy();
+        this.Clear();
     }
 
     set fillColor(color) {
@@ -20,10 +20,11 @@ class Tool{
         this.ctx.font = font;
     }
 
-    Destroy() {
+    Clear() {
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;
         this.canvas.onmousedown = null;
+        // document.getElementById('test').style.display = 'none';
     }
 }
 

@@ -5,12 +5,9 @@ class Text extends Tool {
     constructor(canvas) {
         super(canvas);
 
-        this.textInput = document.createElement('input');
-        this.textInput.type = 'text';
+        this.textInput = document.getElementById('test');
         this.textInput.style.position = 'absolute';
         this.textInput.style.display = 'none';
-        document.body.appendChild(this.textInput);
-
         this.Listen();
     }
 
@@ -18,6 +15,7 @@ class Text extends Tool {
         this.canvas.onmousedown = this.MouseDownHandler.bind(this);
         this.textInput.addEventListener('blur', this.TextInputBlurHandler.bind(this));
         toolState.setFillColor("#000000");
+        document.addEventListener('mousedown', this.MouseClickHandler.bind(this));
     }
 
     MouseDownHandler(e) {
@@ -31,6 +29,12 @@ class Text extends Tool {
         this.textInput.value = '';
         this.textInput.focus();
         this.textInput.addEventListener('keydown', this.TextInputKeydownHandler.bind(this));
+    }
+
+    MouseClickHandler(e){
+        if (!this.canvas.contains(e.target) && e.target !== this.textInput) {
+            this.textInput.style.display = 'none';
+        }
     }
 
     TextInputKeydownHandler(e) {
