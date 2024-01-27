@@ -16,8 +16,8 @@ class Tool{
         this.ctx.lineWidth = width
     }
 
-    set font(size){
-        this.ctx.font = `${size}px Arial`;
+    set font(font){
+        this.ctx.font = font;
     }
 
     Destroy() {

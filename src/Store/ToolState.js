@@ -22,8 +22,8 @@ class ToolState {
         this.tool.lineWidth = width
     }
 
-    setFont(size){
-        this.tool.font = `${size}px Arial`;
+    setFont(font){
+        this.tool.font = font;
     }
 
 }
