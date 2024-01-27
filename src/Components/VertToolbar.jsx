@@ -11,9 +11,20 @@ import Square from "../Tools/Square";
 import Pointer from "../Tools/Pointer";
 import Line from "../Tools/Line";
 import Text from "../Tools/Text"
-import canvas from "./Canvas";
 
 const HorToolbar = () => {
+
+    const download = () => {
+        const dataUrl = canvasState.canvas.toDataURL()
+        console.log(dataUrl)
+        const a = document.createElement('a')
+        a.href = dataUrl
+        a.download = "myCanvas.jpg"
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+    }
+
     return (
         <div className = "toolbar-h">
 
@@ -93,7 +104,7 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn save"
-
+                onClick={() => download()}
             >
                 Save
             </button>
