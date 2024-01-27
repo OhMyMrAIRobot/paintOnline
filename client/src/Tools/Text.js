@@ -1,5 +1,4 @@
 import Tool from "./Tool";
-import toolState from "../Store/ToolState";
 
 class Text extends Tool {
     constructor(canvas) {
@@ -14,7 +13,6 @@ class Text extends Tool {
     Listen() {
         this.canvas.onmousedown = this.MouseDownHandler.bind(this);
         this.textInput.addEventListener('blur', this.TextInputBlurHandler.bind(this));
-        toolState.setFillColor("#000000");
         document.addEventListener('mousedown', this.MouseClickHandler.bind(this));
     }
 
