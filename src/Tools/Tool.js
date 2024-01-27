@@ -16,6 +16,10 @@ class Tool{
         this.ctx.lineWidth = width
     }
 
+    set font(size){
+        this.ctx.font = `${size}px Arial`;
+    }
+
     Destroy() {
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;

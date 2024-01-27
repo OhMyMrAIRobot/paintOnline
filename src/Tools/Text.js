@@ -1,4 +1,5 @@
 import Tool from "./Tool";
+import toolState from "../Store/ToolState";
 
 class Text extends Tool {
     constructor(canvas) {
@@ -16,6 +17,7 @@ class Text extends Tool {
     Listen() {
         this.canvas.onmousedown = this.MouseDownHandler.bind(this);
         this.textInput.addEventListener('blur', this.TextInputBlurHandler.bind(this));
+        toolState.setFillColor("#000000");
     }
 
     MouseDownHandler(e) {
@@ -26,7 +28,6 @@ class Text extends Tool {
         this.textInput.style.left = `${e.pageX}px`;
         this.textInput.style.top = `${e.pageY}px`;
         this.textInput.style.display = 'inline-block';
-        console.log(1);
         this.textInput.value = '';
         this.textInput.focus();
         this.textInput.addEventListener('keydown', this.TextInputKeydownHandler.bind(this));
@@ -48,8 +49,8 @@ class Text extends Tool {
     }
 
     Draw(x, y, text) {
-        this.ctx.font = '16px Arial';
         this.ctx.fillText(text, x, y);
+        console.log(this.ctx.font);
     }
 }
 

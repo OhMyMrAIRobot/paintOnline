@@ -15,6 +15,7 @@ const Canvas = observer(() => {
         toolState.setFillColor("#FFFFFF");
         toolState.setStrokeColor("#000000");
         toolState.setLineWidth(1);
+        toolState.setFont(16);
     }, []);
 
     return (

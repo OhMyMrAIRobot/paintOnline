@@ -24,6 +24,14 @@ const HorToolbar = () => {
                 defaultValue = "#FFFFFF"
                 onChange={e => toolState.setFillColor(e.target.value)}
             />
+
+            <input
+                type = "number"
+                min = {1}
+                max = {50}
+                defaultValue={16}
+                onChange={e => toolState.setFont(e.target.value)}
+            />
         </div>
     );
 };

@@ -6,9 +6,11 @@ class Eraser extends Brush{
     }
 
     Draw(x,y) {
+        let tmp = this.ctx.strokeStyle;
         this.ctx.strokeStyle = "white";
         this.ctx.lineTo(x,y);
         this.ctx.stroke();
+        this.ctx.strokeStyle = tmp;
     }
 }
 
