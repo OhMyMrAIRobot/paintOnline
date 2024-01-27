@@ -11,7 +11,7 @@ const App = () => {
         <div className = "app">
             <HorToolbar />
             <VertToolbar/>
-            <Chat />
+            {/*<Chat />*/}
             <Canvas />
         </div>
     )

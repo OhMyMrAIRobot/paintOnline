@@ -19,10 +19,10 @@ class Square extends Rect{
             this.ctx.clearRect(0,0,this.canvas.width, this.canvas.width);
             this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
             this.ctx.beginPath();
-            this.ctx.strokeStyle = "black";
             w /= Math.sqrt(2);
             this.ctx.rect(x,y,w,w);
             this.ctx.stroke();
+            this.ctx.fill();
         }
     }
 }

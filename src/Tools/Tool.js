@@ -5,6 +5,17 @@ class Tool{
         this.Destroy();
     }
 
+    set fillColor(color) {
+        this.ctx.fillStyle = color
+    }
+    set strokeColor(color) {
+        this.ctx.strokeStyle = color
+    }
+
+    set lineWidth(width) {
+        this.ctx.lineWidth = width
+    }
+
     Destroy() {
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;

@@ -20,8 +20,8 @@ class Ellipse extends Circle{
             this.ctx.drawImage(img, 0 ,0, this.canvas.width, this.canvas.height);
             this.ctx.beginPath();
             this.ctx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI);
-            this.ctx.strokeStyle = "black";
             this.ctx.stroke();
+            this.ctx.fill();
         }
     }
 }

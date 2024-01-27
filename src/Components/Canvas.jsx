@@ -11,14 +11,17 @@ const Canvas = observer(() => {
 
     useEffect(() => {
         canvasState.setCanvas(CanvasRef.current);
-      //  toolState.setTool(new brush(CanvasRef.current))
+        toolState.setTool(new brush(CanvasRef.current))
+        toolState.setFillColor("#FFFFFF");
+        toolState.setStrokeColor("#000000");
+        toolState.setLineWidth(1);
     }, []);
 
     return (
         <div className = "canvas">
             <canvas
-                height = '400'
-                width = '600'
+                height = {window.innerHeight - 100}
+                width = {window.innerWidth - 100}
                 ref = {CanvasRef}
             >
             </canvas>
