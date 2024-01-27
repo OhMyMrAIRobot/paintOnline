@@ -50,7 +50,6 @@ class Text extends Tool {
 
     Draw(x, y, text) {
         this.ctx.fillText(text, x, y);
-        console.log(this.ctx.font);
     }
 }
 

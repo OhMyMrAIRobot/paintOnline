@@ -18,12 +18,17 @@ const Canvas = observer(() => {
         toolState.setFont("16px Arial");
     }, []);
 
+    const MouseDownHandler = () => {
+        canvasState.pushToUndo(CanvasRef.current.toDataURL())
+    }
+
     return (
         <div className = "canvas">
             <canvas
                 height = {window.innerHeight - 100}
                 width = {window.innerWidth - 100}
                 ref = {CanvasRef}
+                onMouseDown={() => MouseDownHandler()}
             >
             </canvas>
         </div>

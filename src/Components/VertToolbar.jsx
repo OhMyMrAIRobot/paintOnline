@@ -11,6 +11,7 @@ import Square from "../Tools/Square";
 import Pointer from "../Tools/Pointer";
 import Line from "../Tools/Line";
 import Text from "../Tools/Text"
+import canvas from "./Canvas";
 
 const HorToolbar = () => {
     return (
@@ -78,14 +79,14 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn next"
-
+                onClick={() => canvasState.reUndo()}
             >
                 Next
             </button>
 
             <button
                 className = "toolbar-btn "
-
+                onClick={() => canvasState.undo()}
             >
                 Prev
             </button>
