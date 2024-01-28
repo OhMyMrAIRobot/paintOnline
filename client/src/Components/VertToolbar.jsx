@@ -62,7 +62,7 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn "
-                onClick={() => toolState.setTool(new Square(canvasState.canvas))}
+                onClick={() => toolState.setTool(new Square(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Square
             </button>

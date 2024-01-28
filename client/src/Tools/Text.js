@@ -51,6 +51,7 @@ class Text extends Tool {
     }
 
     Draw(x, y, text) {
+        this.ctx.beginPath();
         this.ctx.fillText(text, x, y);
     }
 }

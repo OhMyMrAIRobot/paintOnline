@@ -4,12 +4,11 @@ import toolState from "../Store/ToolState";
 
 const HorToolbar = () => {
 
-    let font = "Arial";
-    let size = 16;
+    const fontSizeRef = useRef();
+    const fontFamilyRef = useRef();
 
     const ChangeFont = (e) => {
-        let tmp = `${size}px ${font}`;
-        toolState.setFont(tmp);
+        toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);
     }
 
     return (
@@ -35,20 +34,20 @@ const HorToolbar = () => {
             />
 
             <input
+                ref = {fontSizeRef}
                 type = "number"
                 min = {1}
                 max = {50}
                 defaultValue={16}
                 onChange={e => {
-                    size = e.target.value;
                     ChangeFont(e)
                     }
                 }
             />
 
             <select
+                ref={fontFamilyRef}
                 onChange={e => {
-                    font = e.target.value;
                     ChangeFont(e)
                     }
                 }

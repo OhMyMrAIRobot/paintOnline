@@ -67,7 +67,7 @@ class Rect extends Tool{
         let oldStrokeWidth = ctx.lineWidth;
         let oldStrokeColor = ctx.strokeStyle;
         let oldFillColor = ctx.fillStyle;
-        console.log(oldFillColor);
+
         ctx.beginPath();
         ctx.strokeStyle = strokeColor;
         ctx.fillStyle = fillColor;

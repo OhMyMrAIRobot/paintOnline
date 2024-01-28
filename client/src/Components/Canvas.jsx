@@ -9,6 +9,7 @@ import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
 import Line from "../Tools/Line";
 import Rect from "../Tools/Rect";
+import Square from "../Tools/Square";
 
 const Canvas = observer(() => {
 
@@ -77,6 +78,9 @@ const Canvas = observer(() => {
                 break;
             case "rectangle":
                 Rect.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.strokeColor, figure.fillColor, figure.lineWidth);
+                break;
+            case "square":
+                Square.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.strokeColor, figure.fillColor, figure.lineWidth);
                 break;
             case 'finish':
                 ctx.beginPath();
