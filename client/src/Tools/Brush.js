@@ -38,8 +38,8 @@ class Brush extends Tool {
                     type: 'brush',
                     x: e.pageX - e.target.offsetLeft,
                     y: e.pageY - e.target.offsetTop,
-                    color: this.ctx.strokeStyle,
-                    width: this.ctx.lineWidth,
+                    strokeColor: this.ctx.strokeStyle,
+                    lineWidth: this.ctx.lineWidth,
                 }
             }))
         }

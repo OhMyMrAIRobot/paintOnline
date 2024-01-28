@@ -7,6 +7,7 @@ import brush from "../Tools/Brush";
 import {useParams} from "react-router-dom";
 import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
+import Line from "../Tools/Line";
 
 const Canvas = observer(() => {
 
@@ -63,10 +64,13 @@ const Canvas = observer(() => {
         const ctx = CanvasRef.current.getContext('2d');
         switch (figure.type){
             case "brush":
-                Brush.Draw(ctx, figure.x, figure.y, figure.color,figure.width);
+                Brush.Draw(ctx, figure.x, figure.y, figure.strokeColor,figure.lineWidth);
                 break;
             case "eraser":
-                Eraser.Draw(ctx, figure.x, figure.y, figure.width);
+                Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth);
+                break;
+            case "line":
+                Line.StaticDraw(ctx, figure.Xs, figure.Ys, figure.Xf, figure.Yf, figure.lineWidth, figure.strokeColor);
                 break;
             case 'finish':
                 ctx.beginPath();

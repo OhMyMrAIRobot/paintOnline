@@ -14,7 +14,7 @@ class Eraser extends Brush{
                     type: 'eraser',
                     x: e.pageX - e.target.offsetLeft,
                     y: e.pageY - e.target.offsetTop,
-                    width: this.ctx.lineWidth,
+                    lineWidth: this.ctx.lineWidth,
                 }
             }))
         }
