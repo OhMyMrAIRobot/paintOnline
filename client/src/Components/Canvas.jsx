@@ -19,60 +19,50 @@ const Canvas = observer(() => {
     const CanvasRef = useRef();
     const UsernameRef = useRef();
     const navigate = useNavigate()
-    const socket = new WebSocket(`ws://localhost:3000/`);
+    const socket = useRef()
 
     useEffect(() => {
         let id = params.id
-        socket.onopen = () => {
-        socket.send(JSON.stringify({
-            id: id,
-            method: "join"
-        }))}
+        socket.current = new WebSocket(`ws://localhost:3000/`);
 
-        socket.onmessage = (event) => {
+        socket.current.onopen = () => {
+            socket.current.send(JSON.stringify({
+                id: id,
+                method: "join"
+            }))
+        }
+
+        socket.current.onmessage = (event) => {
             let msg = JSON.parse(event.data);
             switch (msg.method){
                 case 'checkRoom':
                     if (!msg.connect)
                         navigate(`/`)
-                    break;
             }
         }
 
         canvasState.setCanvas(CanvasRef.current);
     }, []);
 
-    const MouseDownHandler = () => {
-        canvasState.pushToUndo(CanvasRef.current.toDataURL())
-    }
-
-    const connectionHandler = () => {
-        canvasState.setUsername(UsernameRef.current.value)
-    }
-
-
-
     useEffect(() => {
         if (canvasState.username){
 
-            canvasState.setSocket(socket);
+            canvasState.setSocket(socket.current);
             canvasState.setSession(params.id);
 
-            toolState.setTool(new brush(CanvasRef.current, socket, params.id));
+            toolState.setTool(new brush(CanvasRef.current, socket.current, params.id));
             toolState.setFillColor("#FFFFFF");
             toolState.setStrokeColor("#000000");
             toolState.setLineWidth(1);
             toolState.setFont("16px Arial");
 
-            socket.onopen = () => {
-                socket.send(JSON.stringify({
-                    id:params.id,
-                    username: canvasState.username,
-                    method: "connection"
-                }))
-            }
+            socket.current.send(JSON.stringify({
+                id:params.id,
+                username: canvasState.username,
+                method: "connection"
+            }))
 
-            socket.onmessage = (event) => {
+            socket.current.onmessage = (event) => {
                 let msg = JSON.parse(event.data);
                 switch (msg.method){
                     case 'connection':
@@ -88,6 +78,14 @@ const Canvas = observer(() => {
             }
         }
     }, [canvasState.username])
+
+    const MouseDownHandler = () => {
+        canvasState.pushToUndo(CanvasRef.current.toDataURL())
+    }
+
+    const connectionHandler = () => {
+        canvasState.setUsername(UsernameRef.current.value)
+    }
 
     const drawHandler = (msg) => {
         const figure = msg.figure;
@@ -129,7 +127,6 @@ const Canvas = observer(() => {
                 break;
         }
     }
-
 
     return (
         <div className = "canvas">

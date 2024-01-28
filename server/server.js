@@ -31,22 +31,16 @@ let RoomsArr = [];
 
 const createRoomHandler = (ws, msg) => {
     RoomsArr.push(JSON.stringify(msg.id));
-    console.log(RoomsArr);
 }
 
 const joinHandler = (ws, msg) => {
     let id = JSON.stringify(msg.id)
-    console.log(id);
-        if (RoomsArr.includes(id))
-            ws.send(JSON.stringify({
-                method: 'checkRoom',
-                connect: true,
-            }))
-        else
-            ws.send(JSON.stringify({
-                method: 'checkRoom',
-                connect: false,
-            }))
+
+    ws.send(JSON.stringify({
+        method: 'checkRoom',
+        connect: RoomsArr.includes(id),
+    }))
+
 }
 
 const connectionHandler = (ws, msg) => {

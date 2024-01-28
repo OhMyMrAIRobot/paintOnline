@@ -1,21 +1,25 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import "../Style/Mainpage.css"
 import {useNavigate} from "react-router-dom";
 
 
 const MainPage = () => {
-    const socket = new WebSocket(`ws://localhost:3000/`);
+    const socket = useRef()
     const inputRef = useRef()
     const navigate = useNavigate();
+
+    useEffect(() => {
+        socket.current = new WebSocket(`ws://localhost:3000/`);
+    }, []);
 
     const jumpToRoom = (id) => {
         navigate(`/${id}`);
     }
 
     const CreateRoomHandler = () => {
-        let id = (+new Date).toString(16)
+        let id = (+ new Date).toString(16)
         jumpToRoom(id);
-            socket.send(JSON.stringify({
+            socket.current.send(JSON.stringify({
                 id: id,
                 method: "createRoom"
             }))
@@ -23,12 +27,12 @@ const MainPage = () => {
 
     const JoinRoomHandler = () => {
         let id = inputRef.current.value;
-        socket.send(JSON.stringify({
+        socket.current.send(JSON.stringify({
             id: id,
             method: "join"
         }))
 
-        socket.onmessage = (event) => {
+        socket.current.onmessage = (event) => {
             let msg = JSON.parse(event.data);
             switch (msg.method){
                 case 'checkRoom':
