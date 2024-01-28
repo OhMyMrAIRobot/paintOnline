@@ -11,6 +11,7 @@ import Line from "../Tools/Line";
 import Rect from "../Tools/Rect";
 import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
+import Ellipse from "../Tools/Ellipse";
 
 const Canvas = observer(() => {
 
@@ -88,6 +89,10 @@ const Canvas = observer(() => {
                 break;
             case "circle":
                 Circle.StaticDraw(ctx, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor, figure.lineWidth);
+                ctx.beginPath();
+                break;
+            case "ellipse":
+                Ellipse.StaticDraw(ctx, figure.x, figure.y, figure.rx, figure.ry, figure.strokeColor, figure.fillColor, figure.lineWidth);
                 ctx.beginPath();
                 break;
             case 'finish':
