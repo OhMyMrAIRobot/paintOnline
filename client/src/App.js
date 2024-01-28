@@ -1,29 +1,16 @@
 import React from 'react'
 import './Style/App.css'
-import Canvas from "./Components/Canvas";
-import HorToolbar from "./Components/HorToolbar";
-import VertToolbar from "./Components/VertToolbar";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
+import MainPage from "./Pages/MainPage";
+import CanvasPage from "./Pages/CanvasPage";
 
 const App = () => {
     return(
         <BrowserRouter>
             <div className = "app">
                 <Routes>
-                    <Route path = '/:id' element={
-                        <>
-                        <HorToolbar />
-                        <VertToolbar/>
-                        <input id = 'test'/>
-                        <Canvas />
-                        </>
-                    }
-                    />
-                    <Route path = '/' element={
-                        <>
-                            hello
-                        </>
-                    }/>
+                    <Route path = '/:id' element={<CanvasPage/>}/>
+                    <Route path = '/' element={<MainPage/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

@@ -15,11 +15,39 @@ app.ws('/', (ws,req) => {
             case 'draw':
                 connectionHandler(ws, msg);
                 break;
+            case 'createRoom':
+                createRoomHandler(ws, msg);
+                break;
+            case 'join':
+                joinHandler(ws, msg);
+                break;
         }
     })
 })
 
 app.listen(PORT, () => console.log(`serv is working on ${PORT}`))
+
+let RoomsArr = [];
+
+const createRoomHandler = (ws, msg) => {
+    RoomsArr.push(JSON.stringify(msg.id));
+    console.log(RoomsArr);
+}
+
+const joinHandler = (ws, msg) => {
+    let id = JSON.stringify(msg.id)
+    console.log(id);
+        if (RoomsArr.includes(id))
+            ws.send(JSON.stringify({
+                method: 'checkRoom',
+                connect: true,
+            }))
+        else
+            ws.send(JSON.stringify({
+                method: 'checkRoom',
+                connect: false,
+            }))
+}
 
 const connectionHandler = (ws, msg) => {
     ws.id = msg.id;

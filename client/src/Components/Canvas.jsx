@@ -4,7 +4,7 @@ import {observer} from "mobx-react-lite";
 import canvasState from "../Store/CanvasState";
 import toolState from "../Store/ToolState";
 import brush from "../Tools/Brush";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
 import Line from "../Tools/Line";
@@ -15,11 +15,30 @@ import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
 
 const Canvas = observer(() => {
-
+    const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
+    const navigate = useNavigate()
+    const socket = new WebSocket(`ws://localhost:3000/`);
 
     useEffect(() => {
+        let id = params.id
+        socket.onopen = () => {
+        socket.send(JSON.stringify({
+            id: id,
+            method: "join"
+        }))}
+
+        socket.onmessage = (event) => {
+            let msg = JSON.parse(event.data);
+            switch (msg.method){
+                case 'checkRoom':
+                    if (!msg.connect)
+                        navigate(`/`)
+                    break;
+            }
+        }
+
         canvasState.setCanvas(CanvasRef.current);
     }, []);
 
@@ -31,11 +50,11 @@ const Canvas = observer(() => {
         canvasState.setUsername(UsernameRef.current.value)
     }
 
-    const params = useParams();
+
 
     useEffect(() => {
         if (canvasState.username){
-            const socket = new WebSocket(`ws://localhost:3000/`);
+
             canvasState.setSocket(socket);
             canvasState.setSession(params.id);
 
@@ -52,6 +71,7 @@ const Canvas = observer(() => {
                     method: "connection"
                 }))
             }
+
             socket.onmessage = (event) => {
                 let msg = JSON.parse(event.data);
                 switch (msg.method){
@@ -60,6 +80,7 @@ const Canvas = observer(() => {
                         break;
                     case 'draw':
                         drawHandler(msg);
+
                         break;
                     default:
                         break;
