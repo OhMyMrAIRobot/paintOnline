@@ -21,6 +21,12 @@ app.ws('/', (ws,req) => {
             case 'join':
                 joinHandler(ws, msg);
                 break;
+            case 'pushUndo':
+                pushToUndoHandler(ws,msg);
+                break;
+            case 'undo':
+                undoHandler(ws,msg);
+                break;
         }
     })
 })
@@ -28,6 +34,23 @@ app.ws('/', (ws,req) => {
 app.listen(PORT, () => console.log(`serv is working on ${PORT}`))
 
 let RoomsArr = [];
+
+const pushToUndoHandler = (ws,msg) => {
+    aWss.clients.forEach(client => {
+        if (client.id === msg.id){
+            client.send(JSON.stringify(msg))
+        }
+    })
+}
+
+const undoHandler = (ws,msg) => {
+    console.log(msg.method)
+    aWss.clients.forEach(client => {
+        if (client.id === msg.id){
+            client.send(JSON.stringify(msg))
+        }
+    })
+}
 
 const createRoomHandler = (ws, msg) => {
     RoomsArr.push(JSON.stringify(msg.id));

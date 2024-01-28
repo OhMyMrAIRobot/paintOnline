@@ -70,7 +70,12 @@ const Canvas = observer(() => {
                         break;
                     case 'draw':
                         drawHandler(msg);
-
+                        break;
+                    case 'pushUndo':
+                        canvasState.pushToUndo(msg.data)
+                        break;
+                    case 'undo':
+                        canvasState.undo();
                         break;
                     default:
                         break;
@@ -80,7 +85,12 @@ const Canvas = observer(() => {
     }, [canvasState.username])
 
     const MouseDownHandler = () => {
-        canvasState.pushToUndo(CanvasRef.current.toDataURL())
+        // canvasState.pushToUndo(CanvasRef.current.toDataURL())
+        socket.current.send(JSON.stringify({
+            id: params.id,
+            method: 'pushUndo',
+            data: CanvasRef.current.toDataURL(),
+        }))
     }
 
     const connectionHandler = () => {

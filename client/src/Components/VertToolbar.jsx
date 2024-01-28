@@ -97,7 +97,12 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn "
-                onClick={() => canvasState.undo()}
+                onClick={(e) => {
+                    canvasState.socket.send(JSON.stringify({
+                        id: canvasState.session,
+                        method: 'undo',
+                    }))
+                }}
             >
                 Prev
             </button>
