@@ -12,6 +12,7 @@ import Rect from "../Tools/Rect";
 import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
+import Text from "../Tools/Text"
 
 const Canvas = observer(() => {
 
@@ -60,6 +61,8 @@ const Canvas = observer(() => {
                     case 'draw':
                         drawHandler(msg);
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -95,8 +98,13 @@ const Canvas = observer(() => {
                 Ellipse.StaticDraw(ctx, figure.x, figure.y, figure.rx, figure.ry, figure.strokeColor, figure.fillColor, figure.lineWidth);
                 ctx.beginPath();
                 break;
+            case "text":
+                Text.Draw(ctx, figure.x, figure.y, figure.text, figure.font,figure.fillColor);
+                break;
             case 'finish':
                 ctx.beginPath();
+                break;
+            default:
                 break;
         }
     }

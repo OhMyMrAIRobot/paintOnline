@@ -1,8 +1,8 @@
 import Tool from "./Tool";
 
 class Text extends Tool {
-    constructor(canvas) {
-        super(canvas);
+    constructor(canvas, socket, id) {
+        super(canvas, socket, id);
 
         this.textInput = document.getElementById('test');
         this.textInput.style.position = 'absolute';
@@ -46,13 +46,32 @@ class Text extends Tool {
         const text = this.textInput.value;
         this.textInput.removeEventListener('keydown', this.TextInputKeydownHandler);
         if (text.trim() !== '') {
-            this.Draw(this.xStart, this.yStart, text);
+            this.socket.send(JSON.stringify({
+                method: 'draw',
+                id: this.id,
+                figure: {
+                    type: 'text',
+                    x: this.xStart,
+                    y: this.yStart,
+                    text: text,
+                    font: this.ctx.font,
+                    fillColor: this.ctx.fillStyle,
+                }
+            }))
         }
     }
 
-    Draw(x, y, text) {
-        this.ctx.beginPath();
-        this.ctx.fillText(text, x, y);
+    static Draw(ctx, x, y, text, font, fillColor) {
+        let oldFont = ctx.font;
+        let oldFillColor = ctx.fillStyle;
+
+        ctx.font = font;
+        ctx.fillStyle = fillColor;
+        ctx.beginPath();
+        ctx.fillText(text, x, y);
+
+        ctx.font = oldFont;
+        ctx.fillStyle = oldFillColor;
     }
 }
 
