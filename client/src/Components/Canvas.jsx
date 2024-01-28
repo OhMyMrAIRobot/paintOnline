@@ -6,6 +6,7 @@ import toolState from "../Store/ToolState";
 import brush from "../Tools/Brush";
 import {useParams} from "react-router-dom";
 import Brush from "../Tools/Brush";
+import Eraser from "../Tools/Eraser";
 
 const Canvas = observer(() => {
 
@@ -63,6 +64,9 @@ const Canvas = observer(() => {
         switch (figure.type){
             case "brush":
                 Brush.Draw(ctx, figure.x, figure.y, figure.color,figure.width);
+                break;
+            case "eraser":
+                Eraser.Draw(ctx, figure.x, figure.y, figure.width);
                 break;
             case 'finish':
                 ctx.beginPath();

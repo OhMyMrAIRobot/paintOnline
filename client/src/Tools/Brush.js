@@ -45,11 +45,18 @@ class Brush extends Tool {
         }
     }
 
-    static Draw(ctx,x,y, color, width) {
+    static Draw(ctx, x, y, color, width) {
+        let oldWidth = ctx.lineWidth;
+        let oldColor = ctx.strokeStyle;
+
         ctx.lineWidth = width;
         ctx.strokeStyle = color;
         ctx.lineTo(x,y);
         ctx.stroke();
+
+        ctx.lineWidth = oldWidth;
+        ctx.strokeStyle = oldColor;
+
     }
 }
 
