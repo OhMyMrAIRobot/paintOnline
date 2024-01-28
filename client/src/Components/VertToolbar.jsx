@@ -90,7 +90,12 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn next"
-                onClick={() => canvasState.reUndo()}
+                onClick={(e) => {
+                    canvasState.socket.send(JSON.stringify({
+                        id: canvasState.session,
+                        method: 'reUndo',
+                    }))
+                }}
             >
                 Next
             </button>

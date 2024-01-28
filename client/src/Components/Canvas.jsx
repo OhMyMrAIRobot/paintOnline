@@ -77,6 +77,9 @@ const Canvas = observer(() => {
                     case 'undo':
                         canvasState.undo();
                         break;
+                    case 'reUndo':
+                        canvasState.reUndo();
+                        break;
                     default:
                         break;
                 }
