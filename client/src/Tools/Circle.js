@@ -1,8 +1,8 @@
 import Tool from "./Tool";
 
 class Circle extends Tool{
-    constructor(canvas) {
-        super(canvas);
+    constructor(canvas, socket, id) {
+        super(canvas, socket, id);
         this.Listen();
     }
 
@@ -14,6 +14,21 @@ class Circle extends Tool{
 
     MouseUpHandler(e){
         this.isMouseDown = false;
+        if (!this.isMouseDown){
+            this.socket.send(JSON.stringify({
+                method: 'draw',
+                id: this.id,
+                figure: {
+                    type: 'circle',
+                    x: this.xStart,
+                    y: this.yStart,
+                    radius: this.radius,
+                    strokeColor: this.ctx.strokeStyle,
+                    fillColor: this.ctx.fillStyle,
+                    lineWidth: this.ctx.lineWidth,
+                }
+            }))
+        }
     }
 
     MouseDownHandler(e){
@@ -30,8 +45,8 @@ class Circle extends Tool{
             let y = e.pageY - e.target.offsetTop;
             let width = x - this.xStart;
             let height = y - this.yStart;
-            let radius = Math.sqrt(width*width + height*height);
-            this.Draw(this.xStart, this.yStart, radius);
+            this.radius = Math.sqrt(width*width + height*height);
+            this.Draw(this.xStart, this.yStart, this.radius);
         }
     }
 
@@ -46,6 +61,24 @@ class Circle extends Tool{
             this.ctx.stroke();
             this.ctx.fill();
         }
+    }
+
+    static StaticDraw(ctx, x, y, r, strokeColor, fillColor, lineWidth){
+        let oldStrokeWidth = ctx.lineWidth;
+        let oldStrokeColor = ctx.strokeStyle;
+        let oldFillColor = ctx.fillStyle;
+
+        ctx.beginPath();
+        ctx.strokeStyle = strokeColor;
+        ctx.fillStyle = fillColor;
+        ctx.lineWidth = lineWidth;
+        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.lineWidth = oldStrokeWidth;
+        ctx.strokeStyle = oldStrokeColor;
+        ctx.fillStyle = oldFillColor;
     }
 }
 

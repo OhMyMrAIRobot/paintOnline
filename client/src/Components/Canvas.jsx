@@ -10,6 +10,7 @@ import Eraser from "../Tools/Eraser";
 import Line from "../Tools/Line";
 import Rect from "../Tools/Rect";
 import Square from "../Tools/Square";
+import Circle from "../Tools/Circle";
 
 const Canvas = observer(() => {
 
@@ -75,12 +76,19 @@ const Canvas = observer(() => {
                 break;
             case "line":
                 Line.StaticDraw(ctx, figure.Xs, figure.Ys, figure.Xf, figure.Yf, figure.lineWidth, figure.strokeColor);
+                ctx.beginPath();
                 break;
             case "rectangle":
                 Rect.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.strokeColor, figure.fillColor, figure.lineWidth);
+                ctx.beginPath();
                 break;
             case "square":
                 Square.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.strokeColor, figure.fillColor, figure.lineWidth);
+                ctx.beginPath();
+                break;
+            case "circle":
+                Circle.StaticDraw(ctx, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor, figure.lineWidth);
+                ctx.beginPath();
                 break;
             case 'finish':
                 ctx.beginPath();
