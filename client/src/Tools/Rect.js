@@ -1,8 +1,8 @@
 import Tool from "./Tool";
 
 class Rect extends Tool{
-    constructor(canvas) {
-        super(canvas);
+    constructor(canvas, socket, id) {
+        super(canvas, socket, id);
         this.Listen();
     }
 
@@ -14,6 +14,22 @@ class Rect extends Tool{
 
     MouseUpHandler(e) {
         this.isMouseDown = false;
+        if (!this.isMouseDown){
+            this.socket.send(JSON.stringify({
+                method: 'draw',
+                id: this.id,
+                figure: {
+                    type: 'rectangle',
+                    x: this.xStart,
+                    y: this.yStart,
+                    width: this.width,
+                    height: this.height,
+                    strokeColor: this.ctx.strokeStyle,
+                    fillColor: this.ctx.fillStyle,
+                    lineWidth: this.ctx.lineWidth,
+                }
+            }))
+        }
     }
 
     MouseDownHandler(e) {
@@ -45,6 +61,24 @@ class Rect extends Tool{
             this.ctx.stroke();
             this.ctx.fill();
         }
+    }
+
+    static StaticDraw(ctx, x, y, w, h, strokeColor, fillColor, lineWidth){
+        let oldStrokeWidth = ctx.lineWidth;
+        let oldStrokeColor = ctx.strokeStyle;
+        let oldFillColor = ctx.fillStyle;
+        console.log(oldFillColor);
+        ctx.beginPath();
+        ctx.strokeStyle = strokeColor;
+        ctx.fillStyle = fillColor;
+        ctx.lineWidth = lineWidth;
+        ctx.rect(x,y,w,h);
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.lineWidth = oldStrokeWidth;
+        ctx.strokeStyle = oldStrokeColor;
+        ctx.fillStyle = oldFillColor;
     }
 }
 
