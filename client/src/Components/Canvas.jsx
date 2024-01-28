@@ -62,7 +62,7 @@ const Canvas = observer(() => {
         const ctx = CanvasRef.current.getContext('2d');
         switch (figure.type){
             case "brush":
-                 Brush.Draw(ctx, figure.x, figure.y);
+                Brush.Draw(ctx, figure.x, figure.y, figure.color,figure.width);
                 break;
             case 'finish':
                 ctx.beginPath();

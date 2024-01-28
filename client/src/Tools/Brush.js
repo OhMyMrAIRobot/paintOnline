@@ -38,12 +38,16 @@ class Brush extends Tool {
                     type: 'brush',
                     x: e.pageX - e.target.offsetLeft,
                     y: e.pageY - e.target.offsetTop,
+                    color: this.ctx.strokeStyle,
+                    width: this.ctx.lineWidth,
                 }
             }))
         }
     }
 
-    static Draw(ctx,x,y) {
+    static Draw(ctx,x,y, color, width) {
+        ctx.lineWidth = width;
+        ctx.strokeStyle = color;
         ctx.lineTo(x,y);
         ctx.stroke();
     }
