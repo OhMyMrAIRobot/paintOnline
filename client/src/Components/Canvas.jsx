@@ -56,6 +56,7 @@ const Canvas = observer(() => {
             toolState.setLineWidth(1);
             toolState.setFont("16px Arial");
 
+
             socket.current.send(JSON.stringify({
                 id:params.id,
                 username: canvasState.username,
@@ -161,9 +162,9 @@ const Canvas = observer(() => {
             </div>
 
             <canvas
-                height = {window.innerHeight - 100}
-                width = {window.innerWidth - 100}
                 ref = {CanvasRef}
+                height = '720px'
+                width = '1280px'
                 onMouseDown={() => MouseDownHandler()}
             >
             </canvas>

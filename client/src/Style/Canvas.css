@@ -2,12 +2,10 @@
 
 .canvas{
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-left: var(--canvas-offset-x);
+    margin-top: var(--canvas-offset-y);
 }
 
 canvas{
     border: 1px solid black;
-    background-color: white;
 }

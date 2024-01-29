@@ -6,4 +6,6 @@
     --btn-size: 25px;
     --chat-width: 300px;
     --chat-height: 500px;
+    --canvas-offset-x: 50px;
+    --canvas-offset-y: 40px;
 }
