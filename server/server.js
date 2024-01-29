@@ -30,6 +30,9 @@ app.ws('/', (ws,req) => {
             case 'reUndo':
                 broadcastConnection(ws,msg);
                 break;
+            case 'changeResolution':
+                changeResolutionHandler(ws,msg);
+                break;
         }
     })
 })
@@ -37,19 +40,38 @@ app.ws('/', (ws,req) => {
 app.listen(PORT, () => console.log(`serv is working on ${PORT}`))
 
 let RoomsArr = [];
+let ResoulionsArr = [];
 
 const createRoomHandler = (ws, msg) => {
+    ResoulionsArr.push(msg.id);
+    ResoulionsArr.push({width: 1280, height: 720});
     RoomsArr.push(JSON.stringify(msg.id));
 }
 
 const joinHandler = (ws, msg) => {
     let id = JSON.stringify(msg.id)
 
-    ws.send(JSON.stringify({
-        method: 'checkRoom',
-        connect: RoomsArr.includes(id),
-    }))
+    if (RoomsArr.includes(id)) {
+        let pos = ResoulionsArr.indexOf(msg.id);
 
+        ws.send(JSON.stringify({
+            method: 'checkRoom',
+            connect: RoomsArr.includes(id),
+            width: ResoulionsArr[pos + 1].width,
+            height: ResoulionsArr[pos + 1].height,
+        }))
+    } else {
+        ws.send(JSON.stringify({
+            method: 'checkRoom',
+            connect: RoomsArr.includes(id),
+        }))
+    }
+}
+
+const changeResolutionHandler = (ws, msg) => {
+    let pos = ResoulionsArr.indexOf(msg.id);
+    ResoulionsArr[pos + 1] = {width: msg.width, height:msg.height};
+    broadcastConnection(ws, msg)
 }
 
 const connectionHandler = (ws, msg) => {

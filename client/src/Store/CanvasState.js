@@ -42,7 +42,6 @@ class CanvasState {
         };
     }
 
-
     setHeight(height){
         let oldWidth = this.canvas.width;
         let oldHeight = this.canvas.height;

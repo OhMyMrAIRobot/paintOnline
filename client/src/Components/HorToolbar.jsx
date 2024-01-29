@@ -1,10 +1,9 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../Style/Toolbar.css'
 import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
 
 const HorToolbar = () => {
-
     const fontSizeRef = useRef();
     const fontFamilyRef = useRef();
 
@@ -16,8 +15,12 @@ const HorToolbar = () => {
     const heightRef = useRef();
 
     const changeSizeHandler = () => {
-        canvasState.setWidth(widthRef.current.value);
-        canvasState.setHeight(heightRef.current.value);
+        canvasState.socket.send(JSON.stringify({
+            id: canvasState.session,
+            method: 'changeResolution',
+            width: widthRef.current.value,
+            height: heightRef.current.value,
+        }))
     }
 
     return (
@@ -71,7 +74,7 @@ const HorToolbar = () => {
                 type = "number"
                 min = {100}
                 max = {5000}
-                defaultValue={1280}
+                defaultValue = "0"
             />
 
             <input
@@ -79,14 +82,12 @@ const HorToolbar = () => {
                 type = "number"
                 min = {100}
                 max = {5000}
-                defaultValue={720}
+                defaultValue = "0"
             />
 
             <button
                 onClick={() => changeSizeHandler()}
             >change</button>
-
-
 
         </div>
     );

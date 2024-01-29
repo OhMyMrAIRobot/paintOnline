@@ -15,6 +15,7 @@ import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
 
 const Canvas = observer(() => {
+
     const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
@@ -37,7 +38,12 @@ const Canvas = observer(() => {
             switch (msg.method){
                 case 'checkRoom':
                     if (!msg.connect)
-                        navigate(`/`)
+                        navigate(`/`);
+                    else {
+                        canvasState.setWidth(msg.width);
+                        canvasState.setHeight(msg.height);
+                    }
+                    break;
             }
         }
 
@@ -55,7 +61,6 @@ const Canvas = observer(() => {
             toolState.setStrokeColor("#000000");
             toolState.setLineWidth(1);
             toolState.setFont("16px Arial");
-
 
             socket.current.send(JSON.stringify({
                 id:params.id,
@@ -81,6 +86,10 @@ const Canvas = observer(() => {
                     case 'reUndo':
                         canvasState.reUndo();
                         break;
+                    case 'changeResolution':
+                        canvasState.setWidth(msg.width);
+                        canvasState.setHeight(msg.height);
+                        break;
                     default:
                         break;
                 }
@@ -89,7 +98,6 @@ const Canvas = observer(() => {
     }, [canvasState.username])
 
     const MouseDownHandler = () => {
-        // canvasState.pushToUndo(CanvasRef.current.toDataURL())
         socket.current.send(JSON.stringify({
             id: params.id,
             method: 'pushUndo',
@@ -98,7 +106,7 @@ const Canvas = observer(() => {
     }
 
     const connectionHandler = () => {
-        canvasState.setUsername(UsernameRef.current.value)
+        canvasState.setUsername(UsernameRef.current.value);
     }
 
     const drawHandler = (msg) => {
@@ -163,8 +171,8 @@ const Canvas = observer(() => {
 
             <canvas
                 ref = {CanvasRef}
-                height = '720px'
-                width = '1280px'
+                height = '600px'
+                width = '600px'
                 onMouseDown={() => MouseDownHandler()}
             >
             </canvas>
