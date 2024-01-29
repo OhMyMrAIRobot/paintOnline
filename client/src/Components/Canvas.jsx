@@ -121,7 +121,7 @@ const Canvas = observer(() => {
                 Brush.Draw(ctx, figure.x, figure.y, figure.strokeColor,figure.lineWidth);
                 break;
             case "eraser":
-                Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth, canvasState.canvas.style.backgroundColor);
+                Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth);
                 break;
             case "line":
                 Line.StaticDraw(ctx, figure.Xs, figure.Ys, figure.Xf, figure.Yf, figure.lineWidth, figure.strokeColor);
