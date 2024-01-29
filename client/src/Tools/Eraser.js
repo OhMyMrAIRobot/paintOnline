@@ -20,12 +20,12 @@ class Eraser extends Brush{
         }
     }
 
-    static Draw(ctx, x, y, width) {
+    static Draw(ctx, x, y, width, color) {
         let oldColor = ctx.strokeStyle;
         let oldWidth = ctx.lineWidth;
 
         ctx.lineWidth = width;
-        ctx.strokeStyle = "white";
+        ctx.strokeStyle = color;
         ctx.lineTo(x,y);
         ctx.stroke();
 

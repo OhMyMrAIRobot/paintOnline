@@ -23,6 +23,14 @@ const HorToolbar = () => {
         }))
     }
 
+    const changeBackgroundHandler = (color) => {
+        canvasState.socket.send(JSON.stringify({
+            id: canvasState.session,
+            method: 'changeBackground',
+            color: color,
+        }))
+    }
+
     return (
         <div className = "toolbar-w">
             <input
@@ -87,7 +95,15 @@ const HorToolbar = () => {
 
             <button
                 onClick={() => changeSizeHandler()}
-            >change</button>
+            >
+                change
+            </button>
+
+            <input
+                type = "color"
+                defaultValue = "#FFFFFF"
+                onChange={(e) => changeBackgroundHandler(e.target.value)}
+            />
 
         </div>
     );

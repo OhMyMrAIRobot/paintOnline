@@ -1,7 +1,7 @@
 @import "./Variables.css";
 
 .canvas{
-    height: 100vh;
+    height: 100%;
     margin-left: var(--canvas-offset-x);
     margin-top: var(--canvas-offset-y);
 }

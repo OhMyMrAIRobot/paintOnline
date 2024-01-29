@@ -33,6 +33,9 @@ app.ws('/', (ws,req) => {
             case 'changeResolution':
                 changeResolutionHandler(ws,msg);
                 break;
+            case 'changeBackground':
+                changeBackgroundHandler(ws, msg);
+                break;
         }
     })
 })
@@ -44,7 +47,7 @@ let ResoulionsArr = [];
 
 const createRoomHandler = (ws, msg) => {
     ResoulionsArr.push(msg.id);
-    ResoulionsArr.push({width: 1280, height: 720});
+    ResoulionsArr.push({width: 1280, height: 360, color: "#FFFFFF"});
     RoomsArr.push(JSON.stringify(msg.id));
 }
 
@@ -59,6 +62,7 @@ const joinHandler = (ws, msg) => {
             connect: RoomsArr.includes(id),
             width: ResoulionsArr[pos + 1].width,
             height: ResoulionsArr[pos + 1].height,
+            color: ResoulionsArr[pos + 1].color,
         }))
     } else {
         ws.send(JSON.stringify({
@@ -71,6 +75,12 @@ const joinHandler = (ws, msg) => {
 const changeResolutionHandler = (ws, msg) => {
     let pos = ResoulionsArr.indexOf(msg.id);
     ResoulionsArr[pos + 1] = {width: msg.width, height:msg.height};
+    broadcastConnection(ws, msg)
+}
+
+const changeBackgroundHandler = (ws,msg) => {
+    let pos = ResoulionsArr.indexOf(msg.id);
+    ResoulionsArr[pos + 1] = {width: ResoulionsArr[pos + 1].width, height:ResoulionsArr[pos + 1].height, color: msg.color};
     broadcastConnection(ws, msg)
 }
 

@@ -42,6 +42,7 @@ const Canvas = observer(() => {
                     else {
                         canvasState.setWidth(msg.width);
                         canvasState.setHeight(msg.height);
+                        canvasState.setBackground(msg.color);
                     }
                     break;
             }
@@ -90,6 +91,9 @@ const Canvas = observer(() => {
                         canvasState.setWidth(msg.width);
                         canvasState.setHeight(msg.height);
                         break;
+                    case 'changeBackground':
+                        canvasState.setBackground(msg.color);
+                        break;
                     default:
                         break;
                 }
@@ -117,7 +121,7 @@ const Canvas = observer(() => {
                 Brush.Draw(ctx, figure.x, figure.y, figure.strokeColor,figure.lineWidth);
                 break;
             case "eraser":
-                Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth);
+                Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth, canvasState.canvas.style.backgroundColor);
                 break;
             case "line":
                 Line.StaticDraw(ctx, figure.Xs, figure.Ys, figure.Xf, figure.Yf, figure.lineWidth, figure.strokeColor);

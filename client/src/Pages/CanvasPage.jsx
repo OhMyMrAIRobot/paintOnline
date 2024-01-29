@@ -7,9 +7,11 @@ const CanvasPage = () => {
     return (
         <>
             <HorToolbar />
-            <VertToolbar/>
-            <input id = 'test'/>
-            <Canvas />
+            <div style = {{display: 'flex'}}>
+                <VertToolbar/>
+                <Canvas />
+            </div>
+            <input id = 'test' style = {{display: 'none', position: 'absolute'}}/>
         </>
     );
 };
