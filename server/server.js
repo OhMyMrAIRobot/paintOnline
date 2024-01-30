@@ -40,14 +40,14 @@ app.ws('/', (ws,req) => {
     })
 })
 
-app.listen(PORT, () => console.log(`serv is working on ${PORT}`))
+app.listen(PORT, () => console.log(`server is working on ${PORT}`))
 
 let RoomsArr = [];
-let ResoulionsArr = [];
+let ResolutionsArr = [];
 
 const createRoomHandler = (ws, msg) => {
-    ResoulionsArr.push(msg.id);
-    ResoulionsArr.push({width: 1280, height: 360, color: "#FFFFFF"});
+    ResolutionsArr.push(msg.id);
+    ResolutionsArr.push({width: 1280, height: 360, color: "#FFFFFF"});
     RoomsArr.push(JSON.stringify(msg.id));
 }
 
@@ -55,14 +55,14 @@ const joinHandler = (ws, msg) => {
     let id = JSON.stringify(msg.id)
 
     if (RoomsArr.includes(id)) {
-        let pos = ResoulionsArr.indexOf(msg.id);
+        let pos = ResolutionsArr.indexOf(msg.id);
 
         ws.send(JSON.stringify({
             method: 'checkRoom',
             connect: RoomsArr.includes(id),
-            width: ResoulionsArr[pos + 1].width,
-            height: ResoulionsArr[pos + 1].height,
-            color: ResoulionsArr[pos + 1].color,
+            width: ResolutionsArr[pos + 1].width,
+            height: ResolutionsArr[pos + 1].height,
+            color: ResolutionsArr[pos + 1].color,
         }))
     } else {
         ws.send(JSON.stringify({
@@ -73,14 +73,14 @@ const joinHandler = (ws, msg) => {
 }
 
 const changeResolutionHandler = (ws, msg) => {
-    let pos = ResoulionsArr.indexOf(msg.id);
-    ResoulionsArr[pos + 1] = {width: msg.width, height:msg.height};
+    let pos = ResolutionsArr.indexOf(msg.id);
+    ResolutionsArr[pos + 1] = {width: msg.width, height:msg.height};
     broadcastConnection(ws, msg)
 }
 
 const changeBackgroundHandler = (ws,msg) => {
-    let pos = ResoulionsArr.indexOf(msg.id);
-    ResoulionsArr[pos + 1] = {width: ResoulionsArr[pos + 1].width, height:ResoulionsArr[pos + 1].height, color: msg.color};
+    let pos = ResolutionsArr.indexOf(msg.id);
+    ResolutionsArr[pos + 1] = {width: ResolutionsArr[pos + 1].width, height:ResolutionsArr[pos + 1].height, color: msg.color};
     broadcastConnection(ws, msg)
 }
 
