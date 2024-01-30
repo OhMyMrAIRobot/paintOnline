@@ -74,7 +74,7 @@ const joinHandler = (ws, msg) => {
 
 const changeResolutionHandler = (ws, msg) => {
     let pos = ResolutionsArr.indexOf(msg.id);
-    ResolutionsArr[pos + 1] = {width: msg.width, height:msg.height};
+    ResolutionsArr[pos + 1] = {width: msg.width, height:msg.height, color: ResolutionsArr[pos + 1].color};
     broadcastConnection(ws, msg)
 }
 
