@@ -36,6 +36,9 @@ app.ws('/', (ws,req) => {
             case 'changeBackground':
                 changeBackgroundHandler(ws, msg);
                 break;
+            case 'initialise':
+                initialiseCanvasHandler(ws,msg);
+                break;
         }
     })
 })
@@ -60,9 +63,6 @@ const joinHandler = (ws, msg) => {
         ws.send(JSON.stringify({
             method: 'checkRoom',
             connect: RoomsArr.includes(id),
-            width: ResolutionsArr[pos + 1].width,
-            height: ResolutionsArr[pos + 1].height,
-            color: ResolutionsArr[pos + 1].color,
         }))
     } else {
         ws.send(JSON.stringify({
@@ -82,6 +82,17 @@ const changeBackgroundHandler = (ws,msg) => {
     let pos = ResolutionsArr.indexOf(msg.id);
     ResolutionsArr[pos + 1] = {width: ResolutionsArr[pos + 1].width, height:ResolutionsArr[pos + 1].height, color: msg.color};
     broadcastConnection(ws, msg)
+}
+
+const initialiseCanvasHandler = (ws,msg) => {
+    let pos = ResolutionsArr.indexOf(msg.id);
+    const mess = {
+        method: 'initialise',
+        width: ResolutionsArr[pos + 1].width,
+        height: ResolutionsArr[pos + 1].height,
+        color: ResolutionsArr[pos + 1].color,
+    }
+    ws.send(JSON.stringify(mess));
 }
 
 const connectionHandler = (ws, msg) => {

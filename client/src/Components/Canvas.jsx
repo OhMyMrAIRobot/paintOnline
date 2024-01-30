@@ -39,11 +39,6 @@ const Canvas = observer(() => {
                 case 'checkRoom':
                     if (!msg.connect)
                         navigate(`/`);
-                    else {
-                        canvasState.setWidth(msg.width);
-                        canvasState.setHeight(msg.height);
-                        canvasState.setBackground(msg.color);
-                    }
                     break;
             }
         }
@@ -111,6 +106,22 @@ const Canvas = observer(() => {
 
     const connectionHandler = () => {
         canvasState.setUsername(UsernameRef.current.value);
+
+        socket.current.send(JSON.stringify({
+            id:params.id,
+            method: "initialise"
+        }))
+
+        socket.current.onmessage = (event) => {
+            let msg = JSON.parse(event.data);
+            switch (msg.method){
+                case 'initialise':
+                    canvasState.setWidth(msg.width);
+                    canvasState.setHeight(msg.height);
+                    canvasState.setBackground(msg.color);
+                    break;
+            }
+        }
     }
 
     const drawHandler = (msg) => {
@@ -175,8 +186,8 @@ const Canvas = observer(() => {
 
             <canvas
                 ref = {CanvasRef}
-                height = '600px'
-                width = '600px'
+                height = '0px'
+                width = '0px'
                 onMouseDown={() => MouseDownHandler()}
             >
             </canvas>
