@@ -51,6 +51,7 @@ const MainPage = () => {
 
             <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
                 <div>
+                    <p className = "room_text">Enter room's ID:</p>
                     <input className = "modal_input" ref = {inputRef} type = 'text'/>
                     <div className={"button_container"}>
                         <button className = "modal_button" onClick={e => setModalActive(false)}>Cancel</button>

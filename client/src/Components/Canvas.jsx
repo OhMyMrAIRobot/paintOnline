@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../Style/Canvas.css'
 import {observer} from "mobx-react-lite";
 import canvasState from "../Store/CanvasState";
@@ -13,9 +13,9 @@ import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
+import Modal from "./Modal";
 
 const Canvas = observer(() => {
-
     const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
@@ -165,33 +165,40 @@ const Canvas = observer(() => {
         }
     }
 
+    const [modalActive, setModalActive] = useState(true);
+
     return (
-        <div className = "canvas">
-
-            <div
-                style={{
-                    width: '200px',
-                    height: '50px',
-                    border: '1px solid black',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                }}
-            >
-                <input ref = {UsernameRef} type = 'text'/>
-                <button
-                    onClick={() => connectionHandler()}
-                >Enter</button>
+        <>
+            <Modal active={modalActive} setActive={setModalActive} canClose={false}>
+                <div className = "nickname_modal">
+                    <p className = "nickname_text">Enter your username:</p>
+                    <input className = "modal_input" ref = {UsernameRef} type = 'text'/>
+                    <button className = "nickname_button"
+                            onClick={(e) => {
+                                if (UsernameRef.current.value !== "") {
+                                    setModalActive(false);
+                                    connectionHandler();
+                                    document.getElementById("hor").style.position = "inherit";
+                                } else
+                                    console.log('empty')
+                                }
+                            }
+                            >
+                        Enter
+                    </button>
+                </div>
+            </Modal>
+            <div className = "canvas">
+                <canvas
+                    ref = {CanvasRef}
+                    height = '0px'
+                    width = '0px'
+                    onMouseDown={() => MouseDownHandler()}
+                >
+                </canvas>
             </div>
+        </>
 
-            <canvas
-                ref = {CanvasRef}
-                height = '0px'
-                width = '0px'
-                onMouseDown={() => MouseDownHandler()}
-            >
-            </canvas>
-        </div>
     );
 });
 

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import HorToolbar from "../Components/HorToolbar";
 import VertToolbar from "../Components/VertToolbar";
 import Canvas from "../Components/Canvas";
+import Modal from "../Components/Modal";
 
 const CanvasPage = () => {
+
     return (
         <>
             <HorToolbar />

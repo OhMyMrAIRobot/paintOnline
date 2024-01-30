@@ -9,3 +9,23 @@
 canvas{
     border: 1px solid black;
 }
+
+.nickname_modal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nickname_button{
+    margin-top: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+    width: 120px;
+    height: 30px;
+    font-size: 16px;
+}
+
+.nickname_text{
+    font-size: 20px;
+}

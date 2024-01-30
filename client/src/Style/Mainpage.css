@@ -14,13 +14,18 @@
     justify-content: center;
     width: 500px;
     height: 250px;
-    border: 1px solid black;
+    border: 3px solid black;
+    border-radius: 10px;
     gap: 50px
 }
 
 .main-button{
     width: 150px;
     height: 50px;
+    border-radius: 10px;
+    border: 3px solid black;
+    cursor: pointer;
+    font-size: 20px;
 }
 
 .button_container{
@@ -33,10 +38,11 @@
 
 .modal_button{
     border-radius: 5px;
-    border: 1px solid black;
+    border: 2px solid black;
     cursor: pointer;
     width: 100px;
     height: 30px;
+    font-size: 16px;
 }
 
 .modal_input{
@@ -44,4 +50,10 @@
     height: 25px;
     margin-top: 10px;
     border-radius: 10px;
+    font-size: 16px;
+}
+
+.room_text{
+    font-size: 20px;
+    text-align: center;
 }

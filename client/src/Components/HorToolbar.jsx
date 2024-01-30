@@ -32,7 +32,7 @@ const HorToolbar = () => {
     }
 
     return (
-        <div className = "toolbar-w">
+        <div id = "hor" className = "toolbar-w">
             <input
                 type = "number"
                 min = {1}
