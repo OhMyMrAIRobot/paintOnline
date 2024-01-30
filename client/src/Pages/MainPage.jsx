@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import "../Style/Mainpage.css"
 import {useNavigate} from "react-router-dom";
+import Modal from "../Components/Modal";
 
 
 const MainPage = () => {
@@ -25,6 +26,8 @@ const MainPage = () => {
             }))
     }
 
+    const [ModalActive, setModalActive] = useState(false);
+
     const JoinRoomHandler = () => {
         let id = inputRef.current.value;
         socket.current.send(JSON.stringify({
@@ -45,12 +48,17 @@ const MainPage = () => {
 
     return (
         <div className = "main">
-            <input
-                ref = {inputRef}
-                style={{
-                    position: 'absolute',
-                }}
-            />
+
+            <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
+                <div>
+                    <input className = "modal_input" ref = {inputRef} type = 'text'/>
+                    <div className={"button_container"}>
+                        <button className = "modal_button" onClick={e => setModalActive(false)}>Cancel</button>
+                        <button className = "modal_button" onClick={JoinRoomHandler}>Join</button>
+                    </div>
+                </div>
+            </Modal>
+
             <div className = "main-container">
                 <button
                     className = "main-button"
@@ -60,7 +68,7 @@ const MainPage = () => {
                 </button>
                 <button
                     className = "main-button"
-                    onClick={() => JoinRoomHandler()}
+                    onClick={() => setModalActive(true)}
                 >
                     Join room
                 </button>

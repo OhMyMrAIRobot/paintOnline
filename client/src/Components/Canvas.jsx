@@ -114,7 +114,7 @@ const Canvas = observer(() => {
 
         socket.current.onmessage = (event) => {
             let msg = JSON.parse(event.data);
-            switch (msg.method){
+            switch (msg.method) {
                 case 'initialise':
                     canvasState.setWidth(msg.width);
                     canvasState.setHeight(msg.height);
