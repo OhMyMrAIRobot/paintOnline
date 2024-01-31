@@ -15,6 +15,7 @@ import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
 import Modal from "./Modal";
 import axios from "axios";
+import '../Style/UsernameModal.css'
 
 const Canvas = observer(() => {
     const params = useParams();
@@ -188,10 +189,18 @@ const Canvas = observer(() => {
     return (
         <>
             <Modal active={modalActive} setActive={setModalActive} canClose={false}>
-                <div className = "nickname_modal">
-                    <p className = "nickname_text">Enter your username:</p>
-                    <input className = "modal_input" ref = {UsernameRef} type = 'text'/>
-                    <button className = "nickname_button"
+                <div className = "username_modal">
+                    <p className = "username_text">Enter your username:</p>
+                    <input
+                        onChange={(e) => {
+                            e.target.value !== '' ?
+                                UsernameRef.current.style.borderColor = "green"
+                            :
+                                UsernameRef.current.style.borderColor = "red"
+
+                        }}
+                        className = "username_input" ref = {UsernameRef} type = 'text'/>
+                    <button className = "username_button"
                             onClick={(e) => {
                                 if (UsernameRef.current.value !== "") {
                                     setModalActive(false);
