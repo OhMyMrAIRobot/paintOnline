@@ -14,6 +14,7 @@ import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
 import Modal from "./Modal";
+import axios from "axios";
 
 const Canvas = observer(() => {
     const params = useParams();
@@ -104,6 +105,11 @@ const Canvas = observer(() => {
         }))
     }
 
+    const MouseUpHandler = () => {
+        axios.post(`http://localhost:3000/image?id=${params.id}`, {img: CanvasRef.current.toDataURL()})
+            .then(response => console.log(response.data))
+    }
+
     const connectionHandler = () => {
         canvasState.setUsername(UsernameRef.current.value);
 
@@ -122,6 +128,18 @@ const Canvas = observer(() => {
                     break;
             }
         }
+
+        let ctx = CanvasRef.current.getContext('2d')
+        axios.get(`http://localhost:3000/image?id=${params.id}`)
+            .then(response => {
+                const img = new Image()
+                img.src = response.data
+                img.onload = () => {
+                    ctx.clearRect(0, 0, CanvasRef.current.width, CanvasRef.current.height)
+                    ctx.drawImage(img, 0, 0, CanvasRef.current.width, CanvasRef.current.height)
+                }
+            })
+
     }
 
     const drawHandler = (msg) => {
@@ -194,6 +212,7 @@ const Canvas = observer(() => {
                     height = '0px'
                     width = '0px'
                     onMouseDown={() => MouseDownHandler()}
+                    onMouseUp={() => MouseUpHandler()}
                 >
                 </canvas>
             </div>
