@@ -8,9 +8,10 @@
     border: 1px solid black;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 20px;
     margin-left: var(--horizantal-offset);
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .toolbar-h{
@@ -49,4 +50,23 @@
 
 .save{
     margin-bottom: 20px;
+}
+
+.button_invite{
+    border-radius: 10px;
+    width: 120px;
+    height: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: aquamarine;
+    margin-left: auto;
+}
+
+.button_leave{
+    border-radius: 10px;
+    width: 100px;
+    height: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    background-color: crimson;
 }

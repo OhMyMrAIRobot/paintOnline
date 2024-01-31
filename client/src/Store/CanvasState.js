@@ -46,6 +46,10 @@ class CanvasState {
         this.canvas.style.backgroundColor = color;
     }
 
+    closeConnection(){
+        this.socket.close();
+    }
+
     setHeight(height){
         let oldWidth = this.canvas.width;
         let oldHeight = this.canvas.height;
