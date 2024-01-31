@@ -27,33 +27,3 @@
     cursor: pointer;
     font-size: 20px;
 }
-
-.button_container{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.modal_button{
-    border-radius: 5px;
-    border: 2px solid black;
-    cursor: pointer;
-    width: 100px;
-    height: 30px;
-    font-size: 16px;
-}
-
-.modal_input{
-    width: 300px;
-    height: 25px;
-    margin-top: 10px;
-    border-radius: 10px;
-    font-size: 16px;
-}
-
-.room_text{
-    font-size: 20px;
-    text-align: center;
-}

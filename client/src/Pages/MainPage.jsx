@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import "../Style/Mainpage.css"
 import {useNavigate} from "react-router-dom";
 import Modal from "../Components/Modal";
+import "../Style/JoinModal.css"
 
 
 const MainPage = () => {
@@ -41,6 +42,8 @@ const MainPage = () => {
                 case 'checkRoom':
                     if (msg.connect)
                         jumpToRoom(id)
+                    else
+                        inputRef.current.style.borderColor = "red"
                     break;
             }
         }
@@ -50,12 +53,19 @@ const MainPage = () => {
         <div className = "main">
 
             <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
-                <div>
-                    <p className = "room_text">Enter room's ID:</p>
-                    <input className = "modal_input" ref = {inputRef} type = 'text'/>
-                    <div className={"button_container"}>
-                        <button className = "modal_button" onClick={e => setModalActive(false)}>Cancel</button>
-                        <button className = "modal_button" onClick={JoinRoomHandler}>Join</button>
+                <div className = "join_modal">
+                    <p className = "join_modal_text">Enter room's ID:</p>
+                    <input className = "join_modal_input" ref = {inputRef} type = 'text'
+                           onChange={(e) => {
+                               e.target.value !== '' ?
+                                   inputRef.current.style.borderColor = "green"
+                                   :
+                                   inputRef.current.style.borderColor = "red"
+                           }}
+                    />
+                    <div className={"join_modal_button_container"}>
+                        <button className = "join_modal_button exit" onClick={e => setModalActive(false)}>Cancel</button>
+                        <button className = "join_modal_button join" onClick={JoinRoomHandler}>Join</button>
                     </div>
                 </div>
             </Modal>

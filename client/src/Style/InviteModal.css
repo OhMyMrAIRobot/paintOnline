@@ -12,20 +12,23 @@
     padding-left: 3px;
     margin-top: 15px;
     font-size: 18px;
-    width: 300px;
+    width: 315px;
     border-radius: 10px;
-    border: 2px solid green;
+    border: 2px solid darkgreen;
     background-color: aquamarine;
-    color: darkgreen;
+    font-weight: bold;
+    color: green;
     outline: none;
 }
 
 .copy_button{
     margin-top: 15px;
     border-radius: 10px;
-    border: 2px solid green;
+    font-weight: bold;
+    border: 2px solid darkgreen;
     background-color: aquamarine;
     width: 75px;
+    height: 30px;
     font-size: 18px;
     margin-left: 10px;
     cursor: pointer;
@@ -33,11 +36,14 @@
 
 .close_invite_modal{
     margin-top: 15px;
-    width: 100px;
+    width: 120px;
     font-size: 18px;
     border-radius: 10px;
     background-color: crimson;
     cursor: pointer;
+    font-weight: bold;
+    border: 2px solid darkred;
+    height: 35px;
 }
 
 .invite_text{
