@@ -4,7 +4,8 @@ import '../Style/Chat.css'
 const Chat = () => {
     return (
         <div className = "chat">
-
+            <input type = 'text'></input>
+            <button className = "send_button">Send</button>
         </div>
     );
 };

@@ -3,6 +3,7 @@ import HorToolbar from "../Components/HorToolbar";
 import VertToolbar from "../Components/VertToolbar";
 import Canvas from "../Components/Canvas";
 import Modal from "../Components/Modal";
+import Chat from "../Components/Chat";
 
 const CanvasPage = () => {
 
@@ -14,6 +15,7 @@ const CanvasPage = () => {
                 <Canvas />
             </div>
             <input id = 'test' style = {{display: 'none', position: 'absolute'}}/>
+
         </>
     );
 };

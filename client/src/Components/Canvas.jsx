@@ -16,6 +16,7 @@ import Text from "../Tools/Text"
 import Modal from "./Modal";
 import axios from "axios";
 import '../Style/UsernameModal.css'
+import Chat from "./Chat";
 
 const Canvas = observer(() => {
     const params = useParams();
@@ -224,7 +225,9 @@ const Canvas = observer(() => {
                     onMouseUp={() => MouseUpHandler()}
                 >
                 </canvas>
+
             </div>
+            <Chat />
         </>
 
     );
