@@ -9,6 +9,7 @@ class CanvasState {
     socket = null;
     session = null;
 
+
     constructor() {
         makeAutoObservable(this)
     }
@@ -44,10 +45,6 @@ class CanvasState {
 
     setBackground(color){
         this.canvas.style.backgroundColor = color;
-    }
-
-    closeConnection(){
-        this.socket.close();
     }
 
     setHeight(height){

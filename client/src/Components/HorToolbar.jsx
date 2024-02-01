@@ -9,13 +9,15 @@ import '../Style/InviteModal.css'
 const HorToolbar = () => {
     const fontSizeRef = useRef();
     const fontFamilyRef = useRef();
+    const widthRef = useRef();
+    const heightRef = useRef();
+
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
     const ChangeFontHandler = () => {
         toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);
     }
-
-    const widthRef = useRef();
-    const heightRef = useRef();
 
     const changeSizeHandler = () => {
         canvasState.socket.send(JSON.stringify({
@@ -34,13 +36,12 @@ const HorToolbar = () => {
         }))
     }
 
-
     const [ModalActive, setModalActive] = useState(false)
 
     const navigate = useNavigate()
 
     return (
-        <>
+        <div>
             <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
                 <div className = "invite_modal">
                     <p className = "invite_text">Invite your friends!</p>
@@ -146,7 +147,7 @@ const HorToolbar = () => {
                 </button>
 
             </div>
-        </>
+        </div>
 
     );
 };

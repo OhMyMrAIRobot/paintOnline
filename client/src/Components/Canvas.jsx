@@ -18,34 +18,12 @@ import axios from "axios";
 import '../Style/UsernameModal.css'
 import Chat from "./Chat";
 
-const Canvas = observer(() => {
+const Canvas = observer(({socket}) => {
     const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
-    const navigate = useNavigate()
-    const socket = useRef()
 
     useEffect(() => {
-        let id = params.id
-        socket.current = new WebSocket(`ws://localhost:3000/`);
-
-        socket.current.onopen = () => {
-            socket.current.send(JSON.stringify({
-                id: id,
-                method: "join"
-            }))
-        }
-
-        socket.current.onmessage = (event) => {
-            let msg = JSON.parse(event.data);
-            switch (msg.method){
-                case 'checkRoom':
-                    if (!msg.connect)
-                        navigate(`/`);
-                    break;
-            }
-        }
-
         canvasState.setCanvas(CanvasRef.current);
     }, []);
 
@@ -201,6 +179,7 @@ const Canvas = observer(() => {
 
                         }}
                         className = "username_input" ref = {UsernameRef} type = 'text'/>
+
                     <button className = "username_button"
                             onClick={(e) => {
                                 if (UsernameRef.current.value !== "") {
@@ -216,6 +195,7 @@ const Canvas = observer(() => {
                     </button>
                 </div>
             </Modal>
+
             <div className = "canvas">
                 <canvas
                     ref = {CanvasRef}
@@ -227,7 +207,7 @@ const Canvas = observer(() => {
                 </canvas>
 
             </div>
-            <Chat />
+            {/*<Chat />*/}
         </>
 
     );
