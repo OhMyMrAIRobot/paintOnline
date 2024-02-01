@@ -48,6 +48,10 @@ app.ws('/', (ws,req) => {
             case 'getResolution':
                 getResolutionHandler(ws,msg);
                 break;
+            case 'message':
+                broadcastConnection(ws, msg);
+                console.log(msg);
+                break;
         }
     })
 })

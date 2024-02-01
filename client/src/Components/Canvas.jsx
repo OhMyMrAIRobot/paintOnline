@@ -23,6 +23,10 @@ const Canvas = observer(({socket}) => {
     const CanvasRef = useRef();
     const UsernameRef = useRef();
 
+    const [msgArr, setMsgArr] = useState([]);
+
+    const [nickname, setNickname] = useState("");
+
     useEffect(() => {
         canvasState.setCanvas(CanvasRef.current);
     }, []);
@@ -70,6 +74,9 @@ const Canvas = observer(({socket}) => {
                     case 'changeBackground':
                         canvasState.setBackground(msg.color);
                         break;
+                    case 'message':
+                        setMsgArr(prev => [...prev, {user: msg.username, text: msg.data}])
+                        break;
                     default:
                         break;
                 }
@@ -92,7 +99,7 @@ const Canvas = observer(({socket}) => {
 
     const connectionHandler = () => {
         canvasState.setUsername(UsernameRef.current.value);
-
+        setNickname(UsernameRef.current.value);
         socket.current.send(JSON.stringify({
             id:params.id,
             method: "initialise"
@@ -207,7 +214,7 @@ const Canvas = observer(({socket}) => {
                 </canvas>
 
             </div>
-            {/*<Chat />*/}
+            <Chat socket={socket} username={nickname} msgArray = {msgArr}/>
         </>
 
     );
