@@ -9,9 +9,13 @@
     z-index: 100;
     bottom: 0;
     right: 0;
-
+    overflow-x: hidden;
 }
 
 .send_button{
+
+}
+
+.send_container{
 
 }
