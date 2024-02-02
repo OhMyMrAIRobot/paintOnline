@@ -4,7 +4,7 @@ import {observer} from "mobx-react-lite";
 import canvasState from "../Store/CanvasState";
 import toolState from "../Store/ToolState";
 import brush from "../Tools/Brush";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
 import Line from "../Tools/Line";
@@ -13,10 +13,9 @@ import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
-import Modal from "./Modal";
 import axios from "axios";
-import '../Style/UsernameModal.css'
 import Chat from "./Chat";
+import UsernameModal from "./UsernameModal";
 
 const Canvas = observer(({socket, setWidth, setHeight}) => {
     const params = useParams();
@@ -189,34 +188,12 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
 
     return (
         <>
-            <Modal active={modalActive} setActive={setModalActive} canClose={false}>
-                <div className = "username_modal">
-                    <p className = "username_text">Enter your username:</p>
-                    <input
-                        onChange={(e) => {
-                            e.target.value !== '' ?
-                                UsernameRef.current.style.borderColor = "green"
-                            :
-                                UsernameRef.current.style.borderColor = "red"
-
-                        }}
-                        className = "username_input" ref = {UsernameRef} type = 'text'/>
-
-                    <button className = "username_button"
-                            onClick={(e) => {
-                                if (UsernameRef.current.value !== "") {
-                                    setModalActive(false);
-                                    connectionHandler();
-                                    document.getElementById("hor").style.position = "inherit";
-                                } else
-                                    console.log('empty')
-                                }
-                            }
-                            >
-                        Enter
-                    </button>
-                </div>
-            </Modal>
+            <UsernameModal
+                setModalActive={setModalActive}
+                UsernameRef={UsernameRef}
+                modalActive={modalActive}
+                connectionHandler={connectionHandler}
+            />
 
             <div className = "canvas">
                 <canvas

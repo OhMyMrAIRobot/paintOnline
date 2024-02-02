@@ -5,6 +5,8 @@ import canvasState from "../Store/CanvasState";
 import {useNavigate} from "react-router-dom";
 import Modal from "./Modal";
 import '../Style/InviteModal.css'
+import InviteModal from "./InviteModal";
+import {set} from "mobx";
 
 const HorToolbar = ({width, height}) => {
     const fontSizeRef = useRef();
@@ -55,22 +57,7 @@ const HorToolbar = ({width, height}) => {
 
     return (
         <div>
-            <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
-                <div className = "invite_modal">
-                    <p className = "invite_text">Invite your friends!</p>
-                    <div className = "invite_input_container">
-                        <input className = "invite_input" type={'text'} defaultValue={window.location.href} readOnly={true}/>
-                        <button className = "copy_button" onClick={() => navigator.clipboard.writeText(window.location.href)}>Copy</button>
-                    </div>
-
-                    <div className = "invite_input_container">
-                        <input className = "invite_input" type={'text'} defaultValue={canvasState.session} readOnly={true}/>
-                        <button className = "copy_button" onClick={() => navigator.clipboard.writeText(canvasState.session)}>Copy</button>
-                    </div>
-
-                    <button className = "close_invite_modal" onClick={() => setModalActive(false)}>Close</button>
-                </div>
-            </Modal>
+            <InviteModal ModalActive={ModalActive} setModalActive={setModalActive}/>
 
             <div id = "hor" className = "toolbar-w">
 
