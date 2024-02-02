@@ -12,6 +12,7 @@ const HorToolbar = ({width, height}) => {
     const widthRef = useRef();
     const heightRef = useRef();
 
+    // обновление размера полотна в тулбаре
     useEffect(() => {
         widthRef.current.value = width;
         heightRef.current.value = height;
@@ -21,7 +22,7 @@ const HorToolbar = ({width, height}) => {
         toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);
     }
 
-    const changeSizeHandler = () => {
+    const changeResolutionHandler = () => {
         canvasState.socket.send(JSON.stringify({
             id: canvasState.session,
             method: 'changeResolution',
@@ -38,9 +39,19 @@ const HorToolbar = ({width, height}) => {
         }))
     }
 
-    const [ModalActive, setModalActive] = useState(false)
-
     const navigate = useNavigate()
+
+    const leaveRoomHandler = () => {
+        canvasState.socket.send(JSON.stringify({
+            method: 'close',
+            id: canvasState.session,
+            username: canvasState.username
+        }))
+        canvasState.socket.close();
+        navigate('/'); navigate(0);
+    }
+
+    const [ModalActive, setModalActive] = useState(false)
 
     return (
         <div>
@@ -62,6 +73,8 @@ const HorToolbar = ({width, height}) => {
             </Modal>
 
             <div id = "hor" className = "toolbar-w">
+
+                {/*Ширина линии*/}
                 <input
                     type = "number"
                     min = {1}
@@ -70,42 +83,41 @@ const HorToolbar = ({width, height}) => {
                     onChange={e => toolState.setLineWidth(e.target.value)}
                 />
 
+                {/*Цвет линии*/}
                 <input
                     type = "color"
                     defaultValue = "#000000"
                     onChange={e => toolState.setStrokeColor(e.target.value)}
                 />
 
+                {/*Цвет заливки*/}
                 <input
                     type = "color"
                     defaultValue = "#FFFFFF"
                     onChange={e => toolState.setFillColor(e.target.value)}
                 />
 
+                {/*Размер шрифта*/}
                 <input
                     ref = {fontSizeRef}
                     type = "number"
                     min = {1}
                     max = {50}
                     defaultValue={16}
-                    onChange={() => {
-                        ChangeFontHandler()
-                    }
-                    }
+                    onChange={() => ChangeFontHandler()}
                 />
 
+                {/*Шрифт*/}
                 <select
                     ref={fontFamilyRef}
-                    onChange={() => {
-                        ChangeFontHandler()
-                    }
-                    }
+                    onChange={() => ChangeFontHandler()}
                 >
                     <option value = "Arial">Arial</option>
                     <option value = "Helvetica">Helvetica</option>
                     <option value = "Times New Roman">Times New Roman</option>
                 </select>
 
+                {/*Ширина полотна*/}
                 <input
                     ref = {widthRef}
                     type = "number"
@@ -114,6 +126,7 @@ const HorToolbar = ({width, height}) => {
                     defaultValue = "0"
                 />
 
+                {/*Высота полотна*/}
                 <input
                     ref = {heightRef}
                     type = "number"
@@ -122,18 +135,17 @@ const HorToolbar = ({width, height}) => {
                     defaultValue = "0"
                 />
 
-                <button
-                    onClick={() => changeSizeHandler()}
-                >
-                    change
-                </button>
+                {/*Кнопка сменить разрешение*/}
+                <button onClick={() => changeResolutionHandler()}>change</button>
 
+                {/*Цвет полотна*/}
                 <input
                     type = "color"
                     defaultValue = "#FFFFFF"
                     onChange={(e) => changeBackgroundHandler(e.target.value)}
                 />
 
+                {/*Кнопка пригласить*/}
                 <button
                     className = "button_invite"
                     onClick = {() => setModalActive(true)}
@@ -141,17 +153,10 @@ const HorToolbar = ({width, height}) => {
                     Invite friends
                 </button>
 
+                {/*Кнопка выйти*/}
                 <button
                     className = "button_leave"
-                    onClick={() => {
-                        canvasState.socket.send(JSON.stringify({
-                            method: 'close',
-                            id: canvasState.session,
-                            username: canvasState.username
-                        }))
-                        canvasState.socket.close();
-                        navigate('/'); navigate(0);
-                    }}
+                    onClick={() => leaveRoomHandler()}
                 >
                     Leave
                 </button>

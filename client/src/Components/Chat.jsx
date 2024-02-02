@@ -6,6 +6,8 @@ import Draggable from "react-draggable";
 const ChangeFormat =(min) => {
     if (min < 10)
         return `0${min}`
+    else
+        return min
 }
 
 const CreateMessage = (message, username, chatContainer) => {
@@ -40,7 +42,8 @@ const ConnectionMessage = (message, username, chatContainer) => {
 
     let nameSpan = document.createElement('span');
     nameSpan.className = "msg_connect";
-    message.type === "connection" ?
+    console.log(message);
+    message.type === 'connect' ?
         nameSpan.textContent = `User ${message.user} has connected!`
     :
         nameSpan.textContent = `User ${message.user} disconnected!`
