@@ -3,6 +3,7 @@ import HorToolbar from "../Components/HorToolbar";
 import VertToolbar from "../Components/VertToolbar";
 import Canvas from "../Components/Canvas";
 import {useNavigate, useParams} from "react-router-dom";
+import canvasState from "../Store/CanvasState";
 
 const CanvasPage = () => {
 
@@ -12,8 +13,15 @@ const CanvasPage = () => {
     const params = useParams();
     const socket = useRef();
     const navigate = useNavigate();
-    const ref = useRef({width: 0, height: 0});
 
+    // Закрытие вкладки
+    window.onunload = () => {
+        canvasState.socket.send(JSON.stringify({
+            method: 'close',
+            id: canvasState.session,
+            username: canvasState.username
+        }))
+    }
 
     useEffect(() => {
         let id = params.id
@@ -41,11 +49,10 @@ const CanvasPage = () => {
         <div>
             <HorToolbar width={width} height={height}/>
             <div style = {{display: 'flex'}}>
-                <VertToolbar/>
+                <VertToolbar />
                 <Canvas setWidth={setWidth} setHeight={setHeight} socket = {socket}/>
             </div>
             <input id = 'test' style = {{display: 'none', position: 'absolute'}}/>
-
         </div>
     );
 };

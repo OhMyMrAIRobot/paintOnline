@@ -3,6 +3,11 @@ import '../Style/Chat.css'
 import {useParams} from "react-router-dom";
 import Draggable from "react-draggable";
 
+const ChangeFormat =(min) => {
+    if (min < 10)
+        return `0${min}`
+}
+
 const CreateMessage = (message, username, chatContainer) => {
     let messageElement = document.createElement('div');
     message.user === username ? messageElement.className = "msg author" : messageElement.className = "msg"
@@ -19,7 +24,7 @@ const CreateMessage = (message, username, chatContainer) => {
 
     let timeSpan = document.createElement('span');
     timeSpan.className = "msg_time";
-    timeSpan.textContent = message.time.hour + ":" + message.time.minute;
+    timeSpan.textContent = message.time.hour + ":" + ChangeFormat(message.time.minute);
     messageHeader.appendChild(timeSpan);
 
     let messageText = document.createElement('div');
@@ -35,7 +40,11 @@ const ConnectionMessage = (message, username, chatContainer) => {
 
     let nameSpan = document.createElement('span');
     nameSpan.className = "msg_connect";
-    nameSpan.textContent = `User ${message.user} has connected!`;
+    message.type === "connection" ?
+        nameSpan.textContent = `User ${message.user} has connected!`
+    :
+        nameSpan.textContent = `User ${message.user} disconnected!`
+    ;
     messageElement.appendChild(nameSpan);
 }
 

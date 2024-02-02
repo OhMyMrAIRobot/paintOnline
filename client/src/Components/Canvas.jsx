@@ -25,8 +25,6 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
 
     const [msgArr, setMsgArr] = useState([]);
 
-    const [nickname, setNickname] = useState("");
-
     useEffect(() => {
         canvasState.setCanvas(CanvasRef.current);
     }, []);
@@ -53,7 +51,6 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
                 let msg = JSON.parse(event.data);
                 switch (msg.method){
                     case 'connection':
-                        console.log(`${msg.username} connected`)
                         setMsgArr(prev => [...prev, {
                             type: "connect",
                             user: msg.username,
@@ -88,6 +85,12 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
                             time: {hour: msg.time.hour, minute: msg.time.minute}
                         }])
                         break;
+                    case 'close':
+                        setMsgArr(prev => [...prev, {
+                            type: "disconnect",
+                            user: msg.username,
+                        }])
+                        break;
                     default:
                         break;
                 }
@@ -110,7 +113,6 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
 
     const connectionHandler = () => {
         canvasState.setUsername(UsernameRef.current.value);
-        setNickname(UsernameRef.current.value);
         socket.current.send(JSON.stringify({
             id:params.id,
             method: "initialise"
@@ -227,7 +229,7 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
                 </canvas>
 
             </div>
-            <Chat socket={socket} username={nickname} msgArray = {msgArr}/>
+            <Chat socket={socket} username={canvasState.username} msgArray = {msgArr}/>
         </>
 
     );

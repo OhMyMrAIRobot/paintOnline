@@ -49,7 +49,7 @@ app.ws('/', (ws,req) => {
                 broadcastConnection(ws, msg);
                 break;
             case "close":
-                console.log("leave");
+                broadcastConnection(ws, msg);
                 break;
         }
     })

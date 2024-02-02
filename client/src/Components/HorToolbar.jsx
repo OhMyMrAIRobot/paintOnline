@@ -144,11 +144,14 @@ const HorToolbar = ({width, height}) => {
                 <button
                     className = "button_leave"
                     onClick={() => {
-                        canvasState.socket.send = () => {JSON.stringify({
-                            method: 'close'
-                        })}
-
-                        navigate('/'); navigate(0)}}
+                        canvasState.socket.send(JSON.stringify({
+                            method: 'close',
+                            id: canvasState.session,
+                            username: canvasState.username
+                        }))
+                        canvasState.socket.close();
+                        navigate('/'); navigate(0);
+                    }}
                 >
                     Leave
                 </button>
