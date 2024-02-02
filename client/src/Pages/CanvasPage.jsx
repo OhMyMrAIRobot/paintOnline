@@ -2,10 +2,12 @@ import React, {useEffect, useRef, useState} from 'react';
 import HorToolbar from "../Components/HorToolbar";
 import VertToolbar from "../Components/VertToolbar";
 import Canvas from "../Components/Canvas";
-import Chat from "../Components/Chat";
 import {useNavigate, useParams} from "react-router-dom";
 
 const CanvasPage = () => {
+
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
     const params = useParams();
     const socket = useRef();
@@ -37,10 +39,10 @@ const CanvasPage = () => {
 
     return (
         <div>
-            <HorToolbar/>
+            <HorToolbar width={width} height={height}/>
             <div style = {{display: 'flex'}}>
                 <VertToolbar/>
-                <Canvas socket = {socket}/>
+                <Canvas setWidth={setWidth} setHeight={setHeight} socket = {socket}/>
             </div>
             <input id = 'test' style = {{display: 'none', position: 'absolute'}}/>
 

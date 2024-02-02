@@ -45,9 +45,6 @@ app.ws('/', (ws,req) => {
             case 'initialise':
                 initialiseCanvasHandler(ws,msg);
                 break;
-            case 'getResolution':
-                getResolutionHandler(ws,msg);
-                break;
             case 'message':
                 broadcastConnection(ws, msg);
                 console.log(msg);
@@ -107,16 +104,6 @@ const changeResolutionHandler = (ws, msg) => {
     let pos = ResolutionsArr.indexOf(msg.id);
     ResolutionsArr[pos + 1] = {width: msg.width, height:msg.height, color: ResolutionsArr[pos + 1].color};
     broadcastConnection(ws, msg)
-}
-
-const getResolutionHandler = (ws, msg) => {
-    let pos = ResolutionsArr.indexOf(msg.id);
-    const mess = {
-        method: 'getResolution',
-        width: ResolutionsArr[pos+1].width,
-        height: ResolutionsArr[pos+1].height,
-    }
-    ws.send(JSON.stringify(mess));
 }
 
 const changeBackgroundHandler = (ws,msg) => {

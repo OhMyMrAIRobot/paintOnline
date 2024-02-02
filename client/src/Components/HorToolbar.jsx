@@ -6,14 +6,16 @@ import {useNavigate} from "react-router-dom";
 import Modal from "./Modal";
 import '../Style/InviteModal.css'
 
-const HorToolbar = () => {
+const HorToolbar = ({width, height}) => {
     const fontSizeRef = useRef();
     const fontFamilyRef = useRef();
     const widthRef = useRef();
     const heightRef = useRef();
 
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
+    useEffect(() => {
+        widthRef.current.value = width;
+        heightRef.current.value = height;
+    }, [width, height]);
 
     const ChangeFontHandler = () => {
         toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);

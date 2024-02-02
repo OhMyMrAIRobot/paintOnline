@@ -18,7 +18,7 @@ import axios from "axios";
 import '../Style/UsernameModal.css'
 import Chat from "./Chat";
 
-const Canvas = observer(({socket}) => {
+const Canvas = observer(({socket, setWidth, setHeight}) => {
     const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
@@ -70,6 +70,8 @@ const Canvas = observer(({socket}) => {
                     case 'changeResolution':
                         canvasState.setWidth(msg.width);
                         canvasState.setHeight(msg.height);
+                        setWidth(msg.width);
+                        setHeight(msg.height)
                         break;
                     case 'changeBackground':
                         canvasState.setBackground(msg.color);
@@ -112,6 +114,8 @@ const Canvas = observer(({socket}) => {
                     canvasState.setWidth(msg.width);
                     canvasState.setHeight(msg.height);
                     canvasState.setBackground(msg.color);
+                    setWidth(msg.width);
+                    setHeight(msg.height)
                     break;
             }
         }
