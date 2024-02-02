@@ -14,7 +14,7 @@ const CanvasPage = () => {
     const navigate = useNavigate();
     const ref = useRef({width: 0, height: 0});
 
-    console.log(ref.current);
+
     useEffect(() => {
         let id = params.id
         socket.current = new WebSocket(`ws://localhost:3000/`);

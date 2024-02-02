@@ -47,7 +47,9 @@ app.ws('/', (ws,req) => {
                 break;
             case 'message':
                 broadcastConnection(ws, msg);
-                console.log(msg);
+                break;
+            case "close":
+                console.log("leave");
                 break;
         }
     })

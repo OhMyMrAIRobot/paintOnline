@@ -54,6 +54,10 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
                 switch (msg.method){
                     case 'connection':
                         console.log(`${msg.username} connected`)
+                        setMsgArr(prev => [...prev, {
+                            type: "connect",
+                            user: msg.username,
+                        }])
                         break;
                     case 'draw':
                         drawHandler(msg);
@@ -77,7 +81,12 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
                         canvasState.setBackground(msg.color);
                         break;
                     case 'message':
-                        setMsgArr(prev => [...prev, {user: msg.username, text: msg.data}])
+                        setMsgArr(prev => [...prev, {
+                            type: 'message',
+                            user: msg.username,
+                            text: msg.data,
+                            time: {hour: msg.time.hour, minute: msg.time.minute}
+                        }])
                         break;
                     default:
                         break;

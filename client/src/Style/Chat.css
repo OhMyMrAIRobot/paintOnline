@@ -97,3 +97,18 @@
     overflow-x: hidden;
 }
 
+.msg_connect_container{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.msg_connect_container:first-child{
+    margin-top: 5px;
+}
+
+.msg_connect{
+    font-size: 16px;
+    font-weight: bold;
+}
+
