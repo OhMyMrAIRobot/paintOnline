@@ -20,10 +20,14 @@ const MainPage = () => {
     const CreateRoomHandler = () => {
         let id = (+ new Date).toString(16)
         jumpToRoom(id);
-            socket.current.send(JSON.stringify({
-                id: id,
-                method: "createRoom"
-            }))
+        socket.current.send(JSON.stringify({
+            id: id,
+            method: "createRoom",
+        }))
+        socket.current.close(1000);
+        socket.current.onclose = () => {
+            console.log('closed menu');
+        }
     }
 
     const [ModalActive, setModalActive] = useState(false);

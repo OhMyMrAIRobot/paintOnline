@@ -74,7 +74,7 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
         const currentDate = new Date();
         const currentHour = currentDate.getHours();
         const currentMinute = currentDate.getMinutes();
-        socket.current.send(JSON.stringify({
+        socket.send(JSON.stringify({
             id: params.id,
             username: username,
             method: 'message',
@@ -86,8 +86,8 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
 
     return (
         <Draggable
-            onStart={() => chatRef.current.style.transition = '0s'}
-            onStop={() => chatRef.current.style.transition = '0.5s'}
+            onStart={() => {chatRef.current.style.transition = '0s'}}
+            onStop={() => {chatRef.current.style.transition = '0.5s'}}
         >
             <div
                 ref = {chatRef}

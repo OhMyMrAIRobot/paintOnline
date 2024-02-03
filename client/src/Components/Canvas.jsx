@@ -13,11 +13,10 @@ import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text"
-import axios from "axios";
 import Chat from "./Chat";
 import UsernameModal from "./UsernameModal";
 
-const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
+const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
     const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
@@ -26,27 +25,22 @@ const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
 
     useEffect(() => {
         canvasState.setCanvas(CanvasRef.current);
-    }, []);
+        console.log('username')
 
-    useEffect(() => {
         if (canvasState.username){
-
-            canvasState.setSocket(socket.current);
-            canvasState.setSession(params.id);
-
-            toolState.setTool(new brush(CanvasRef.current, socket.current, params.id));
+            toolState.setTool(new brush(CanvasRef.current, canvasState.socket, params.id));
             toolState.setFillColor("#FFFFFF");
             toolState.setStrokeColor("#000000");
             toolState.setLineWidth(1);
             toolState.setFont("16px Arial");
 
-            socket.current.send(JSON.stringify({
+            canvasState.socket.send(JSON.stringify({
                 id:params.id,
                 username: canvasState.username,
                 method: "connection"
             }))
 
-            socket.current.onmessage = (event) => {
+            canvasState.socket.onmessage = (event) => {
                 let msg = JSON.parse(event.data);
                 switch (msg.method){
                     case 'connection':
@@ -98,50 +92,57 @@ const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
     }, [canvasState.username])
 
     const MouseDownHandler = () => {
-        socket.current.send(JSON.stringify({
+        canvasState.socket.send(JSON.stringify({
             id: params.id,
             method: 'pushUndo',
             data: CanvasRef.current.toDataURL(),
         }))
     }
 
+    // отправка текущего состояния
     const MouseUpHandler = () => {
-        axios.post(`http://localhost:3000/image?id=${params.id}`, {img: CanvasRef.current.toDataURL()})
-            .then(response => console.log(response.data))
+        console.log('тык')
+        canvasState.socket.send(JSON.stringify({
+            id: params.id,
+            method: 'saveCanvas',
+            data: CanvasRef.current.toDataURL(),
+        }))
     }
 
+    // инициализация полотна
     const connectionHandler = () => {
-        canvasState.setUsername(UsernameRef.current.value);
-        document.title = `${params.id} | ${canvasState.username}`;
-        socket.current.send(JSON.stringify({
+        canvasState.socket.send(JSON.stringify({
             id:params.id,
             method: "initialise"
         }))
 
-        socket.current.onmessage = (event) => {
+        canvasState.socket.onmessage = (event) => {
             let msg = JSON.parse(event.data);
             switch (msg.method) {
                 case 'initialise':
+                    console.log('initialise')
                     canvasState.setWidth(msg.width);
                     canvasState.setHeight(msg.height);
                     canvasState.setBackground(msg.color);
+
+                    console.log('canvas: ', canvasUrl)
+                    if (canvasUrl !== 'init'){
+                        let ctx = CanvasRef.current.getContext('2d');
+                        const img = new Image()
+                        img.src = canvasUrl;
+                        img.onload = () => {
+                            ctx.clearRect(0, 0, CanvasRef.current.width, CanvasRef.current.height)
+                            ctx.drawImage(img, 0, 0, CanvasRef.current.width, CanvasRef.current.height)
+                        }
+                    }
+
                     setWidth(msg.width);
-                    setHeight(msg.height)
+                    setHeight(msg.height);
+                    canvasState.setUsername(UsernameRef.current.value);
+                    document.title = `${params.id} | ${canvasState.username}`;
                     break;
             }
         }
-
-        let ctx = CanvasRef.current.getContext('2d')
-        axios.get(`http://localhost:3000/image?id=${params.id}`)
-            .then(response => {
-                const img = new Image()
-                img.src = response.data
-                img.onload = () => {
-                    ctx.clearRect(0, 0, CanvasRef.current.width, CanvasRef.current.height)
-                    ctx.drawImage(img, 0, 0, CanvasRef.current.width, CanvasRef.current.height)
-                }
-            })
-
     }
 
     const drawHandler = (msg) => {
@@ -208,7 +209,7 @@ const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
 
             </div>
 
-            <Chat socket={socket} username={canvasState.username} msgArray = {msgArr} chatActive={chatActive}/>
+            <Chat socket={canvasState.socket} username={canvasState.username} msgArray = {msgArr} chatActive={chatActive}/>
         </>
 
     );

@@ -3,10 +3,8 @@ import '../Style/Toolbar.css'
 import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
 import {useNavigate} from "react-router-dom";
-import Modal from "./Modal";
 import '../Style/InviteModal.css'
 import InviteModal from "./InviteModal";
-import {set} from "mobx";
 
 const HorToolbar = ({width, height, chatActive, setChatActive}) => {
     const fontSizeRef = useRef();
@@ -50,7 +48,10 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
             username: canvasState.username
         }))
         canvasState.socket.close();
-        navigate('/'); navigate(0);
+        canvasState.socket.onclose = () => {
+            console.log('closed canvas')
+        }
+        navigate('/');
     }
 
     const [ModalActive, setModalActive] = useState(false)
