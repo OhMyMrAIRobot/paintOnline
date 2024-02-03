@@ -162,7 +162,7 @@ const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
                 ctx.beginPath();
                 break;
             case "square":
-                Square.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.strokeColor, figure.fillColor, figure.lineWidth);
+                Square.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.strokeColor, figure.fillColor, figure.lineWidth);
                 ctx.beginPath();
                 break;
             case "circle":
