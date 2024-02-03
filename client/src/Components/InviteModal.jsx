@@ -4,12 +4,27 @@ import canvasState from "../Store/CanvasState";
 import '../Style/InviteModal.css'
 
 const InviteModal = ({ModalActive, setModalActive}) => {
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Escape') {
+            setModalActive(false);
+            removeEventListener();
+        }
+    }
+
+    document.getElementById('root').addEventListener('keydown', handleKeyPress);
+
+    const removeEventListener = () => {
+        document.getElementById('root').removeEventListener('keydown', handleKeyPress);
+    }
+
     return (
         <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
-        <div className = "invite_modal">
+        <div
+            className = "invite_modal">
                 <p className = "invite_text">Invite your friends!</p>
                 <div className = "invite_input_container">
-                    <input className = "invite_input" type={'text'} defaultValue={window.location.href} readOnly={true}/>
+                    <input autoFocus={true} className = "invite_input" type={'text'} defaultValue={window.location.href} readOnly={true}/>
                     <button className = "copy_button" onClick={() => navigator.clipboard.writeText(window.location.href)}>Copy</button>
                 </div>
 

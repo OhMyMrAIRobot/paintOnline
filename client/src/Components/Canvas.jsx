@@ -112,6 +112,7 @@ const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
 
     const connectionHandler = () => {
         canvasState.setUsername(UsernameRef.current.value);
+        document.title = `${params.id} | ${canvasState.username}`;
         socket.current.send(JSON.stringify({
             id:params.id,
             method: "initialise"

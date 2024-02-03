@@ -49,24 +49,6 @@ class Square extends Rect{
         }
     }
 
-    static StaticDraw(ctx, x, y, w, h, strokeColor, fillColor, lineWidth){
-        let oldStrokeWidth = ctx.lineWidth;
-        let oldStrokeColor = ctx.strokeStyle;
-        let oldFillColor = ctx.fillStyle;
-
-        ctx.beginPath();
-        ctx.strokeStyle = strokeColor;
-        ctx.fillStyle = fillColor;
-        ctx.lineWidth = lineWidth;
-        ctx.rect(x,y,w,h);
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.lineWidth = oldStrokeWidth;
-        ctx.strokeStyle = oldStrokeColor;
-        ctx.fillStyle = oldFillColor;
-    }
-
 }
 
 export default Square;

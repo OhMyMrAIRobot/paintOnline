@@ -54,6 +54,7 @@ const ConnectionMessage = (message, username, chatContainer) => {
 const Chat = ({socket, username, msgArray, chatActive}) => {
 
     const inputRef = useRef("")
+    const chatRef = useRef("")
     const params = useParams();
 
     useEffect(() => {
@@ -84,8 +85,12 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
     }
 
     return (
-        <Draggable>
+        <Draggable
+            onStart={() => chatRef.current.style.transition = '0s'}
+            onStop={() => chatRef.current.style.transition = '0.5s'}
+        >
             <div
+                ref = {chatRef}
                 onKeyDown={e => {if (e.key === 'Enter' && inputRef.current.value !== "") sendHandler()}}
                 className = {chatActive ? "chat chat_active" : "chat"}>
                 <div className = "msg_container" id = "idchat"></div>
