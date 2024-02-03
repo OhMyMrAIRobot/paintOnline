@@ -7,13 +7,22 @@
     background-color: lightgrey;
     position: absolute;
     z-index: 100;
-    /*bottom: 0;*/
-    /*right: 0;*/
     margin-left: 200px;
     overflow-x: scroll;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
+    opacity: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    transform: scale(0);
+}
+
+.chat_active{
+    pointer-events: all;
+    opacity: 1;
+    transform: scale(1);
 }
 
 .msg_container{

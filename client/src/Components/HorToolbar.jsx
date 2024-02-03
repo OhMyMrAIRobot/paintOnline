@@ -8,7 +8,7 @@ import '../Style/InviteModal.css'
 import InviteModal from "./InviteModal";
 import {set} from "mobx";
 
-const HorToolbar = ({width, height}) => {
+const HorToolbar = ({width, height, chatActive, setChatActive}) => {
     const fontSizeRef = useRef();
     const fontFamilyRef = useRef();
     const widthRef = useRef();
@@ -131,6 +131,15 @@ const HorToolbar = ({width, height}) => {
                     defaultValue = "#FFFFFF"
                     onChange={(e) => changeBackgroundHandler(e.target.value)}
                 />
+
+                <button
+                    className = "button_chat"
+                    onClick = {() => {
+                        chatActive ? setChatActive(false) : setChatActive(true);
+                    }}
+                >
+                    Chat
+                </button>
 
                 {/*Кнопка пригласить*/}
                 <button

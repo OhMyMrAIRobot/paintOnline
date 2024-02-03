@@ -17,7 +17,7 @@ import axios from "axios";
 import Chat from "./Chat";
 import UsernameModal from "./UsernameModal";
 
-const Canvas = observer(({socket, setWidth, setHeight}) => {
+const Canvas = observer(({socket, setWidth, setHeight, chatActive}) => {
     const params = useParams();
     const CanvasRef = useRef();
     const UsernameRef = useRef();
@@ -206,7 +206,8 @@ const Canvas = observer(({socket, setWidth, setHeight}) => {
                 </canvas>
 
             </div>
-            <Chat socket={socket} username={canvasState.username} msgArray = {msgArr}/>
+
+            <Chat socket={socket} username={canvasState.username} msgArray = {msgArr} chatActive={chatActive}/>
         </>
 
     );

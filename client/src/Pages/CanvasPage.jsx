@@ -9,6 +9,7 @@ const CanvasPage = () => {
 
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
+    const [chatActive, setChatActive] = useState(false);
 
     const params = useParams();
     const socket = useRef();
@@ -47,10 +48,10 @@ const CanvasPage = () => {
 
     return (
         <div>
-            <HorToolbar width={width} height={height}/>
+            <HorToolbar width={width} height={height} chatActive={chatActive} setChatActive={setChatActive}/>
             <div style = {{display: 'flex'}}>
                 <VertToolbar />
-                <Canvas setWidth={setWidth} setHeight={setHeight} socket = {socket}/>
+                <Canvas setWidth={setWidth} setHeight={setHeight} socket = {socket} chatActive={chatActive}/>
             </div>
             <input id = 'test' style = {{display: 'none', position: 'absolute'}}/>
         </div>

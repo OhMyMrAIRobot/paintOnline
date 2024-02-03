@@ -51,7 +51,7 @@ const ConnectionMessage = (message, username, chatContainer) => {
     messageElement.appendChild(nameSpan);
 }
 
-const Chat = ({socket, username, msgArray}) => {
+const Chat = ({socket, username, msgArray, chatActive}) => {
 
     const inputRef = useRef("")
     const params = useParams();
@@ -87,7 +87,7 @@ const Chat = ({socket, username, msgArray}) => {
         <Draggable>
             <div
                 onKeyDown={e => {if (e.key === 'Enter' && inputRef.current.value !== "") sendHandler()}}
-                className = "chat">
+                className = {chatActive ? "chat chat_active" : "chat"}>
                 <div className = "msg_container" id = "idchat"></div>
                 <div className = "send_container">
                     <input placeholder = "Enter" className = "msg_input" ref = {inputRef} type = 'text'></input>

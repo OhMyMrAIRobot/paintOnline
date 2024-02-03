@@ -12,6 +12,7 @@
     margin-left: var(--horizantal-offset);
     padding-left: 10px;
     padding-right: 10px;
+    border-radius: 5px;
 }
 
 .toolbar-h{
@@ -24,6 +25,7 @@
     flex-direction: column;
     align-items: center;
     margin-top: var(--vertical-offset);
+    border-radius: 5px;
 }
 
 .toolbar-btn{
@@ -52,6 +54,18 @@
     margin-bottom: 20px;
 }
 
+.button_chat{
+    margin-left: auto;
+    border-radius: 10px;
+    width: 70px;
+    height: 25px;
+    border: 2px solid black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #f6f6f6;
+}
+
 .button_invite{
     border-radius: 10px;
     width: 120px;
@@ -59,7 +73,6 @@
     cursor: pointer;
     font-size: 16px;
     background-color: aquamarine;
-    margin-left: auto;
     border: 2px solid darkgreen;
     font-weight: bold;
 }
