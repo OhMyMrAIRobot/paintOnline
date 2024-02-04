@@ -15,7 +15,7 @@ const JoinModal = ({ModalActive, setModalActive, inputRef, socket, jumpToRoom}) 
         <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
             <div className = "join_modal"
                  onKeyDown={e => {
-                     if (e.key === 'Enter') JoinRoomHandler(socket.current, jumpToRoom, inputRef);
+                     if (e.key === 'Enter') JoinRoomHandler(socket.current, jumpToRoom, inputRef.current);
                      else if (e.key === 'Escape') setModalActive(false)
                  }}
             >
@@ -33,7 +33,7 @@ const JoinModal = ({ModalActive, setModalActive, inputRef, socket, jumpToRoom}) 
 
                 <div className={"join_modal_button_container"}>
                     <button className = "join_modal_button exit" onClick={e => setModalActive(false)}>Cancel</button>
-                    <button className = "join_modal_button join" onClick={() => JoinRoomHandler(socket.current, jumpToRoom, inputRef)}>Join</button>
+                    <button className = "join_modal_button join" onClick={() => JoinRoomHandler(socket.current, jumpToRoom, inputRef.current)}>Join</button>
                 </div>
 
             </div>

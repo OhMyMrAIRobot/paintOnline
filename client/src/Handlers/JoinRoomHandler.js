@@ -1,8 +1,7 @@
 import {sendMessage} from "./SendHandler";
 
-export const JoinRoomHandler = (socket, jumpToRoom, inputRef) => {
-    console.log("input:" , inputRef)
-    let id = inputRef.current.value;
+export const JoinRoomHandler = (socket, jumpToRoom, input) => {
+    let id = input.value;
     sendMessage(socket,{id: id, method: "join"})
 
     socket.onmessage = (event) => {
@@ -11,7 +10,7 @@ export const JoinRoomHandler = (socket, jumpToRoom, inputRef) => {
             if (msg.connect)
                 jumpToRoom(id)
             else
-                inputRef.current.style.borderColor = "red"
+                input.style.borderColor = "red"
         }
     }
 }

@@ -35,7 +35,7 @@ const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
         if (canvasState.username){
             initialiseTools(CanvasRef);
             sendMessage(canvasState.socket,{id:params.id, method: "connection", username: canvasState.username})
-            messageHandler(setMsgArr, CanvasRef, setWidth, setHeight);
+            messageHandler(setMsgArr, CanvasRef.current, setWidth, setHeight);
         }
 
     }, [canvasState.username])
@@ -53,7 +53,7 @@ const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
     // инициализация полотна
     const connectionHandler = () => {
         sendMessage(canvasState.socket,{id:params.id, method: "initialise"})
-        InitialiseCanvas(canvasUrl, CanvasRef, setWidth, setHeight, UsernameRef, params);
+        InitialiseCanvas(canvasUrl, CanvasRef.current, setWidth, setHeight, UsernameRef.current.value, params);
     }
 
     return (

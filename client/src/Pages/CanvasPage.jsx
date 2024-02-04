@@ -33,7 +33,7 @@ const CanvasPage = () => {
             sendMessage(socket.current,{id: params.id, method: "join"});
         }
 
-        preInitialiseCanvasHandler(socket, params, setCanvasUrl, navigate);
+        preInitialiseCanvasHandler(socket.current, params, setCanvasUrl, navigate);
     }, [params.id]);
 
     return (

@@ -7,9 +7,9 @@ import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text";
 
-export const drawHandler = (msg, CanvasRef) => {
+export const drawHandler = (msg, Canvas) => {
     const figure = msg.figure;
-    const ctx = CanvasRef.current.getContext('2d');
+    const ctx = Canvas.getContext('2d');
     switch (figure.type){
         case "brush":
             Brush.Draw(ctx, figure.x, figure.y, figure.strokeColor,figure.lineWidth);
