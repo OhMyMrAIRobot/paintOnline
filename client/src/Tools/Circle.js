@@ -1,4 +1,5 @@
 import Tool from "./Tool";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Circle extends Tool{
     constructor(canvas, socket, id) {
@@ -14,21 +15,19 @@ class Circle extends Tool{
 
     MouseUpHandler(e){
         this.isMouseDown = false;
-        if (!this.isMouseDown){
-            this.socket.send(JSON.stringify({
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'circle',
-                    x: this.xStart,
-                    y: this.yStart,
-                    radius: this.radius,
-                    strokeColor: this.ctx.strokeStyle,
-                    fillColor: this.ctx.fillStyle,
-                    lineWidth: this.ctx.lineWidth,
-                }
-            }))
-        }
+        sendMessage(this.socket,{
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'circle',
+                x: this.xStart,
+                y: this.yStart,
+                radius: this.radius,
+                strokeColor: this.ctx.strokeStyle,
+                fillColor: this.ctx.fillStyle,
+                lineWidth: this.ctx.lineWidth,
+            }
+        })
     }
 
     MouseDownHandler(e){

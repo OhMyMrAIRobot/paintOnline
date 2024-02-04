@@ -17,8 +17,8 @@ export const messageHandler = (setMsgArr, Canvas, setWidth, setHeight) => {
             case 'undo':
                 canvasState.undo();
                 break;
-            case 'reUndo':
-                canvasState.reUndo();
+            case 'redo':
+                canvasState.redo();
                 break;
             case 'changeResolution':
                 canvasState.setWidth(msg.width);

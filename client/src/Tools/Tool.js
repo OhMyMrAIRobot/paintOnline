@@ -4,7 +4,7 @@ class Tool{
         this.socket = socket;
         this.id = id;
         this.ctx = canvas.getContext('2d');
-        this.Clear();
+        this.clear();
     }
 
     set fillColor(color) {
@@ -22,11 +22,10 @@ class Tool{
         this.ctx.font = font;
     }
 
-    Clear() {
+    clear() {
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;
         this.canvas.onmousedown = null;
-        // document.getElementById('test').style.display = 'none';
     }
 }
 

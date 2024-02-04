@@ -1,4 +1,5 @@
 import Tool from "./Tool";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Brush extends Tool {
     constructor(canvas, socket, id) {
@@ -14,13 +15,7 @@ class Brush extends Tool {
 
     MouseUpHandler(e) {
         this.isMouseDown = false;
-        this.socket.send(JSON.stringify({
-            method: 'draw',
-            id: this.id,
-            figure: {
-                type: 'finish',
-            }
-        }))
+        sendMessage(this.socket,{id: this.id, method: 'draw', figure: {type: 'finish'}})
     }
 
     MouseDownHandler(e) {
@@ -31,7 +26,7 @@ class Brush extends Tool {
 
     MouseMoveHandler(e) {
         if (this.isMouseDown){
-            this.socket.send(JSON.stringify({
+            sendMessage(this.socket, {
                 method: 'draw',
                 id: this.id,
                 figure: {
@@ -41,7 +36,7 @@ class Brush extends Tool {
                     strokeColor: this.ctx.strokeStyle,
                     lineWidth: this.ctx.lineWidth,
                 }
-            }))
+            })
         }
     }
 

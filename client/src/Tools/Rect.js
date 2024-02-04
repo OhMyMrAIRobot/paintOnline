@@ -1,4 +1,5 @@
 import Tool from "./Tool";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Rect extends Tool{
     constructor(canvas, socket, id) {
@@ -14,22 +15,20 @@ class Rect extends Tool{
 
     MouseUpHandler(e) {
         this.isMouseDown = false;
-        if (!this.isMouseDown){
-            this.socket.send(JSON.stringify({
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'rectangle',
-                    x: this.xStart,
-                    y: this.yStart,
-                    width: this.width,
-                    height: this.height,
-                    strokeColor: this.ctx.strokeStyle,
-                    fillColor: this.ctx.fillStyle,
-                    lineWidth: this.ctx.lineWidth,
-                }
-            }))
-        }
+        sendMessage(this.socket, {
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'rectangle',
+                x: this.xStart,
+                y: this.yStart,
+                width: this.width,
+                height: this.height,
+                strokeColor: this.ctx.strokeStyle,
+                fillColor: this.ctx.fillStyle,
+                lineWidth: this.ctx.lineWidth,
+            }
+        })
     }
 
     MouseDownHandler(e) {

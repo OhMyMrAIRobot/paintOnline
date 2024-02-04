@@ -1,4 +1,5 @@
 import Tool from "./Tool";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Line extends Tool{
     constructor(canvas, socket, id) {
@@ -14,22 +15,19 @@ class Line extends Tool{
 
     MouseUpHandler(e){
         this.isMouseDown = false;
-        if (!this.isMouseDown){
-            this.socket.send(JSON.stringify({
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'line',
-                    Xs: this.xStart,
-                    Ys: this.yStart,
-                    Xf: e.pageX - e.target.offsetLeft,
-                    Yf: e.pageY - e.target.offsetTop,
-                    strokeColor: this.ctx.strokeStyle,
-                    lineWidth: this.ctx.lineWidth,
-                }
-            }))
-        }
-
+        sendMessage(this.socket, {
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'line',
+                Xs: this.xStart,
+                Ys: this.yStart,
+                Xf: e.pageX - e.target.offsetLeft,
+                Yf: e.pageY - e.target.offsetTop,
+                strokeColor: this.ctx.strokeStyle,
+                lineWidth: this.ctx.lineWidth,
+            }
+        })
     }
 
     MouseDownHandler(e){

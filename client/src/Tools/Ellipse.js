@@ -1,25 +1,24 @@
 import Circle from "./Circle";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Ellipse extends Circle{
 
     MouseUpHandler(e){
         this.isMouseDown = false;
-        if (!this.isMouseDown){
-            this.socket.send(JSON.stringify({
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'ellipse',
-                    x: this.xStart,
-                    y: this.yStart,
-                    rx: this.Rx,
-                    ry: this.Ry,
-                    strokeColor: this.ctx.strokeStyle,
-                    fillColor: this.ctx.fillStyle,
-                    lineWidth: this.ctx.lineWidth,
-                }
-            }))
-        }
+        sendMessage(this.socket, {
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'ellipse',
+                x: this.xStart,
+                y: this.yStart,
+                rx: this.Rx,
+                ry: this.Ry,
+                strokeColor: this.ctx.strokeStyle,
+                fillColor: this.ctx.fillStyle,
+                lineWidth: this.ctx.lineWidth,
+            }
+        })
     }
 
     MouseMoveHandler(e){

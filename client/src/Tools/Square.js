@@ -1,25 +1,24 @@
 import Rect from "./Rect";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Square extends Rect{
 
     MouseUpHandler(e) {
         this.isMouseDown = false;
-        if (!this.isMouseDown){
-            this.socket.send(JSON.stringify({
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'square',
-                    x: this.xStart,
-                    y: this.yStart,
-                    width: this.width / Math.sqrt(2),
-                    height: this.height / Math.sqrt(2),
-                    strokeColor: this.ctx.strokeStyle,
-                    fillColor: this.ctx.fillStyle,
-                    lineWidth: this.ctx.lineWidth,
-                }
-            }))
-        }
+        sendMessage(this.socket, {
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'square',
+                x: this.xStart,
+                y: this.yStart,
+                width: this.width / Math.sqrt(2),
+                height: this.height / Math.sqrt(2),
+                strokeColor: this.ctx.strokeStyle,
+                fillColor: this.ctx.fillStyle,
+                lineWidth: this.ctx.lineWidth,
+            }
+        })
     }
 
     MouseMoveHandler(e) {

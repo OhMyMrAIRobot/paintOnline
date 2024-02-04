@@ -92,7 +92,7 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn next"
-                onClick={(e) => sendMessage(canvasState.socket,{id: canvasState.session, method: 'reUndo'})}
+                onClick={(e) => sendMessage(canvasState.socket,{id: canvasState.session, method: 'redo'})}
             >
                 Next
             </button>

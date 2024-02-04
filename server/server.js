@@ -21,12 +21,13 @@ app.ws('/', (ws,req) => {
                 joinHandler(ws, msg);
                 break;
             case 'pushUndo':
+                saveCanvasHandler(ws,msg);
                 broadcastConnection(ws,msg);
                 break;
             case 'undo':
                 broadcastConnection(ws,msg);
                 break;
-            case 'reUndo':
+            case 'redo':
                 broadcastConnection(ws,msg);
                 break;
             case 'changeResolution':
@@ -48,7 +49,6 @@ app.ws('/', (ws,req) => {
                 saveCanvasHandler(ws,msg);
                 break;
             case 'getCanvas':
-                console.log('getcan')
                 getCanvasHandler(ws, msg);
                 break;
         }

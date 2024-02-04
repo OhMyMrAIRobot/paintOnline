@@ -3,7 +3,7 @@ import {makeAutoObservable} from "mobx";
 class CanvasState {
     canvas = null;
     undoList = [];
-    reUndoList = [];
+    redoList = [];
 
     username = "";
     socket = null;
@@ -64,15 +64,15 @@ class CanvasState {
         this.undoList.push(state);
     }
 
-    pushToReUndo(state){
-        this.reUndoList.push(state);
+    pushToRedo(state){
+        this.redoList.push(state);
     }
 
     undo(){
         let ctx = this.canvas.getContext('2d');
         if (this.undoList.length > 0){
             let Url = this.undoList.pop();
-            this.pushToReUndo(this.canvas.toDataURL());
+            this.pushToRedo(this.canvas.toDataURL());
             let img = new Image();
             img.src = Url;
             img.onload = () => {
@@ -82,10 +82,10 @@ class CanvasState {
         }
     }
 
-    reUndo(){
+    redo(){
         let ctx = this.canvas.getContext('2d');
-        if (this.reUndoList.length > 0){
-            let Url = this.reUndoList.pop();
+        if (this.redoList.length > 0){
+            let Url = this.redoList.pop();
             this.pushToUndo(this.canvas.toDataURL());
             let img = new Image();
             img.src = Url;

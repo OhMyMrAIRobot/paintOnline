@@ -1,4 +1,5 @@
 import Tool from "./Tool";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Text extends Tool {
     constructor(canvas, socket, id) {
@@ -45,8 +46,9 @@ class Text extends Tool {
     TextInputBlurHandler() {
         const text = this.textInput.value;
         this.textInput.removeEventListener('keydown', this.TextInputKeydownHandler);
+
         if (text.trim() !== '') {
-            this.socket.send(JSON.stringify({
+            sendMessage(this.socket, {
                 method: 'draw',
                 id: this.id,
                 figure: {
@@ -57,7 +59,7 @@ class Text extends Tool {
                     font: this.ctx.font,
                     fillColor: this.ctx.fillStyle,
                 }
-            }))
+            })
         }
     }
 

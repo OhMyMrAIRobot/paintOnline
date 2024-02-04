@@ -1,13 +1,11 @@
 import Brush from "./Brush";
+import {sendMessage} from "../Handlers/SendHandler";
 
 class Eraser extends Brush{
-    constructor(canvas, socket, id) {
-        super(canvas, socket, id);
-    }
 
     MouseMoveHandler(e) {
         if (this.isMouseDown){
-            this.socket.send(JSON.stringify({
+            sendMessage(this.socket, {
                 method: 'draw',
                 id: this.id,
                 figure: {
@@ -16,7 +14,7 @@ class Eraser extends Brush{
                     y: e.pageY - e.target.offsetTop,
                     lineWidth: this.ctx.lineWidth,
                 }
-            }))
+            })
         }
     }
 
