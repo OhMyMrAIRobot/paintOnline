@@ -57,7 +57,12 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
     const chatRef = useRef("")
     const params = useParams();
 
+    // обновление сообщений
     useEffect(() => {
+
+        if (!chatActive)
+            document.getElementById('idMsgSpan').style.opacity = '1';
+
         let chatContainer = document.getElementById('idchat');
         chatContainer.innerHTML = '';
         msgArray.forEach(function (message) {

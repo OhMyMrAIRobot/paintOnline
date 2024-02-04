@@ -3,12 +3,6 @@ const app = express();
 const WSserver = require('express-ws')(app);
 const aWss = WSserver.getWss();
 const PORT = 3000;
-const cors = require('cors')
-const fs = require('fs')
-const path = require('path')
-
-app.use(cors())
-app.use(express.json())
 
 app.ws('/', (ws,req) => {
     ws.on('message', (msg) => {
@@ -83,36 +77,42 @@ const createRoomHandler = (ws, msg) => {
 
 const joinHandler = (ws, msg) => {
     let id = JSON.stringify(msg.id)
+    ws.send(JSON.stringify({
+        method: 'checkRoom',
+        connect: RoomsArr.includes(id),
+    }))
 
-    if (RoomsArr.includes(id)) {
-        let pos = ConfigArr.indexOf(msg.id);
-
-        ws.send(JSON.stringify({
-            method: 'checkRoom',
-            connect: RoomsArr.includes(id),
-        }))
-    } else {
-        ws.send(JSON.stringify({
-            method: 'checkRoom',
-            connect: RoomsArr.includes(id),
-        }))
-    }
 }
 
 const saveCanvasHandler = (ws,msg) => {
     let pos = ConfigArr.indexOf(msg.id);
-    ConfigArr[pos + 1] = {width: ConfigArr[pos + 1].width, height:ConfigArr[pos + 1].height, color: ConfigArr[pos + 1].color, url: msg.data};
+    ConfigArr[pos + 1] = {
+        width: ConfigArr[pos + 1].width,
+        height:ConfigArr[pos + 1].height,
+        color: ConfigArr[pos + 1].color,
+        url: msg.data
+    };
 }
 
 const changeResolutionHandler = (ws, msg) => {
     let pos = ConfigArr.indexOf(msg.id);
-    ConfigArr[pos + 1] = {width: msg.width, height:msg.height, color: ConfigArr[pos + 1].color, url: ConfigArr[pos + 1].url};
+    ConfigArr[pos + 1] = {
+        width: msg.width,
+        height:msg.height,
+        color: ConfigArr[pos + 1].color,
+        url: ConfigArr[pos + 1].url,
+    };
     broadcastConnection(ws, msg)
 }
 
 const changeBackgroundHandler = (ws,msg) => {
     let pos = ConfigArr.indexOf(msg.id);
-    ConfigArr[pos + 1] = {width: ConfigArr[pos + 1].width, height:ConfigArr[pos + 1].height, color: msg.color, url: ConfigArr[pos + 1].url};
+    ConfigArr[pos + 1] = {
+        width: ConfigArr[pos + 1].width,
+        height:ConfigArr[pos + 1].height,
+        color: msg.color,
+        url: ConfigArr[pos + 1].url,
+    };
     broadcastConnection(ws, msg)
 }
 

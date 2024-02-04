@@ -54,8 +54,11 @@
     margin-bottom: 20px;
 }
 
-.button_chat{
+.button_chat_container{
     margin-left: auto;
+}
+
+.button_chat{
     border-radius: 10px;
     width: 70px;
     height: 25px;
@@ -64,6 +67,15 @@
     font-size: 16px;
     cursor: pointer;
     background-color: #f6f6f6;
+}
+
+.new_msg_span{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: crimson;
+    border-radius: 50%;
+    transition: 0.5s;
 }
 
 .button_invite{
@@ -87,3 +99,5 @@
     background-color: crimson;
     font-weight: bold;
 }
+
+

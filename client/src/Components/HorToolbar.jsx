@@ -133,14 +133,20 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     onChange={(e) => changeBackgroundHandler(e.target.value)}
                 />
 
-                <button
-                    className = "button_chat"
-                    onClick = {() => {
-                        chatActive ? setChatActive(false) : setChatActive(true);
-                    }}
-                >
-                    Chat
-                </button>
+                {/*Кнопка чата*/}
+                <div className = "button_chat_container">
+                    <span id = "idMsgSpan" className = "new_msg_span"></span>
+                    <button className = "button_chat"
+                        onClick = {() => {
+                            chatActive ? setChatActive(false) : setChatActive(true);
+                            document.getElementById('idMsgSpan').style.opacity = '0';
+                        }}
+                    >
+
+                        Chat
+                    </button>
+                </div>
+
 
                 {/*Кнопка пригласить*/}
                 <button
