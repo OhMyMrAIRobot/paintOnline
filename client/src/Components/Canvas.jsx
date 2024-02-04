@@ -34,7 +34,7 @@ const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
 
         if (canvasState.username){
             initialiseTools(CanvasRef);
-            sendMessage({id:params.id, method: "connection", username: canvasState.username})
+            sendMessage(canvasState.socket,{id:params.id, method: "connection", username: canvasState.username})
             messageHandler(setMsgArr, CanvasRef, setWidth, setHeight);
         }
 
@@ -42,17 +42,17 @@ const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
 
     // Сохранение полотна для отмены
     const MouseDownHandler = () => {
-        sendMessage({id: params.id, method: 'pushUndo', data: CanvasRef.current.toDataURL()})
+        sendMessage(canvasState.socket,{id: params.id, method: 'pushUndo', data: CanvasRef.current.toDataURL()})
     }
 
     // Сохранение полотна на сервер
     const MouseUpHandler = () => {
-        sendMessage({id: params.id, method: 'saveCanvas', data: CanvasRef.current.toDataURL()})
+        sendMessage(canvasState.socket,{id: params.id, method: 'saveCanvas', data: CanvasRef.current.toDataURL()})
     }
 
     // инициализация полотна
     const connectionHandler = () => {
-        sendMessage({id:params.id, method: "initialise"})
+        sendMessage(canvasState.socket,{id:params.id, method: "initialise"})
         InitialiseCanvas(canvasUrl, CanvasRef, setWidth, setHeight, UsernameRef, params);
     }
 

@@ -11,15 +11,15 @@ import Square from "../Tools/Square";
 import Pointer from "../Tools/Pointer";
 import Line from "../Tools/Line";
 import Text from "../Tools/Text"
+import {sendMessage} from "../Handlers/SendHandler";
 
 const HorToolbar = () => {
 
     const download = () => {
         const dataUrl = canvasState.canvas.toDataURL()
-        console.log(dataUrl)
         const a = document.createElement('a')
         a.href = dataUrl
-        a.download = "myCanvas.jpg"
+        a.download = `${canvasState.session}.jpg`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
@@ -27,16 +27,17 @@ const HorToolbar = () => {
 
     return (
         <div className = "toolbar-h">
-
             <button
                 className = "toolbar-btn"
                 onClick={() => toolState.setTool(new Pointer(canvasState.canvas))}
-            >none
+            >
+                none
             </button>
 
             <button
                 className = "toolbar-btn "
-                onClick={() => toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session))}>
+                onClick={() => toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session))}
+            >
                 Brush
             </button>
 
@@ -49,7 +50,8 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn "
-                onClick={() => toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session))}>
+                onClick={() => toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session))}
+            >
                 Line
             </button>
 
@@ -90,24 +92,14 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbar-btn next"
-                onClick={(e) => {
-                    canvasState.socket.send(JSON.stringify({
-                        id: canvasState.session,
-                        method: 'reUndo',
-                    }))
-                }}
+                onClick={(e) => sendMessage(canvasState.socket,{id: canvasState.session, method: 'reUndo'})}
             >
                 Next
             </button>
 
             <button
                 className = "toolbar-btn "
-                onClick={(e) => {
-                    canvasState.socket.send(JSON.stringify({
-                        id: canvasState.session,
-                        method: 'undo',
-                    }))
-                }}
+                onClick={(e) => sendMessage(canvasState.socket,{id: canvasState.session, method: 'undo'})}
             >
                 Prev
             </button>
@@ -118,8 +110,6 @@ const HorToolbar = () => {
             >
                 Save
             </button>
-
-
         </div>
     );
 };

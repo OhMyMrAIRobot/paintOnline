@@ -6,10 +6,7 @@ export const messageHandler = (setMsgArr, CanvasRef, setWidth, setHeight) => {
         let msg = JSON.parse(event.data);
         switch (msg.method){
             case 'connection':
-                setMsgArr(prev => [...prev, {
-                    type: "connect",
-                    user: msg.username,
-                }])
+                setMsgArr(prev => [...prev, {type: "connect", user: msg.username}])
                 break;
             case 'draw':
                 drawHandler(msg, CanvasRef);
@@ -41,10 +38,7 @@ export const messageHandler = (setMsgArr, CanvasRef, setWidth, setHeight) => {
                 }])
                 break;
             case 'close':
-                setMsgArr(prev => [...prev, {
-                    type: "disconnect",
-                    user: msg.username,
-                }])
+                setMsgArr(prev => [...prev, {type: "disconnect", user: msg.username}])
                 break;
             default:
                 break;

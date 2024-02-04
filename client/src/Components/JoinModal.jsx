@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import Modal from "./Modal";
 import "../Style/JoinModal.css"
+import {JoinRoomHandler} from "../Handlers/JoinRoomHandler";
 
-const JoinModal = ({ModalActive, setModalActive, inputRef, JoinRoomHandler}) => {
+const JoinModal = ({ModalActive, setModalActive, inputRef, socket, jumpToRoom}) => {
 
     useEffect(() => {
         if (inputRef.current) {
@@ -14,7 +15,7 @@ const JoinModal = ({ModalActive, setModalActive, inputRef, JoinRoomHandler}) => 
         <Modal active={ModalActive} setActive={setModalActive} canClose={true}>
             <div className = "join_modal"
                  onKeyDown={e => {
-                     if (e.key === 'Enter') JoinRoomHandler()
+                     if (e.key === 'Enter') JoinRoomHandler(socket.current, jumpToRoom, inputRef);
                      else if (e.key === 'Escape') setModalActive(false)
                  }}
             >
@@ -27,11 +28,14 @@ const JoinModal = ({ModalActive, setModalActive, inputRef, JoinRoomHandler}) => 
                                :
                                inputRef.current.style.borderColor = "red"
                        }}
-                    className = "join_modal_input" ref = {inputRef} type = 'text'/>
+                    className = "join_modal_input" ref = {inputRef} type = 'text'
+                />
+
                 <div className={"join_modal_button_container"}>
                     <button className = "join_modal_button exit" onClick={e => setModalActive(false)}>Cancel</button>
-                    <button className = "join_modal_button join" onClick={JoinRoomHandler}>Join</button>
+                    <button className = "join_modal_button join" onClick={() => JoinRoomHandler(socket.current, jumpToRoom, inputRef)}>Join</button>
                 </div>
+
             </div>
         </Modal>
     );

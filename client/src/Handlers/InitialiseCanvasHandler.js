@@ -1,5 +1,4 @@
 import canvasState from "../Store/CanvasState";
-import {useParams} from "react-router-dom";
 
 export const InitialiseCanvas = (canvasUrl, CanvasRef, setWidth, setHeight, UsernameRef, params) => {
     canvasState.socket.onmessage = (event) => {

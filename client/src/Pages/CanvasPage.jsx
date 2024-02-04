@@ -4,6 +4,8 @@ import VertToolbar from "../Components/VertToolbar";
 import Canvas from "../Components/Canvas";
 import {useNavigate, useParams} from "react-router-dom";
 import canvasState from "../Store/CanvasState";
+import {sendMessage} from "../Handlers/SendHandler";
+import {preInitialiseCanvasHandler} from "../Handlers/preInitialiseCanvasHandler";
 
 const CanvasPage = () => {
     const [width, setWidth] = useState(0);
@@ -18,55 +20,20 @@ const CanvasPage = () => {
     // Закрытие вкладки
     window.onunload = () => {
         if (canvasState.username){
-            canvasState.socket.send(JSON.stringify({
-                method: 'close',
-                id: canvasState.session,
-                username: canvasState.username
-            }))
+            sendMessage(canvasState.socket,{id: canvasState.session, method: 'close', username: canvasState.username})
         }
         canvasState.socket.close();
     }
 
     // Проверка ID комнаты
     useEffect(() => {
-        let id = params.id;
         socket.current = new WebSocket(`ws://localhost:3000/`);
 
         socket.current.onopen = () => {
-            socket.current.send(JSON.stringify({
-                id: id,
-                method: "join"
-            }))
-            console.log('opened')
+            sendMessage(socket.current,{id: params.id, method: "join"});
         }
 
-        socket.current.onmessage = (event) => {
-            let msg = JSON.parse(event.data);
-            switch (msg.method){
-                case 'checkRoom':
-                    if (!msg.connect)
-                        navigate(`/`);
-                    else{
-                        canvasState.setSocket(socket.current)
-                        canvasState.setSession(params.id);
-
-                        canvasState.socket.send(JSON.stringify({
-                            method: 'getCanvas',
-                            id: params.id,
-                        }))
-
-                        canvasState.socket.onmessage = (event) => {
-                            let msg = JSON.parse(event.data);
-                            switch (msg.method) {
-                                case 'getCanvas':
-                                    setCanvasUrl(msg.url);
-                                    break;
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
+        preInitialiseCanvasHandler(socket, params, setCanvasUrl, navigate);
     }, [params.id]);
 
     return (

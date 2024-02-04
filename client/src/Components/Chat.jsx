@@ -3,6 +3,7 @@ import '../Style/Chat.css'
 import {useParams} from "react-router-dom";
 import Draggable from "react-draggable";
 import {sendMessage} from "../Handlers/SendHandler";
+import canvasState from "../Store/CanvasState";
 
 const ChangeFormat =(min) => {
     if (min < 10)
@@ -86,7 +87,7 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
         let currentDate = new Date();
         let currentHour = currentDate.getHours();
         let currentMinute = currentDate.getMinutes();
-        sendMessage({id: params.id, method: 'message', username: username, data: inputRef.current.value, time: {hour: currentHour, minute: currentMinute}})
+        sendMessage(canvasState.socket,{id: params.id, method: 'message', username: username, data: inputRef.current.value, time: {hour: currentHour, minute: currentMinute}})
         inputRef.current.value = "";
     }
 

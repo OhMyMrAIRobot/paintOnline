@@ -5,12 +5,17 @@ import canvasState from "../Store/CanvasState";
 import {useNavigate} from "react-router-dom";
 import '../Style/InviteModal.css'
 import InviteModal from "./InviteModal";
+import {sendMessage} from "../Handlers/SendHandler";
 
 const HorToolbar = ({width, height, chatActive, setChatActive}) => {
     const fontSizeRef = useRef();
     const fontFamilyRef = useRef();
     const widthRef = useRef();
     const heightRef = useRef();
+
+    const navigate = useNavigate()
+
+    const [ModalActive, setModalActive] = useState(false)
 
     // обновление размера полотна в тулбаре
     useEffect(() => {
@@ -22,39 +27,22 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);
     }
 
+    // обновление размера полотна
     const changeResolutionHandler = () => {
-        canvasState.socket.send(JSON.stringify({
-            id: canvasState.session,
-            method: 'changeResolution',
-            width: widthRef.current.value,
-            height: heightRef.current.value,
-        }))
+        sendMessage(canvasState.socket,{id: canvasState.session, method: 'changeResolution', width: widthRef.current.value, height: heightRef.current.value})
     }
 
+    // обновление цвета полотна
     const changeBackgroundHandler = (color) => {
-        canvasState.socket.send(JSON.stringify({
-            id: canvasState.session,
-            method: 'changeBackground',
-            color: color,
-        }))
+        sendMessage(canvasState.socket,{id: canvasState.session, method: 'changeBackground', color: color})
     }
 
-    const navigate = useNavigate()
-
+    // обработка нажатия на кнопку выйти
     const leaveRoomHandler = () => {
-        canvasState.socket.send(JSON.stringify({
-            method: 'close',
-            id: canvasState.session,
-            username: canvasState.username
-        }))
+        sendMessage(canvasState.socket,{id: canvasState.session, method: 'close', username: canvasState.username})
         canvasState.socket.close();
-        canvasState.socket.onclose = () => {
-            console.log('closed canvas')
-        }
         navigate('/');
     }
-
-    const [ModalActive, setModalActive] = useState(false)
 
     return (
         <div>
@@ -142,11 +130,9 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                             document.getElementById('idMsgSpan').style.opacity = '0';
                         }}
                     >
-
                         Chat
                     </button>
                 </div>
-
 
                 {/*Кнопка пригласить*/}
                 <button
@@ -166,7 +152,6 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
 
             </div>
         </div>
-
     );
 };
 
