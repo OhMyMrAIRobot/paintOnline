@@ -2,6 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import '../Style/Chat.css'
 import {useParams} from "react-router-dom";
 import Draggable from "react-draggable";
+import {sendMessage} from "../Handlers/SendHandler";
 
 const ChangeFormat =(min) => {
     if (min < 10)
@@ -10,6 +11,7 @@ const ChangeFormat =(min) => {
         return min
 }
 
+// Сообщение от пользователя
 const CreateMessage = (message, username, chatContainer) => {
     let messageElement = document.createElement('div');
     message.user === username ? messageElement.className = "msg author" : messageElement.className = "msg"
@@ -35,6 +37,7 @@ const CreateMessage = (message, username, chatContainer) => {
     messageElement.appendChild(messageText);
 }
 
+// Системное сообщение
 const ConnectionMessage = (message, username, chatContainer) => {
     let messageElement = document.createElement('div');
     messageElement.className = "msg_connect_container";
@@ -60,11 +63,14 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
     // обновление сообщений
     useEffect(() => {
 
+        // Новое сообщение
         if (!chatActive)
             document.getElementById('idMsgSpan').style.opacity = '1';
 
+        // Отрисовка сообщений
         let chatContainer = document.getElementById('idchat');
         chatContainer.innerHTML = '';
+
         msgArray.forEach(function (message) {
             if (message.type === "message")
                 CreateMessage(message, username, chatContainer);
@@ -75,17 +81,12 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }, [msgArray]);
 
-    const sendHandler = () => {
-        const currentDate = new Date();
-        const currentHour = currentDate.getHours();
-        const currentMinute = currentDate.getMinutes();
-        socket.send(JSON.stringify({
-            id: params.id,
-            username: username,
-            method: 'message',
-            data: inputRef.current.value,
-            time: {hour: currentHour, minute: currentMinute},
-        }))
+    // Отправка сообщения
+    const sendMessageHandler = () => {
+        let currentDate = new Date();
+        let currentHour = currentDate.getHours();
+        let currentMinute = currentDate.getMinutes();
+        sendMessage({id: params.id, method: 'message', username: username, data: inputRef.current.value, time: {hour: currentHour, minute: currentMinute}})
         inputRef.current.value = "";
     }
 
@@ -96,13 +97,13 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
         >
             <div
                 ref = {chatRef}
-                onKeyDown={e => {if (e.key === 'Enter' && inputRef.current.value !== "") sendHandler()}}
+                onKeyDown={e => {if (e.key === 'Enter' && inputRef.current.value !== "") sendMessageHandler()}}
                 className = {chatActive ? "chat chat_active" : "chat"}>
                 <div className = "msg_container" id = "idchat"></div>
                 <div className = "send_container">
                     <input placeholder = "Enter" className = "msg_input" ref = {inputRef} type = 'text'></input>
                     <button
-                        onClick={() => {sendHandler()}}
+                        onClick={() => {sendMessageHandler()}}
                         className = "send_button">Send</button>
                 </div>
             </div>
