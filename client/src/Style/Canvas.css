@@ -9,3 +9,8 @@
 canvas{
     border: 1px solid black;
 }
+
+.inputText{
+    display: none;
+    position: absolute;
+}

@@ -26,6 +26,10 @@ class Tool{
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;
         this.canvas.onmousedown = null;
+        let inputs = Array.from(document.getElementsByClassName("inputText"));
+        inputs.forEach(node => {
+            document.body.removeChild(node);
+        })
     }
 }
 

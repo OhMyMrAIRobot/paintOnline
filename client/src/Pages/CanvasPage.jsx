@@ -43,7 +43,6 @@ const CanvasPage = () => {
                 <VertToolbar />
                 <Canvas canvasUrl = {canvasUrl} setWidth={setWidth} setHeight={setHeight} chatActive={chatActive}/>
             </div>
-            <input id = 'test' style = {{display: 'none', position: 'absolute'}}/>
         </div>
     );
 };

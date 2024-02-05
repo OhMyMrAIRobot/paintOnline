@@ -39,6 +39,7 @@ export const drawHandler = (msg, Canvas) => {
             break;
         case "text":
             Text.Draw(ctx, figure.x, figure.y, figure.text, figure.font,figure.fillColor);
+            ctx.beginPath();
             break;
         case 'finish':
             ctx.beginPath();
