@@ -6,6 +6,8 @@ import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text";
+import {sendMessage} from "./SendHandler";
+import canvasState from "../Store/CanvasState";
 
 export const drawHandler = (msg, Canvas) => {
     const figure = msg.figure;
@@ -39,6 +41,7 @@ export const drawHandler = (msg, Canvas) => {
             break;
         case "text":
             Text.Draw(ctx, figure.x, figure.y, figure.text, figure.font,figure.fillColor);
+            sendMessage(canvasState.socket,{id: canvasState.session, method: 'saveCanvas', data: canvasState.canvas.toDataURL()})
             ctx.beginPath();
             break;
         case 'finish':
