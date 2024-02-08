@@ -11,15 +11,15 @@ import {messageHandler} from "../Handlers/MessageHandler";
 import {sendMessage} from "../Handlers/SendHandler";
 import {InitialiseCanvas} from "../Handlers/InitialiseCanvasHandler";
 
-const initialiseTools = (CanvasRef) => {
-    toolState.setTool(new brush(CanvasRef.current, canvasState.socket, canvasState.session));
+const initialiseTools = () => {
+    toolState.setTool(new brush(canvasState.canvas, canvasState.socket, canvasState.session));
     toolState.setFillColor("#FFFFFF");
     toolState.setStrokeColor("#000000");
     toolState.setLineWidth(1);
     toolState.setFont("16px Arial");
 }
 
-const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
+const Canvas = observer(({setWidth, setHeight, chatActive}) => {
     const params = useParams();
 
     const CanvasRef = useRef();
@@ -33,27 +33,26 @@ const Canvas = observer(({canvasUrl, setWidth, setHeight, chatActive}) => {
         canvasState.setCanvas(CanvasRef.current);
 
         if (canvasState.username){
-            initialiseTools(CanvasRef);
+            initialiseTools();
             sendMessage(canvasState.socket,{id:params.id, method: "connection", username: canvasState.username})
-            messageHandler(setMsgArr, CanvasRef.current, setWidth, setHeight);
+            messageHandler(setMsgArr, canvasState.canvas, setWidth, setHeight);
         }
 
     }, [canvasState.username])
 
     // Сохранение полотна для отмены
     const MouseDownHandler = () => {
-        sendMessage(canvasState.socket,{id: params.id, method: 'pushUndo', data: CanvasRef.current.toDataURL()})
+        sendMessage(canvasState.socket,{id: params.id, method: 'pushUndo', data: canvasState.canvas.toDataURL()})
     }
 
     // Сохранение полотна на сервер
     const MouseUpHandler = () => {
-        sendMessage(canvasState.socket,{id: params.id, method: 'saveCanvas', data: CanvasRef.current.toDataURL()})
+        sendMessage(canvasState.socket,{id: params.id, method: 'saveCanvas', data: canvasState.canvas.toDataURL()})
     }
 
     // инициализация полотна
     const connectionHandler = () => {
-        sendMessage(canvasState.socket,{id:params.id, method: "initialise"})
-        InitialiseCanvas(canvasUrl, CanvasRef.current, setWidth, setHeight, UsernameRef.current.value, params);
+        InitialiseCanvas(canvasState.canvas, setWidth, setHeight, UsernameRef.current.value, params.id);
     }
 
     return (

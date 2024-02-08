@@ -3,6 +3,10 @@ const app = express();
 const WSserver = require('express-ws')(app);
 const aWss = WSserver.getWss();
 const PORT = 3000;
+const cors = require('cors')
+
+app.use(cors())
+app.use(express.json())
 
 app.ws('/', (ws,req) => {
     ws.on('message', (msg) => {
@@ -14,14 +18,7 @@ app.ws('/', (ws,req) => {
             case 'draw':
                 connectionHandler(ws, msg);
                 break;
-            case 'createRoom':
-                createRoomHandler(ws, msg);
-                break;
-            case 'join':
-                joinHandler(ws, msg);
-                break;
             case 'pushUndo':
-                saveCanvasHandler(ws,msg);
                 broadcast(ws,msg);
                 break;
             case 'undo':
@@ -36,9 +33,6 @@ app.ws('/', (ws,req) => {
             case 'changeBackground':
                 changeBackgroundHandler(ws, msg);
                 break;
-            case 'initialise':
-                initialiseCanvasHandler(ws,msg);
-                break;
             case 'message':
                 broadcast(ws, msg);
                 break;
@@ -48,9 +42,6 @@ app.ws('/', (ws,req) => {
             case 'saveCanvas':
                 saveCanvasHandler(ws,msg);
                 break;
-            case 'getCanvas':
-                getCanvasHandler(ws, msg);
-                break;
         }
     })
 })
@@ -59,6 +50,42 @@ app.listen(PORT, () => console.log(`server is working on ${PORT}`))
 
 let RoomsArr = [];
 let ConfigArr = [];
+
+app.post('/createRoom', (req, res) => {
+    try {
+        const id = req.query.id;
+        ConfigArr.push(id);
+        ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init"});
+        RoomsArr.push(id);
+        return res.status(200).json({message: "room created"})
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+app.get('/getRoom', (req, res) => {
+    try {
+        const data = RoomsArr.includes(req.query.id)
+        res.json(data)
+    } catch (e) {
+        console.log(e);
+    }
+})
+
+app.get('/initialise', (req, res) => {
+    try {
+        let pos = ConfigArr.indexOf(req.query.id);
+        const data = {
+            width: ConfigArr[pos + 1].width,
+            height: ConfigArr[pos + 1].height,
+            color: ConfigArr[pos + 1].color,
+            url: ConfigArr[pos + 1].url,
+        }
+        res.json(data)
+    } catch (e) {
+        console.log(e);
+    }
+})
 
 const broadcast = (ws, msg) => {
     aWss.clients.forEach(client => {
@@ -73,27 +100,13 @@ const connectionHandler = (ws, msg) => {
     broadcast(ws, msg);
 }
 
-const createRoomHandler = (ws, msg) => {
-    ConfigArr.push(msg.id);
-    ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init"});
-    RoomsArr.push(msg.id);
-}
-
-const joinHandler = (ws, msg) => {
-    let id = msg.id;
-    ws.send(JSON.stringify({
-        method: 'checkRoom',
-        connect: RoomsArr.includes(id),
-    }))
-}
-
 const saveCanvasHandler = (ws,msg) => {
     let pos = ConfigArr.indexOf(msg.id);
     ConfigArr[pos + 1] = {
         width: ConfigArr[pos + 1].width,
         height:ConfigArr[pos + 1].height,
         color: ConfigArr[pos + 1].color,
-        url: msg.data
+        url: msg.data,
     };
 }
 
@@ -117,24 +130,4 @@ const changeBackgroundHandler = (ws,msg) => {
         url: ConfigArr[pos + 1].url,
     };
     broadcast(ws, msg)
-}
-
-const initialiseCanvasHandler = (ws,msg) => {
-    let pos = ConfigArr.indexOf(msg.id);
-    const mess = {
-        method: 'initialise',
-        width: ConfigArr[pos + 1].width,
-        height: ConfigArr[pos + 1].height,
-        color: ConfigArr[pos + 1].color,
-    }
-    ws.send(JSON.stringify(mess));
-}
-
-const getCanvasHandler = (ws, msg) => {
-    let pos = ConfigArr.indexOf(msg.id);
-    const mess = {
-        method: 'getCanvas',
-        url: ConfigArr[pos + 1].url,
-    }
-    ws.send(JSON.stringify(mess))
 }

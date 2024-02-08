@@ -1,22 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import "../Style/Mainpage.css"
 import {useNavigate} from "react-router-dom";
 import JoinModal from "../Components/JoinModal";
 import {CreateRoomHandler} from "../Handlers/CreateRoomHandler";
-import {JoinRoomHandler} from "../Handlers/JoinRoomHandler";
 
 const MainPage = () => {
-    const socket = useRef()
     const inputRef = useRef()
 
     const navigate = useNavigate();
 
     const [ModalActive, setModalActive] = useState(false);
-
-    // Создание сокета на главной странице
-    useEffect(() => {
-        socket.current = new WebSocket(`ws://localhost:3000/`);
-    }, []);
 
     // Переход к комнате
     const jumpToRoom = (id) => {
@@ -26,12 +19,12 @@ const MainPage = () => {
     return (
         <div className = "main">
 
-            <JoinModal inputRef={inputRef} ModalActive={ModalActive} setModalActive={setModalActive} socket={socket} jumpToRoom={jumpToRoom}/>
+            <JoinModal inputRef={inputRef} ModalActive={ModalActive} setModalActive={setModalActive} jumpToRoom={jumpToRoom}/>
 
             <div className = "main-container">
                 <button
                     className = "main-button"
-                    onClick={() => CreateRoomHandler(jumpToRoom, socket.current)}
+                    onClick={() => CreateRoomHandler(jumpToRoom)}
                 >
                     Create room
                 </button>

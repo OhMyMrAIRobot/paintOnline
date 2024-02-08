@@ -46,7 +46,6 @@ const ConnectionMessage = (message, username, chatContainer) => {
 
     let nameSpan = document.createElement('span');
     nameSpan.className = "msg_connect";
-    console.log(message);
     message.type === 'connect' ?
         nameSpan.textContent = `User ${message.user} has connected!`
     :

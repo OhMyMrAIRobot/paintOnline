@@ -1,16 +1,8 @@
-import {sendMessage} from "./SendHandler";
+import axios from "axios";
 
-export const JoinRoomHandler = (socket, jumpToRoom, input) => {
+export const JoinRoomHandler = (jumpToRoom, input) => {
     let id = input.value;
-    sendMessage(socket,{id: id, method: "join"})
-
-    socket.onmessage = (event) => {
-        let msg = JSON.parse(event.data);
-        if (msg.method === 'checkRoom'){
-            if (msg.connect)
-                jumpToRoom(id)
-            else
-                input.style.borderColor = "red"
-        }
-    }
+    axios.get(`http://localhost:3000/getRoom?id=${id}`).then(response => {
+        response.data ? jumpToRoom(id) : input.style.borderColor = "red";
+    })
 }
