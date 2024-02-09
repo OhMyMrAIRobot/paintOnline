@@ -12,7 +12,7 @@ import {sendMessage} from "../Handlers/SendHandler";
 import {InitialiseCanvas} from "../Handlers/InitialiseCanvasHandler";
 
 const initialiseTools = () => {
-    toolState.setTool(new brush(canvasState.canvas, canvasState.socket, canvasState.session));
+    //toolState.setTool(new brush(canvasState.canvas, canvasState.socket, canvasState.session));
     toolState.setFillColor("#FFFFFF");
     toolState.setStrokeColor("#000000");
     toolState.setLineWidth(1);
@@ -47,7 +47,13 @@ const Canvas = observer(({setWidth, setHeight, chatActive}) => {
 
     // Сохранение полотна на сервер
     const MouseUpHandler = () => {
-        sendMessage(canvasState.socket,{id: params.id, method: 'saveCanvas', data: canvasState.canvas.toDataURL()})
+        sendMessage(canvasState.socket,{
+            id: params.id,
+            method: 'saveCanvas',
+            data: canvasState.canvas.toDataURL(),
+            width: canvasState.canvas.width,
+            height: canvasState.canvas.height,
+        })
     }
 
     // инициализация полотна

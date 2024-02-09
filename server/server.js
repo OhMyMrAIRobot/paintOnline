@@ -55,7 +55,7 @@ app.post('/createRoom', (req, res) => {
     try {
         const id = req.query.id;
         ConfigArr.push(id);
-        ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init"});
+        ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init", urlWidth: 1280, urlHeight: 720});
         RoomsArr.push(id);
         return res.status(200).json({message: "room created"})
     } catch (e) {
@@ -80,6 +80,8 @@ app.get('/initialise', (req, res) => {
             height: ConfigArr[pos + 1].height,
             color: ConfigArr[pos + 1].color,
             url: ConfigArr[pos + 1].url,
+            urlWidth: ConfigArr[pos + 1].urlWidth,
+            urlHeight: ConfigArr[pos + 1].urlHeight,
         }
         res.json(data)
     } catch (e) {
@@ -107,6 +109,8 @@ const saveCanvasHandler = (ws,msg) => {
         height:ConfigArr[pos + 1].height,
         color: ConfigArr[pos + 1].color,
         url: msg.data,
+        urlWidth: msg.width,
+        urlHeight: msg.height,
     };
 }
 
@@ -117,6 +121,8 @@ const changeResolutionHandler = (ws, msg) => {
         height:msg.height,
         color: ConfigArr[pos + 1].color,
         url: ConfigArr[pos + 1].url,
+        urlWidth: ConfigArr[pos + 1].urlWidth,
+        urlHeight: ConfigArr[pos + 1].urlHeight,
     };
     broadcast(ws, msg)
 }
@@ -128,6 +134,8 @@ const changeBackgroundHandler = (ws,msg) => {
         height:ConfigArr[pos + 1].height,
         color: msg.color,
         url: ConfigArr[pos + 1].url,
+        urlWidth: ConfigArr[pos + 1].urlWidth,
+        urlHeight: ConfigArr[pos + 1].urlHeight,
     };
     broadcast(ws, msg)
 }

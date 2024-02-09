@@ -15,7 +15,7 @@ export const InitialiseCanvas = (Canvas, setWidth, setHeight, Username, id) => {
             img.src = dataUrl;
             img.onload = () => {
                 ctx.clearRect(0, 0, Canvas.width, Canvas.height)
-                ctx.drawImage(img, 0, 0, Canvas.width, Canvas.height)
+                ctx.drawImage(img, 0, 0, response.data.urlWidth, response.data.urlHeight);
             }
         }
 
