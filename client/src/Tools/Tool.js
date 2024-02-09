@@ -7,18 +7,22 @@ class Tool{
         this.clear();
     }
 
+    // заливка
     set fillColor(color) {
         this.ctx.fillStyle = color
     }
 
+    // цвет обводки
     set strokeColor(color) {
         this.ctx.strokeStyle = color
     }
 
+    // ширина обводки
     set lineWidth(width) {
         this.ctx.lineWidth = width
     }
 
+    // шрифт
     set font(font){
         this.ctx.font = font;
     }

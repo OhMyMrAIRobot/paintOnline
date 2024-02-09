@@ -1,6 +1,5 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
-import canvasState from "../Store/CanvasState";
 
 class Text extends Tool {
     constructor(canvas, socket, id) {
