@@ -12,7 +12,7 @@ import {sendMessage} from "../Handlers/SendHandler";
 import {InitialiseCanvas} from "../Handlers/InitialiseCanvasHandler";
 
 const initialiseTools = () => {
-    //toolState.setTool(new brush(canvasState.canvas, canvasState.socket, canvasState.session));
+    toolState.setTool(new brush(canvasState.canvas, canvasState.socket, canvasState.session));
     toolState.setFillColor("#FFFFFF");
     toolState.setStrokeColor("#000000");
     toolState.setLineWidth(1);

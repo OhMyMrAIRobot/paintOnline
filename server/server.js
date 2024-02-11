@@ -4,9 +4,21 @@ const WSserver = require('express-ws')(app);
 const aWss = WSserver.getWss();
 const PORT = 3000;
 const cors = require('cors')
+const config = require('./config')
+const mysql = require('mysql')
 
 app.use(cors())
 app.use(express.json())
+
+const db = mysql.createConnection(config);
+db.connect(function(err){
+    if (err) {
+        return console.error("Ошибка: " + err.message);
+    }
+    else{
+        console.log("Подключение к серверу MySQL успешно установлено");
+    }
+})
 
 app.ws('/', (ws,req) => {
     ws.on('message', (msg) => {
@@ -46,7 +58,9 @@ app.ws('/', (ws,req) => {
     })
 })
 
-app.listen(PORT, () => console.log(`server is working on ${PORT}`))
+app.listen(PORT, () => {
+    console.log(`server is working on ${PORT}`);
+})
 
 let RoomsArr = [];
 let ConfigArr = [];
@@ -57,6 +71,17 @@ app.post('/createRoom', (req, res) => {
         ConfigArr.push(id);
         ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init", urlWidth: 1280, urlHeight: 720});
         RoomsArr.push(id);
+
+        let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)});`
+        console.log(query);
+        db.query(query, (error, result) => {
+            if (error) {
+                console.error('Ошибка выполнения запроса: ', error);
+                throw error;
+            }
+            console.log('Значение успешно добавлено в таблицу');
+        })
+
         return res.status(200).json({message: "room created"})
     } catch (e) {
         console.log(e);
@@ -65,8 +90,8 @@ app.post('/createRoom', (req, res) => {
 
 app.get('/getRoom', (req, res) => {
     try {
-        const data = RoomsArr.includes(req.query.id)
-        res.json(data)
+        const data = RoomsArr.includes(req.query.id);
+        res.json(data);
     } catch (e) {
         console.log(e);
     }
