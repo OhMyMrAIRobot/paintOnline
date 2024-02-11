@@ -73,7 +73,6 @@ app.post('/createRoom', (req, res) => {
         RoomsArr.push(id);
 
         let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)});`
-        console.log(query);
         db.query(query, (error, result) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
@@ -90,8 +89,15 @@ app.post('/createRoom', (req, res) => {
 
 app.get('/getRoom', (req, res) => {
     try {
-        const data = RoomsArr.includes(req.query.id);
-        res.json(data);
+        let query = `SELECT id FROM rooms WHERE session = ${JSON.stringify(req.query.id)};`
+        db.query(query, (error, result) => {
+            if (error) {
+                console.error('Ошибка выполнения запроса: ', error);
+                throw error;
+            }
+            let data = result.length ? data = true : data = false;
+            res.json(data);
+        })
     } catch (e) {
         console.log(e);
     }
