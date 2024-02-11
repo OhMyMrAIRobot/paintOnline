@@ -72,7 +72,7 @@ app.post('/createRoom', (req, res) => {
         ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init", urlWidth: 1280, urlHeight: 720});
         RoomsArr.push(id);
 
-        let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)});`
+        let query = `CALL InsertData(${JSON.stringify(id)});`
         db.query(query, (error, result) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
@@ -95,7 +95,8 @@ app.get('/getRoom', (req, res) => {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
             }
-            let data = result.length ? data = true : data = false;
+            let data;
+            result.length ? data = true : data = false;
             res.json(data);
         })
     } catch (e) {
