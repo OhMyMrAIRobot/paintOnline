@@ -107,7 +107,6 @@ app.get('/getRoom', (req, res) => {
 
 app.get('/initialise', (req, res) => {
     try {
-        // let pos = ConfigArr.indexOf(req.query.id);
         let query = `SELECT * FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
         db.query(query, (error, result) => {
             if (error) {
@@ -144,15 +143,15 @@ const connectionHandler = (ws, msg) => {
 }
 
 const saveCanvasHandler = (ws,msg) => {
-    let pos = ConfigArr.indexOf(msg.id);
-    ConfigArr[pos + 1] = {
-        width: ConfigArr[pos + 1].width,
-        height:ConfigArr[pos + 1].height,
-        color: ConfigArr[pos + 1].color,
-        url: msg.data,
-        urlWidth: msg.width,
-        urlHeight: msg.height,
-    };
+    let query = `UPDATE room_config SET url = ${JSON.stringify(msg.data)} WHERE session = ${JSON.stringify(msg.id)};`
+    db.query(query, (error, result) => {
+        if (error) {
+            console.error('Ошибка выполнения запроса: ', error);
+            throw error;
+        }
+        else
+            console.log('url loaded');
+    })
 }
 
 const changeResolutionHandler = (ws, msg) => {

@@ -9,7 +9,7 @@ export const InitialiseCanvas = (Canvas, setWidth, setHeight, Username, id) => {
         const dataUrl = response.data.url;
 
         // загрузка изображения полотна
-        if (dataUrl !== 'init'){
+        if (dataUrl !== ''){
             let ctx = Canvas.getContext('2d');
             const img = new Image()
             img.src = dataUrl;
