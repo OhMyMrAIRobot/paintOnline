@@ -6,7 +6,6 @@ const PORT = 3000;
 const cors = require('cors')
 const config = require('./config')
 const mysql = require('mysql')
-const {json} = require("express");
 
 app.use(cors())
 app.use(express.json())
@@ -63,25 +62,32 @@ app.listen(PORT, () => {
     console.log(`server is working on ${PORT}`);
 })
 
-let RoomsArr = [];
-let ConfigArr = [];
-
-app.post('/createRoom', (req, res) => {
+app.post('/createRoom',  (req, res) => {
     try {
         const id = req.query.id;
-        ConfigArr.push(id);
-        ConfigArr.push({width: 1280, height: 720, color: "#FFFFFF", url: "init", urlWidth: 1280, urlHeight: 720});
-        RoomsArr.push(id);
 
-        let query = `CALL InsertData(${JSON.stringify(id)});`
+        // let query = `CALL InsertData(${JSON.stringify(id)});`
+        let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)});`
+        console.log(query)
         db.query(query, (error, result) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
             }
             console.log('Значение успешно добавлено в таблицу');
+
         })
 
+        query = `INSERT INTO room_config (session, url) VALUES (${JSON.stringify(id)}, "");`
+        console.log(query)
+        db.query(query, (error, result) => {
+            if (error) {
+                console.error('Ошибка выполнения запроса: ', error);
+                throw error;
+            }
+            console.log('Значение успешно добавлено в таблицу');
+
+        })
         return res.status(200).json({message: "room created"})
     } catch (e) {
         console.log(e);
@@ -91,6 +97,7 @@ app.post('/createRoom', (req, res) => {
 app.get('/getRoom', (req, res) => {
     try {
         let query = `SELECT id FROM rooms WHERE session = ${JSON.stringify(req.query.id)};`
+        console.log(query);
         db.query(query, (error, result) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
@@ -98,6 +105,7 @@ app.get('/getRoom', (req, res) => {
             }
             let data;
             result.length ? data = true : data = false;
+            console.log(result);
             res.json(data);
         })
     } catch (e) {
