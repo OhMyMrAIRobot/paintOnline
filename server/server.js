@@ -155,15 +155,16 @@ const saveCanvasHandler = (ws,msg) => {
 }
 
 const changeResolutionHandler = (ws, msg) => {
-    let pos = ConfigArr.indexOf(msg.id);
-    ConfigArr[pos + 1] = {
-        width: msg.width,
-        height:msg.height,
-        color: ConfigArr[pos + 1].color,
-        url: ConfigArr[pos + 1].url,
-        urlWidth: ConfigArr[pos + 1].urlWidth,
-        urlHeight: ConfigArr[pos + 1].urlHeight,
-    };
+    let query = `UPDATE room_config SET width = ${msg.width}, height = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
+    db.query(query, (error, result) => {
+        if (error) {
+            console.error('Ошибка выполнения запроса: ', error);
+            throw error;
+        }
+        else
+            console.log('url loaded');
+    })
+
     broadcast(ws, msg)
 }
 
