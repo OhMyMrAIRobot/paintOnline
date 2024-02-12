@@ -6,6 +6,7 @@ const PORT = 3000;
 const cors = require('cors')
 const config = require('./config')
 const mysql = require('mysql')
+const {json} = require("express");
 
 app.use(cors())
 app.use(express.json())
@@ -106,16 +107,24 @@ app.get('/getRoom', (req, res) => {
 
 app.get('/initialise', (req, res) => {
     try {
-        let pos = ConfigArr.indexOf(req.query.id);
-        const data = {
-            width: ConfigArr[pos + 1].width,
-            height: ConfigArr[pos + 1].height,
-            color: ConfigArr[pos + 1].color,
-            url: ConfigArr[pos + 1].url,
-            urlWidth: ConfigArr[pos + 1].urlWidth,
-            urlHeight: ConfigArr[pos + 1].urlHeight,
-        }
-        res.json(data)
+        // let pos = ConfigArr.indexOf(req.query.id);
+        let query = `SELECT * FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
+        db.query(query, (error, result) => {
+            if (error) {
+                console.error('Ошибка выполнения запроса: ', error);
+                throw error;
+            }
+            const data = {
+                width: result[0].width,
+                height: result[0].height,
+                color: result[0].color,
+                url: result[0].url,
+                urlWidth: result[0].urlWidth,
+                urlHeight: result[0].urlHeight,
+            }
+            res.json(data)
+        })
+
     } catch (e) {
         console.log(e);
     }
