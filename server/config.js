@@ -1,6 +1,6 @@
 module.exports = {
     host: "localhost",
     user: "root",
-    database: "paintDB",
+    database: "main",
     password: "15672021012702dd"
 }

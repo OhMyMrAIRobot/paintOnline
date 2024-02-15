@@ -5,7 +5,7 @@ const aWss = WSserver.getWss();
 const PORT = 3000;
 const cors = require('cors')
 const config = require('./config')
-const mysql = require('mysql')
+const mysql = require('mysql2')
 
 app.use(cors())
 app.use(express.json())
@@ -68,19 +68,16 @@ app.post('/createRoom',  (req, res) => {
 
         // let query = `CALL InsertData(${JSON.stringify(id)});`
         let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)});`
-        console.log(query)
-        db.query(query, (error, result) => {
+        db.query(query, (error) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
             }
             console.log('Значение успешно добавлено в таблицу');
-
         })
 
         query = `INSERT INTO room_config (session, url) VALUES (${JSON.stringify(id)}, "");`
-        console.log(query)
-        db.query(query, (error, result) => {
+        db.query(query, (error) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
@@ -90,7 +87,7 @@ app.post('/createRoom',  (req, res) => {
         })
         return res.status(200).json({message: "room created"})
     } catch (e) {
-        console.log(e);
+        return res.status(500).json({message: e})
     }
 })
 
@@ -109,18 +106,19 @@ app.get('/getRoom', (req, res) => {
             res.json(data);
         })
     } catch (e) {
-        console.log(e);
+        return res.status(500).json({message: e})
     }
 })
 
 app.get('/initialise', (req, res) => {
     try {
-        let query = `SELECT * FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
+        let query = `SELECT *, url FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
         db.query(query, (error, result) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
             }
+            console.log(result[0]);
             const data = {
                 width: result[0].width,
                 height: result[0].height,
@@ -133,7 +131,7 @@ app.get('/initialise', (req, res) => {
         })
 
     } catch (e) {
-        console.log(e);
+        return res.status(500).json({message: e})
     }
 })
 
