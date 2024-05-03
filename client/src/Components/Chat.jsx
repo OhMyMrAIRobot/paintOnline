@@ -1,6 +1,5 @@
 import React, {useEffect, useRef} from 'react';
 import '../Style/Chat.css'
-import {useParams} from "react-router-dom";
 import Draggable from "react-draggable";
 import {sendMessage} from "../Handlers/SendHandler";
 import canvasState from "../Store/CanvasState";
@@ -13,39 +12,39 @@ const ChangeFormat =(min) => {
 }
 
 // Сообщение от пользователя
-const CreateMessage = (message, username, chatContainer) => {
+const createMessage = (message, chatContainer) => {
     let messageElement = document.createElement('div');
-    message.user === username ? messageElement.className = "msg author" : messageElement.className = "msg"
+    message.user === canvasState.username ? messageElement.className = "msg author" : messageElement.className = "msg"
     chatContainer.appendChild(messageElement);
 
     let messageHeader = document.createElement('div');
-    messageHeader.className = "msg_header";
+    messageHeader.className = "msgHeader";
     messageElement.appendChild(messageHeader);
 
     let authorSpan = document.createElement('span');
-    authorSpan.className = "msg_author";
-    message.user === username ? authorSpan.textContent = "You" : authorSpan.textContent = message.user;
+    authorSpan.className = "msgAuthor";
+    message.user === canvasState.username ? authorSpan.textContent = "You" : authorSpan.textContent = message.user;
     messageHeader.appendChild(authorSpan);
 
     let timeSpan = document.createElement('span');
-    timeSpan.className = "msg_time";
+    timeSpan.className = "msgTime";
     timeSpan.textContent = message.time.hour + ":" + ChangeFormat(message.time.minute);
     messageHeader.appendChild(timeSpan);
 
     let messageText = document.createElement('div');
-    messageText.className = "msg_text";
+    messageText.className = "msgText";
     messageText.textContent =  message.text;
     messageElement.appendChild(messageText);
 }
 
 // Системное сообщение
-const ConnectionMessage = (message, username, chatContainer) => {
+const createSystemMessage = (message, chatContainer) => {
     let messageElement = document.createElement('div');
-    messageElement.className = "msg_connect_container";
+    messageElement.className = "msgSystemContainer";
     chatContainer.appendChild(messageElement);
 
     let nameSpan = document.createElement('span');
-    nameSpan.className = "msg_connect";
+    nameSpan.className = "msgSystem";
     message.type === 'connect' ?
         nameSpan.textContent = `User ${message.user} has connected!`
     :
@@ -54,11 +53,10 @@ const ConnectionMessage = (message, username, chatContainer) => {
     messageElement.appendChild(nameSpan);
 }
 
-const Chat = ({socket, username, msgArray, chatActive}) => {
+const Chat = ({msgArray, chatActive}) => {
 
-    const inputRef = useRef("")
-    const chatRef = useRef("")
-    const params = useParams();
+    const inputRef = useRef(null)
+    const chatRef = useRef(null)
 
     // обновление сообщений
     useEffect(() => {
@@ -68,14 +66,14 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
             document.getElementById('idMsgSpan').style.opacity = '1';
 
         // Отрисовка сообщений
-        let chatContainer = document.getElementById('idchat');
+        let chatContainer = document.getElementById('Chat');
         chatContainer.innerHTML = '';
 
         msgArray.forEach(function (message) {
             if (message.type === "message")
-                CreateMessage(message, username, chatContainer);
+                createMessage(message, chatContainer);
             else
-                ConnectionMessage(message, username, chatContainer);
+                createSystemMessage(message, chatContainer);
         });
 
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -83,10 +81,16 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
 
     // Отправка сообщения
     const sendMessageHandler = () => {
-        let currentDate = new Date();
-        let currentHour = currentDate.getHours();
-        let currentMinute = currentDate.getMinutes();
-        sendMessage(canvasState.socket,{id: params.id, method: 'message', username: username, data: inputRef.current.value, time: {hour: currentHour, minute: currentMinute}})
+        const currentDate = new Date();
+        const currentHour = currentDate.getHours();
+        const currentMinute = currentDate.getMinutes();
+        sendMessage(canvasState.socket,{
+            method: 'message',
+            id: canvasState.session,
+            username: canvasState.username,
+            data: inputRef.current.value,
+            time: {hour: currentHour, minute: currentMinute}
+        })
         inputRef.current.value = "";
     }
 
@@ -97,14 +101,17 @@ const Chat = ({socket, username, msgArray, chatActive}) => {
         >
             <div
                 ref = {chatRef}
-                onKeyDown={e => {if (e.key === 'Enter' && inputRef.current.value !== "") sendMessageHandler()}}
-                className = {chatActive ? "chat chat_active" : "chat"}>
-                <div className = "msg_container" id = "idchat"></div>
-                <div className = "send_container">
-                    <input placeholder = "Enter" className = "msg_input" ref = {inputRef} type = 'text'></input>
+                onKeyDown={e => {
+                    if (e.key === 'Enter' && inputRef.current.value !== "")
+                        sendMessageHandler()
+                }}
+                className = {chatActive ? "chat chatActive" : "chat"}>
+                <div className = "msgContainer" id = "Chat"></div>
+                <div className = "sendContainer">
+                    <input placeholder = "Message..." className = "msgInput" ref = {inputRef} type = 'text'></input>
                     <button
                         onClick={() => {sendMessageHandler()}}
-                        className = "send_button">Send</button>
+                        className = "sendButton">Send</button>
                 </div>
             </div>
         </Draggable>
