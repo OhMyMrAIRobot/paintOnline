@@ -64,10 +64,9 @@ app.listen(PORT, () => {
 
 app.post('/createRoom',  (req, res) => {
     try {
-        const id = req.query.id;
+        const id = req.body.id;
 
-        // let query = `CALL InsertData(${JSON.stringify(id)});`
-        let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)});`
+        let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)})`;
         db.query(query, (error) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
@@ -85,7 +84,7 @@ app.post('/createRoom',  (req, res) => {
             console.log('Значение успешно добавлено в таблицу');
 
         })
-        return res.status(200).json({message: "room created"})
+        return res.status(200).json({id: id})
     } catch (e) {
         return res.status(500).json({message: e})
     }
@@ -93,17 +92,14 @@ app.post('/createRoom',  (req, res) => {
 
 app.get('/getRoom', (req, res) => {
     try {
-        let query = `SELECT id FROM rooms WHERE session = ${JSON.stringify(req.query.id)};`
-        console.log(query);
+        let query = `SELECT id FROM rooms WHERE session = ${JSON.stringify(req.query.id)}`;
         db.query(query, (error, result) => {
             if (error) {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
             }
-            let data;
-            result.length ? data = true : data = false;
-            console.log(result);
-            res.json(data);
+            console.log(result)
+            return result.length ? res.status(200).json() : res.status(404).json()
         })
     } catch (e) {
         return res.status(500).json({message: e})

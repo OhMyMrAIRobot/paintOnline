@@ -1,4 +1,22 @@
-.join_modal_button_container{
+.joinModalText{
+    font-size: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.joinModalInput{
+    width: 300px;
+    height: 25px;
+    margin-top: 10px;
+    border-radius: 7px;
+    font-size: 16px;
+    padding: 8px;
+    outline: none;
+    background-color: #F6F6F6;
+    border: 2px solid black;
+}
+
+.joinModalButtons{
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
@@ -6,40 +24,36 @@
     padding-right: 15px;
 }
 
-.join_modal_button{
+.joinModalButton{
     border-radius: 10px;
     cursor: pointer;
     width: 100px;
     height: 30px;
     font-size: 18px;
     font-weight: bold;
-}
-
-.join_modal_input{
-    font-weight: bold;
-    width: 300px;
-    height: 25px;
-    margin-top: 10px;
-    border-radius: 10px;
-    font-size: 16px;
-    padding-left: 5px;
-    outline: none;
-    background-color: #F6F6F6;
-    border: 2px solid black;
-}
-
-.join_modal_text{
-    font-size: 24px;
-    text-align: center;
-    font-weight: bold;
+    transition: 0.3s;
 }
 
 .join{
     border: 2px solid darkgreen;
-    background-color: aquamarine;
+    background-color: #09a809;
+    color: white;
+}
+
+.join:hover {
+    transition: 0.3s;
+    background-color: white;
+    color: #09a809;
 }
 
 .exit{
     border: 2px solid darkred;
-    background-color: crimson;
+    background-color: #d00931;
+    color: white;
+}
+
+.exit:hover {
+    transition: 0.3s;
+    background-color: white;
+    color: #d00931;
 }
