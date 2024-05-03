@@ -13,13 +13,13 @@
     transition: 0.5s;
 }
 
-.modal-active{
+.modalActive{
     pointer-events: all;
     opacity: 1;
     transform: scale(1);
 }
 
-.modal_content{
+.modalContent{
     background-color: white;
     border-radius: 10px;
     padding: 12px;
@@ -27,6 +27,6 @@
     transition: 0.4s all
 }
 
-.modal_content-active{
+.modalContentActive{
     transform: scale(1);
 }

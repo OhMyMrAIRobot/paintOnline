@@ -1,7 +1,7 @@
 import canvasState from "../Store/CanvasState";
-import {drawHandler} from "./drawHandler";
+import {drawHandler} from "./DrawHandler";
 
-export const messageHandler = (setMsgArr, Canvas, setWidth, setHeight) => {
+export const MessageHandler = (setMsgArr, setWidth, setHeight) => {
     canvasState.socket.onmessage = (event) => {
         let msg = JSON.parse(event.data);
         switch (msg.method){
@@ -9,7 +9,7 @@ export const messageHandler = (setMsgArr, Canvas, setWidth, setHeight) => {
                 setMsgArr(prev => [...prev, {type: "connect", user: msg.username}])
                 break;
             case 'draw':
-                drawHandler(msg, Canvas);
+                drawHandler(msg, canvasState.canvas);
                 break;
             case 'pushUndo':
                 canvasState.pushToUndo(msg.data)

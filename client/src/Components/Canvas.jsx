@@ -7,7 +7,7 @@ import brush from "../Tools/Brush";
 import {useParams} from "react-router-dom";
 import Chat from "./Chat";
 import UsernameModal from "./UsernameModal";
-import {messageHandler} from "../Handlers/MessageHandler";
+import {MessageHandler} from "../Handlers/MessageHandler";
 import {sendMessage} from "../Handlers/SendHandler";
 import {InitialiseCanvas} from "../Handlers/InitialiseCanvasHandler";
 
@@ -35,7 +35,7 @@ const Canvas = observer(({setWidth, setHeight, chatActive}) => {
         if (canvasState.username){
             initialiseTools();
             sendMessage(canvasState.socket,{id:params.id, method: "connection", username: canvasState.username})
-            messageHandler(setMsgArr, canvasState.canvas, setWidth, setHeight);
+            MessageHandler(setMsgArr, setWidth, setHeight);
         }
 
     }, [canvasState.username])

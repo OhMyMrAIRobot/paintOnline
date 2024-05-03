@@ -5,7 +5,7 @@ import Canvas from "../Components/Canvas";
 import {useNavigate, useParams} from "react-router-dom";
 import canvasState from "../Store/CanvasState";
 import {sendMessage} from "../Handlers/SendHandler";
-import {checkIsRoomValid} from "../Handlers/CheckIsRoomValid";
+import {CheckIsRoomValid} from "../Handlers/CheckIsRoomValid";
 
 const CanvasPage = () => {
     const [width, setWidth] = useState(0);
@@ -29,9 +29,15 @@ const CanvasPage = () => {
         socket.current = new WebSocket(`ws://localhost:3000/`);
 
         socket.current.onopen = () => {
-            checkIsRoomValid(params.id, navigate);
-            canvasState.setSocket(socket.current);
-            canvasState.setSession(params.id);
+            CheckIsRoomValid(params.id)
+                .then(() => {
+                    canvasState.setSocket(socket.current);
+                    canvasState.setSession(params.id);
+                })
+                .catch(() => {
+                    navigate(`/`)
+                })
+
         }
     }, [params.id]);
 
