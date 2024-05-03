@@ -1,31 +1,19 @@
 @import "./Variables.css";
 
-.toolbar-w{
-    /*position: absolute;*/
-    width: 90%;
-    height: var(--toolbar-height);
-    background-color: white;
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-left: var(--horizantal-offset);
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 5px;
-}
-
-.toolbar-h{
+.vertToolbar{
+    position: fixed;
     height: 90vh;
-    width: var(--toolbar-width);
-    min-width: var(--toolbar-width);
+    width: var(--toolbar-height);
+    min-width: var(--toolbar-height);
+    margin-top: var(--toolbar-offset);
     background-color: white;
     border: 1px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: var(--vertical-offset);
     border-radius: 5px;
+    gap: 20px;
+    padding: 10px;
 }
 
 .toolbar-btn{
@@ -35,7 +23,6 @@
     background-size: cover;
     border: 1px solid black;
     outline: none;
-    margin-top: 20px;
 }
 
 .brush{
@@ -54,22 +41,42 @@
     margin-bottom: 20px;
 }
 
-.button_chat_container{
+.horToolbar{
+    position: fixed;
+    width: 90%;
+    height: var(--toolbar-height);
+    margin-left: var(--toolbar-offset);
+    background-color: white;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+}
+
+.buttonChatContainer{
     margin-left: auto;
 }
 
-.button_chat{
-    border-radius: 10px;
-    width: 70px;
-    height: 25px;
+.buttonChat{
+    border-radius: 7px;
+    padding: 3px 20px 3px 20px;
     border: 2px solid black;
-    font-weight: bold;
-    font-size: 16px;
+    font-size: 1.1rem;
     cursor: pointer;
     background-color: #f6f6f6;
+    transition: 0.3s;
 }
 
-.new_msg_span{
+.buttonChat:hover {
+    color: #f6f6f6;
+    background-color: black;
+    transition: 0.3s;
+}
+
+.newMsgSpan{
     position: absolute;
     width: 10px;
     height: 10px;
@@ -78,26 +85,38 @@
     transition: 0.5s;
 }
 
-.button_invite{
-    border-radius: 10px;
-    width: 120px;
-    height: 25px;
+.buttonInvite{
+    border-radius: 7px;
     cursor: pointer;
-    font-size: 16px;
-    background-color: aquamarine;
+    font-size: 1.1rem;
+    padding: 3px 10px 3px 10px;
     border: 2px solid darkgreen;
-    font-weight: bold;
+    background-color: #0ab02c;
+    color: #f6f6f6;
+    transition: 0.3s;
 }
 
-.button_leave{
-    border-radius: 10px;
-    width: 100px;
-    height: 25px;
+.buttonInvite:hover {
+    background-color: #f6f6f6;
+    color: #0ab02c;
+    transition: 0.3s;
+}
+
+.buttonLeave{
+    border-radius: 7px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.1rem;
+    padding: 3px 30px 3px 30px;
     border: 2px solid darkred;
     background-color: crimson;
-    font-weight: bold;
+    color: #f6f6f6;
+    transition: 0.3s;
+}
+
+.buttonLeave:hover {
+    background-color: #f6f6f6;
+    color: crimson;
+    transition: 0.3s;
 }
 
 

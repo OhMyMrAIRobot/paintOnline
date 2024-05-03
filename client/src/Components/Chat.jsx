@@ -63,7 +63,7 @@ const Chat = ({msgArray, chatActive}) => {
 
         // Новое сообщение
         if (!chatActive)
-            document.getElementById('idMsgSpan').style.opacity = '1';
+            document.getElementById('newMsgSpan').style.opacity = '1';
 
         // Отрисовка сообщений
         let chatContainer = document.getElementById('Chat');
@@ -81,17 +81,19 @@ const Chat = ({msgArray, chatActive}) => {
 
     // Отправка сообщения
     const sendMessageHandler = () => {
-        const currentDate = new Date();
-        const currentHour = currentDate.getHours();
-        const currentMinute = currentDate.getMinutes();
-        sendMessage(canvasState.socket,{
-            method: 'message',
-            id: canvasState.session,
-            username: canvasState.username,
-            data: inputRef.current.value,
-            time: {hour: currentHour, minute: currentMinute}
-        })
-        inputRef.current.value = "";
+        if (inputRef.current.value !== "") {
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = currentDate.getMinutes();
+            sendMessage(canvasState.socket,{
+                method: 'message',
+                id: canvasState.session,
+                username: canvasState.username,
+                data: inputRef.current.value,
+                time: {hour: currentHour, minute: currentMinute}
+            })
+            inputRef.current.value = "";
+        }
     }
 
     return (
@@ -102,8 +104,7 @@ const Chat = ({msgArray, chatActive}) => {
             <div
                 ref = {chatRef}
                 onKeyDown={e => {
-                    if (e.key === 'Enter' && inputRef.current.value !== "")
-                        sendMessageHandler()
+                    if (e.key === 'Enter') sendMessageHandler()
                 }}
                 className = {chatActive ? "chat chatActive" : "chat"}>
                 <div className = "msgContainer" id = "Chat"></div>

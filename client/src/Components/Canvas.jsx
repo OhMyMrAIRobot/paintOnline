@@ -32,18 +32,15 @@ const Canvas = observer(() => {
     }
 
     return (
-        <>
-            <canvas
-                className="canvas"
-                ref={canvasRef}
-                height='0px'
-                width='0px'
-                onMouseDown={() => MouseDownHandler()}
-                onMouseUp={() => MouseUpHandler()}
-            >
-            </canvas>
-        </>
-
+        <canvas
+            className="canvas"
+            ref={canvasRef}
+            height='0px'
+            width='0px'
+            onMouseDown={() => MouseDownHandler()}
+            onMouseUp={() => MouseUpHandler()}
+        >
+        </canvas>
     );
 });
 

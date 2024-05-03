@@ -26,86 +26,86 @@ const HorToolbar = () => {
     }
 
     return (
-        <div className = "toolbar-h">
+        <div className = "vertToolbar">
             <button
-                className = "toolbar-btn"
+                className = "toolbarBtn"
                 onClick={() => toolState.setTool(new Pointer(canvasState.canvas))}
             >
                 none
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Brush
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Eraser(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Eraser
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Line
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Rect(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Rect
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Square(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Square
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Circle(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Circle
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Ellipse(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Ellipse
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={() => toolState.setTool(new Text(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Text
             </button>
 
             <button
-                className = "toolbar-btn next"
+                className = "toolbarBtn next"
                 onClick={(e) => sendMessage(canvasState.socket,{id: canvasState.session, method: 'redo'})}
             >
                 Next
             </button>
 
             <button
-                className = "toolbar-btn "
+                className = "toolbarBtn "
                 onClick={(e) => sendMessage(canvasState.socket,{id: canvasState.session, method: 'undo'})}
             >
                 Prev
             </button>
 
             <button
-                className = "toolbar-btn save"
+                className = "toolbarBtn save"
                 onClick={() => download()}
             >
                 Save

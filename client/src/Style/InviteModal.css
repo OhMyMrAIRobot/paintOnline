@@ -1,52 +1,61 @@
-.invite_modal{
+.inviteModal{
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
+    width: 400px;
 }
 
-.invite_input_container{
+.inviteText{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.inviteInputContainer{
     display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
-.invite_input{
-    padding-left: 3px;
-    margin-top: 15px;
-    font-size: 18px;
-    width: 315px;
-    border-radius: 10px;
-    border: 2px solid darkgreen;
-    background-color: aquamarine;
-    font-weight: bold;
-    color: green;
+.inviteInput{
+    width: 80%;
+    padding: 3px 10px 3px 10px;
+    font-size: 1.1rem;
+    border-radius: 7px;
     outline: none;
+    border: 2px solid black;
 }
 
-.copy_button{
-    margin-top: 15px;
-    border-radius: 10px;
-    font-weight: bold;
-    border: 2px solid darkgreen;
-    background-color: aquamarine;
-    width: 75px;
-    height: 30px;
-    font-size: 18px;
-    margin-left: 10px;
+.copyButton {
+    font-size: 1.1rem;
+    padding: 3px 10px 3px 10px;
+    border-radius: 7px;
     cursor: pointer;
+    background-color: #09a809;
+    color: white;
+    border: 2px solid #0d690d;
+    transition: 0.3s;
 }
 
-.close_invite_modal{
-    margin-top: 15px;
-    width: 120px;
-    font-size: 18px;
-    border-radius: 10px;
-    background-color: crimson;
+.copyButton:hover {
+    background-color: white;
+    color: #09a809;
+    transition: 0.3s;
+}
+
+.closeInvite{
+    padding: 3px 30px 3px 30px;
+    font-size: 1.2rem;
+    border-radius: 7px;
     cursor: pointer;
-    font-weight: bold;
     border: 2px solid darkred;
-    height: 35px;
+    background-color: crimson;
+    color: white;
+    transition: 0.3s;
 }
 
-.invite_text{
-    font-size: 24px;
-    font-weight: bold;
+.closeInvite:hover {
+    transition: 0.3s;
+    background-color: white;
+    color: crimson;
 }
