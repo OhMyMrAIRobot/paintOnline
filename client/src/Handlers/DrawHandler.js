@@ -1,7 +1,7 @@
 import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
 import Line from "../Tools/Line";
-import Rect from "../Tools/Rect";
+import Rectangle from "../Tools/Rectangle";
 import Square from "../Tools/Square";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
@@ -23,8 +23,7 @@ export const drawHandler = (msg) => {
             Line.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor);
             break;
         case "rectangle":
-       //     Rect.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.strokeColor, figure.fillColor, figure.lineWidth);
-         //   ctx.beginPath();
+            Rectangle.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
         case "square":
         //    Square.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.strokeColor, figure.fillColor, figure.lineWidth);
@@ -50,6 +49,8 @@ export const drawHandler = (msg) => {
             const shape = document.getElementById(figure.shapeId);
             if (figure.shapeId.startsWith('Line'))
                 Line.moveShape(shape, figure.dx, figure.dy);
+            else if (figure.shapeId.startsWith('Rect'))
+                Rectangle.moveShape(shape, figure.dx, figure.dy);
             break
         default:
             break;

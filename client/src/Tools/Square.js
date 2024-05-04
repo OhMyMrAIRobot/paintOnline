@@ -1,7 +1,7 @@
-import Rect from "./Rect";
+import Rectangle from "./Rectangle";
 import {sendMessage} from "../Handlers/SendHandler";
 
-class Square extends Rect{
+class Square extends Rectangle{
 
     MouseUpHandler(e) {
         this.isMouseDown = false;

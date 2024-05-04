@@ -4,7 +4,7 @@ import toolState from "../Store/ToolState";
 import Brush from "../Tools/Brush";
 import canvasState from "../Store/CanvasState";
 import Eraser from "../Tools/Eraser";
-import Rect from "../Tools/Rect";
+import Rectangle from "../Tools/Rectangle";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Square from "../Tools/Square";
@@ -29,7 +29,9 @@ const HorToolbar = () => {
         <div className = "vertToolbar">
             <button
                 className = "toolbarBtn"
-                onClick={() => toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session))}
+                }
             >
                 none
             </button>
@@ -50,14 +52,14 @@ const HorToolbar = () => {
 
             <button
                 className = "toolbarBtn "
-                onClick={() => toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session)); console.log(toolState)}}
             >
                 Line
             </button>
 
             <button
                 className = "toolbarBtn "
-                onClick={() => toolState.setTool(new Rect(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => toolState.setTool(new Rectangle(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 Rect
             </button>
