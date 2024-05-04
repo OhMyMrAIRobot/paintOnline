@@ -1,53 +1,54 @@
 import Rectangle from "./Rectangle";
 import {sendMessage} from "../Handlers/SendHandler";
 
-class Square extends Rectangle{
+class Square extends Rectangle {
 
-    MouseUpHandler(e) {
-        this.isMouseDown = false;
-        sendMessage(this.socket, {
-            method: 'draw',
-            id: this.id,
-            figure: {
-                type: 'square',
-                x: this.xStart,
-                y: this.yStart,
-                width: this.width / Math.sqrt(2),
-                height: this.height / Math.sqrt(2),
-                strokeColor: this.ctx.strokeStyle,
-                fillColor: this.ctx.fillStyle,
-                lineWidth: this.ctx.lineWidth,
-            }
-        })
-    }
+    // constructor(canvas, socket, id) {
+    //     super(canvas, socket, id);
+    //     super.Listen();
+    // }
 
     MouseMoveHandler(e) {
         if (this.isMouseDown){
-            let x = e.pageX - e.target.offsetLeft;
-            let y = e.pageY - e.target.offsetTop;
-            this.width = x - this.xStart;
-            this.height = y - this.yStart;
-            let sideLength = Math.sqrt(this.width*this.width + this.height*this.height);
-            this.width < 0 ? this.width = -sideLength : this.width = sideLength;
-            this.height < 0 ? this.height = -sideLength : this.height = sideLength;
-            this.Draw(this.xStart, this.yStart, this.width / Math.sqrt(2), this.height / Math.sqrt(2));
+            const p = this.getPoint(e)
+            this.xFinish = p.x;
+            this.yFinish = p.y;
+            this.Draw(this.xStart, this.yStart, this.xFinish, this.yFinish);
         }
     }
 
-    Draw(x, y, w, h) {
+    Draw(xS, yS, xF, yF) {
+        let side, x, y;
 
-        const img = new Image();
-        img.src = this.oldCanvas;
-        img.onload = () => {
-            this.ctx.clearRect(0,0,this.canvas.width, this.canvas.width);
-            this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
-            this.ctx.beginPath();
-            this.ctx.rect(x,y,w,h);
-            this.ctx.stroke();
-            this.ctx.fill();
+        if (Math.abs(xF - xS) <= Math.abs(yF - yS)) {
+            side = Math.abs(xF - xS);
+        } else {
+            side = Math.abs(yF - yS);
         }
-    }
 
+        if (xF >= xS && yF >= yS) {
+            x = xS;
+            y = yS;
+        } else if (xF >= xS && yF < yS) {
+            x = xS;
+            y = yS - side
+        } else if (xF < xS && yF >= yS) {
+            x = xS - side;
+            y = yS;
+        } else {
+            x = xS - side;
+            y = yS - side;
+        }
+
+        this.shape.setAttributeNS(null, 'x', x.toString());
+        this.shape.setAttributeNS(null, 'y', y.toString());
+        this.shape.setAttributeNS(null, 'width', side.toString());
+        this.shape.setAttributeNS(null, 'height', side.toString());
+        this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', this._fillColor);
+        this.canvas.appendChild(this.shape);
+    }
 }
 
 export default Square;

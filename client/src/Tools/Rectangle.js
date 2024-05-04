@@ -30,7 +30,7 @@ class Rectangle extends Tool{
                 id: this.shape.id,
             }
         })
-        this.canvas.removeChild(this.shape);
+       this.canvas.removeChild(this.shape);
     }
 
     MouseDownHandler(e) {
