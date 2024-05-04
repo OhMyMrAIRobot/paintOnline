@@ -75,15 +75,15 @@ class Rectangle extends Tool{
         canvas.appendChild(shape);
     }
 
-    static moveShape(line, dx, dy) {
-        let x = parseFloat(line.getAttributeNS(null, 'x')) + dx;
-        let y = parseFloat(line.getAttributeNS(null, 'y')) + dy;
-        let width = parseFloat(line.getAttributeNS(null, 'width'));
-        let height = parseFloat(line.getAttributeNS(null, 'height'));
-        line.setAttributeNS(null, 'x', x);
-        line.setAttributeNS(null, 'y', y);
-        line.setAttributeNS(null, 'width', width.toString());
-        line.setAttributeNS(null, 'height', height.toString());
+    static moveShape(rect, dx, dy) {
+        let x = parseFloat(rect.getAttributeNS(null, 'x')) + dx;
+        let y = parseFloat(rect.getAttributeNS(null, 'y')) + dy;
+        let width = parseFloat(rect.getAttributeNS(null, 'width'));
+        let height = parseFloat(rect.getAttributeNS(null, 'height'));
+        rect.setAttributeNS(null, 'x', x);
+        rect.setAttributeNS(null, 'y', y);
+        rect.setAttributeNS(null, 'width', width.toString());
+        rect.setAttributeNS(null, 'height', height.toString());
     }
 }
 

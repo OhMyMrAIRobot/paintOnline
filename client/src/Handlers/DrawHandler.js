@@ -30,8 +30,7 @@ export const drawHandler = (msg) => {
         //    ctx.beginPath();
             break;
         case "ellipse":
-        //    Ellipse.StaticDraw(ctx, figure.x, figure.y, figure.rx, figure.ry, figure.strokeColor, figure.fillColor, figure.lineWidth);
-         //   ctx.beginPath();
+           Ellipse.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
         case "text":
          //   Text.Draw(ctx, figure.x, figure.y, figure.text, figure.font,figure.fillColor);
@@ -42,11 +41,21 @@ export const drawHandler = (msg) => {
           //  ctx.beginPath();
             break;
         case 'move':
+            const shapeType = figure.shapeId.substring(0, 4); // Получаем тип фигуры из shapeId
             const shape = document.getElementById(figure.shapeId);
-            if (figure.shapeId.startsWith('Line'))
-                Line.moveShape(shape, figure.dx, figure.dy);
-            else if (figure.shapeId.startsWith('Rect'))
-                Rectangle.moveShape(shape, figure.dx, figure.dy);
+            switch (shapeType) {
+                case 'Line':
+                    Line.moveShape(shape, figure.dx, figure.dy);
+                    break;
+                case 'Rect':
+                    Rectangle.moveShape(shape, figure.dx, figure.dy);
+                    break;
+                case 'Elli':
+                    Ellipse.moveShape(shape, figure.dx, figure.dy);
+                    break;
+                default:
+                    break;
+            }
             break
         default:
             break;
