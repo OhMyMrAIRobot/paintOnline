@@ -7,7 +7,7 @@ class CanvasState {
 
     username = "";
     socket = null;
-    session = null;
+    session = "";
 
 
     constructor() {

@@ -52,7 +52,7 @@ const CanvasPage = () => {
 
     useEffect(() => {
         if (canvasState.username){
-            InitialiseCanvas(canvasState.canvas, setWidth, setHeight, canvasState.username, canvasState.session);
+           // InitialiseCanvas(canvasState.canvas, setWidth, setHeight, canvasState.username, canvasState.session);
             InitializeTools();
             sendMessage(canvasState.socket,{
                 method: "connection",

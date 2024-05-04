@@ -9,7 +9,7 @@ export const MessageHandler = (setMsgArr, setWidth, setHeight) => {
                 setMsgArr(prev => [...prev, {type: "connect", user: msg.username}])
                 break;
             case 'draw':
-                drawHandler(msg, canvasState.canvas);
+                drawHandler(msg);
                 break;
             case 'pushUndo':
                 canvasState.pushToUndo(msg.data)

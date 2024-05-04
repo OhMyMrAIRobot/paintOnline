@@ -3,28 +3,30 @@ class Tool{
         this.canvas = canvas;
         this.socket = socket;
         this.id = id;
-        this.ctx = canvas.getContext('2d');
         this.clear();
     }
 
     // заливка
     set fillColor(color) {
-        this.ctx.fillStyle = color
+       // this.ctx.fillStyle = color
+        this._fillColor = color;
     }
 
     // цвет обводки
     set strokeColor(color) {
-        this.ctx.strokeStyle = color
+    //    this.ctx.strokeStyle = color
+        this._strokeColor = color;
     }
 
     // ширина обводки
     set lineWidth(width) {
-        this.ctx.lineWidth = width
+      //  this.ctx.lineWidth = width
+        this._strokeWidth = width
     }
 
     // шрифт
     set font(font){
-        this.ctx.font = font;
+     //   this.ctx.font = font;
     }
 
     clear() {
