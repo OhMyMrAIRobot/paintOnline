@@ -29,7 +29,7 @@ const HorToolbar = () => {
         <div className = "vertToolbar">
             <button
                 className = "toolbarBtn"
-                onClick={() => toolState.setTool(new Pointer(canvasState.canvas))}
+                onClick={() => toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session))}
             >
                 none
             </button>

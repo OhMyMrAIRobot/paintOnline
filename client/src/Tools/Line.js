@@ -34,22 +34,16 @@ class Line extends Tool{
 
     MouseDownHandler(e){
         this.isMouseDown = true;
-        let p = this.canvas.createSVGPoint();
-        p.x = e.clientX;
-        p.y = e.clientY;
-        p = p.matrixTransform(this.canvas.getScreenCTM().inverse())
+        const p = this.getPoint(e)
         this.xStart = p.x;
         this.yStart = p.y;
         this.shape = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        this.shape.id = Math.random().toString();
+        this.shape.id = 'Line' + Math.random().toString();
     }
 
     MouseMoveHandler(e){
         if(this.isMouseDown){
-            let p = this.canvas.createSVGPoint();
-            p.x = e.clientX;
-            p.y = e.clientY;
-            p = p.matrixTransform(this.canvas.getScreenCTM().inverse())
+            const p = this.getPoint(e)
             this.xFinish = p.x;
             this.yFinish = p.y;
             this.Draw(this.xStart, this.yStart, this.xFinish, this.yFinish);
@@ -66,7 +60,7 @@ class Line extends Tool{
         this.canvas.appendChild(this.shape);
     }
 
-    static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor){
+    static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor) {
         const shape = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         shape.id = id;
         shape.setAttributeNS(null, 'x1', xS);
@@ -76,7 +70,17 @@ class Line extends Tool{
         shape.setAttributeNS(null, 'stroke', strokeColor);
         shape.setAttributeNS(null, 'stroke-width', strokeWidth);
         canvas.appendChild(shape);
+    }
 
+    static moveShape(line, dx, dy) {
+        let x1 = parseFloat(line.getAttributeNS(null, 'x1')) + dx;
+        let y1 = parseFloat(line.getAttributeNS(null, 'y1')) + dy;
+        let x2 = parseFloat(line.getAttributeNS(null, 'x2')) + dx;
+        let y2 = parseFloat(line.getAttributeNS(null, 'y2')) + dy;
+        line.setAttributeNS(null, 'x1', x1);
+        line.setAttributeNS(null, 'y1', y1);
+        line.setAttributeNS(null, 'x2', x2);
+        line.setAttributeNS(null, 'y2', y2);
     }
 }
 

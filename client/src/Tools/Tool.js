@@ -38,6 +38,13 @@ class Tool{
             document.body.removeChild(node);
         })
     }
+
+    getPoint(e) {
+        let p = this.canvas.createSVGPoint();
+        p.x = e.clientX;
+        p.y = e.clientY;
+        return p.matrixTransform(this.canvas.getScreenCTM().inverse())
+    }
 }
 
 export default Tool;

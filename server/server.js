@@ -28,7 +28,10 @@ app.ws('/', (ws,req) => {
                 connectionHandler(ws, msg);
                 break;
             case 'draw':
-                connectionHandler(ws, msg);
+                broadcast(ws, msg);
+                break;
+            case 'move':
+                broadcast(ws,msg);
                 break;
             case 'pushUndo':
                 broadcast(ws,msg);

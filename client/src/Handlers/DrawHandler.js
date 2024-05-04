@@ -20,8 +20,7 @@ export const drawHandler = (msg) => {
       //      Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth);
             break;
         case "line":
-            console.log(figure);
-            Line.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor);
+            Line.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor);
             break;
         case "rectangle":
        //     Rect.StaticDraw(ctx, figure.x, figure.y, figure.width, figure.height, figure.strokeColor, figure.fillColor, figure.lineWidth);
@@ -47,6 +46,11 @@ export const drawHandler = (msg) => {
         case 'finish':
           //  ctx.beginPath();
             break;
+        case 'move':
+            const shape = document.getElementById(figure.shapeId);
+            if (figure.shapeId.startsWith('Line'))
+                Line.moveShape(shape, figure.dx, figure.dy);
+            break
         default:
             break;
     }
