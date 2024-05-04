@@ -13,7 +13,7 @@ class Rectangle extends Tool{
         this.canvas.onmousemove = this.MouseMoveHandler.bind(this);
     }
 
-    MouseUpHandler(e) {
+    MouseUpHandler() {
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',

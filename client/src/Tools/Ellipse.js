@@ -60,6 +60,7 @@ class Ellipse extends Tool{
         this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
         this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
         this.shape.setAttributeNS(null, 'fill', this._fillColor);
+
         this.canvas.appendChild(this.shape);
     }
 

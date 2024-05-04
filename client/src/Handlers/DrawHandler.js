@@ -25,9 +25,11 @@ export const drawHandler = (msg) => {
         case "rectangle":
             Rectangle.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
+        case "square":
+            Square.StaticDraw(canvasState.canvas, figure.id, figure.x, figure.y, figure.side, figure.strokeWidth, figure.strokeColor, figure.fillColor);
+            break;
         case "circle":
-        //    Circle.StaticDraw(ctx, figure.x, figure.y, figure.radius, figure.strokeColor, figure.fillColor, figure.lineWidth);
-        //    ctx.beginPath();
+            Circle.StaticDraw(canvasState.canvas, figure.id, figure.x, figure.y, figure.r, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
         case "ellipse":
            Ellipse.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
