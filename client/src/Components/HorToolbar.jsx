@@ -23,8 +23,12 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         heightRef.current.value = height;
     }, [width, height]);
 
-    const ChangeFontHandler = () => {
-        toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);
+    const ChangeFontSizeHandler = () => {
+        toolState.setFontSize(fontSizeRef.current.value);
+    }
+
+    const ChangeFontFamilyHandler = () => {
+        toolState.setFontFamily(fontFamilyRef.current.value)
     }
 
     // обновление размера полотна
@@ -89,12 +93,12 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     min = {1}
                     max = {50}
                     defaultValue={16}
-                    onChange={() => ChangeFontHandler()}
+                    onChange={() => ChangeFontSizeHandler()}
                 />
 
                 <select
                     ref={fontFamilyRef}
-                    onChange={() => ChangeFontHandler()}
+                    onChange={() => ChangeFontFamilyHandler()}
                 >
                     <option value = "Arial">Arial</option>
                     <option value = "Helvetica">Helvetica</option>

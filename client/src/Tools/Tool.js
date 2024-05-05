@@ -18,8 +18,12 @@ class Tool{
         this._strokeWidth = width
     }
 
-    set font(font){
-     //   this.ctx.font = font;
+    set fontSize(fontSize){
+        this._fontSize = fontSize;
+    }
+
+    set fontFamily(fontFamily) {
+        this._fontFamily = fontFamily
     }
 
     clear() {

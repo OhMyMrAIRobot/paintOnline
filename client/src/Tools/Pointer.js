@@ -4,7 +4,7 @@ import canvasState from "../Store/CanvasState";
 
 class Pointer extends Tool{
 
-    shapes = document.querySelectorAll('line, rect, ellipse');
+    shapes = document.querySelectorAll('line, rect, ellipse, text');
     isMouseDown = false;
 
     constructor(canvas, socket, id) {

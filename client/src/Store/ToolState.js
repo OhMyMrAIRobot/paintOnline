@@ -22,8 +22,12 @@ class ToolState {
         this.tool.lineWidth = width
     }
 
-    setFont(font){
-        this.tool.font = font;
+    setFontSize(fontSize){
+        this.tool.fontSize = fontSize;
+    }
+
+    setFontFamily(fontFamily) {
+        this.tool.fontFamily = fontFamily;
     }
 
 }

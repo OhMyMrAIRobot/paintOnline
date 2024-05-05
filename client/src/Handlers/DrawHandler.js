@@ -6,10 +6,10 @@ import Ellipse from "../Tools/Ellipse";
 import canvasState from "../Store/CanvasState";
 import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
+import Text from "../Tools/Text"
 
 export const drawHandler = (msg) => {
     const figure = msg.figure;
-   // const ctx = Canvas.getContext('2d');
     switch (figure.type){
         case "brushStart":
             const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -39,12 +39,7 @@ export const drawHandler = (msg) => {
            Ellipse.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
         case "text":
-         //   Text.Draw(ctx, figure.x, figure.y, figure.text, figure.font,figure.fillColor);
-         //   sendMessage(canvasState.socket,{id: canvasState.session, method: 'saveCanvas', data: canvasState.canvas.toDataURL()})
-          //  ctx.beginPath();
-            break;
-        case 'finish':
-          //  ctx.beginPath();
+            Text.Draw(canvasState.canvas, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily,figure.strokeColor);
             break;
         case 'move':
             const shapeType = figure.shapeId.substring(0, 4); // Получаем тип фигуры из shapeId
@@ -58,6 +53,9 @@ export const drawHandler = (msg) => {
                     break;
                 case 'Elli':
                     Ellipse.moveShape(shape, figure.dx, figure.dy);
+                    break;
+                case 'Text':
+                    Text.moveShape(shape, figure.dx, figure.dy);
                     break;
                 default:
                     break;
