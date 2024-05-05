@@ -20,7 +20,9 @@ class Circle extends Ellipse{
                 id: this.shape.id,
             }
         })
-        this.canvas.removeChild(this.shape);
+        try {
+            this.canvas.removeChild(this.shape);
+        } catch (e) {}
     }
 
     Draw(xS, yS, xF, yF) {

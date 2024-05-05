@@ -1,4 +1,5 @@
 import {makeAutoObservable} from "mobx";
+import canvasState from "./CanvasState";
 
 class ToolState {
     tool = null;
@@ -9,6 +10,7 @@ class ToolState {
 
     setTool(tool){
         this.tool = tool;
+        canvasState.setCurFigure(null);
     }
 
     setFillColor(color){

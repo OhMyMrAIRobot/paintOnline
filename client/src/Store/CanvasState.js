@@ -9,6 +9,7 @@ class CanvasState {
     socket = null;
     session = "";
 
+    curFigure = null;
 
     constructor() {
         makeAutoObservable(this)
@@ -66,6 +67,10 @@ class CanvasState {
 
     pushToRedo(state){
         this.redoList.push(state);
+    }
+
+    setCurFigure(figure) {
+        this.curFigure = figure;
     }
 
     undo(){

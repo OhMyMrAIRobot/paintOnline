@@ -6,12 +6,17 @@ import {useNavigate} from "react-router-dom";
 import '../Style/InviteModal.css'
 import InviteModal from "./InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
+import {autorun} from "mobx";
 
 const HorToolbar = ({width, height, chatActive, setChatActive}) => {
     const fontSizeRef = useRef(null);
     const fontFamilyRef = useRef(null);
     const widthRef = useRef(null);
     const heightRef = useRef(null);
+
+    const stroke = useRef(null);
+    const strokeColor = useRef(null);
+    const fill = useRef(null);
 
     const navigate = useNavigate()
 
@@ -31,7 +36,14 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         toolState.setFontFamily(fontFamilyRef.current.value)
     }
 
-    // обновление размера полотна
+    autorun(() => {
+        if (canvasState.curFigure) {
+            fill.current.value = (canvasState.curFigure.getAttributeNS(null, 'fill')) ?? "#FFFFFF";
+            strokeColor.current.value = (canvasState.curFigure.getAttributeNS(null, 'stroke')) ?? "#FFFFFF";
+            stroke.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'stroke-width'));
+        }
+    });
+
     const changeResolutionHandler = () => {
         sendMessage(canvasState.socket,{
             method: 'changeResolution',
@@ -41,7 +53,6 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         })
     }
 
-    // обновление цвета полотна
     const changeBackgroundHandler = (color) => {
         sendMessage(canvasState.socket,{
             id: canvasState.session,
@@ -50,7 +61,6 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         })
     }
 
-    // обработка нажатия на кнопку выйти
     const leaveRoomHandler = () => {
         sendMessage(canvasState.socket,{
             method: 'close',
@@ -68,23 +78,41 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
             <div id = "hor" className = "horToolbar">
 
                 <input
+                    ref = {stroke}
                     type = "number"
                     min = {1}
                     max = {100}
                     defaultValue={1}
-                    onChange={e => toolState.setStrokeWidth(e.target.value)}
+                    onChange={e => {
+                        toolState.setStrokeWidth(e.target.value)
+                        if (canvasState.curFigure) {
+                            canvasState.curFigure.setAttributeNS(null, 'stroke-width', e.target.value);
+                        }
+                    }}
                 />
 
                 <input
+                    ref = {strokeColor}
                     type = "color"
                     defaultValue = "#000000"
-                    onChange={e => toolState.setStrokeColor(e.target.value)}
+                    onChange={e => {
+                        toolState.setStrokeColor(e.target.value)
+                        if (canvasState.curFigure) {
+                            canvasState.curFigure.setAttributeNS(null, 'stroke', e.target.value);
+                        }
+                    }}
                 />
 
                 <input
+                    ref = {fill}
                     type = "color"
                     defaultValue = "#FFFFFF"
-                    onChange={e => toolState.setFillColor(e.target.value)}
+                    onChange={e => {
+                        toolState.setFillColor(e.target.value)
+                        if (canvasState.curFigure) {
+                            canvasState.curFigure.setAttributeNS(null, 'fill', e.target.value);
+                        }
+                    }}
                 />
 
                 <input
