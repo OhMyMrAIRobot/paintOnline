@@ -8,7 +8,7 @@ import Rectangle from "../Tools/Rectangle";
 import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Square from "../Tools/Square";
-import Pointer from "../Tools/Pointer";
+import Hand from "../Tools/Hand";
 import Line from "../Tools/Line";
 import Text from "../Tools/Text"
 import {sendMessage} from "../Handlers/SendHandler";
@@ -16,13 +16,13 @@ import {sendMessage} from "../Handlers/SendHandler";
 const HorToolbar = () => {
 
     const download = () => {
-        const dataUrl = canvasState.canvas.toDataURL()
-        const a = document.createElement('a')
-        a.href = dataUrl
-        a.download = `${canvasState.session}.jpg`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
+        // const dataUrl = canvasState.canvas.toDataURL()
+        // const a = document.createElement('a')
+        // a.href = dataUrl
+        // a.download = `${canvasState.session}.jpg`
+        // document.body.appendChild(a)
+        // a.click()
+        // document.body.removeChild(a)
     }
 
     return (
@@ -30,7 +30,7 @@ const HorToolbar = () => {
             <button
                 className = "toolbarBtn"
                 onClick={() => {
-                    toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session))}
+                    toolState.setTool(new Hand(canvasState.canvas, canvasState.socket, canvasState.session))}
                 }
             >
                 none

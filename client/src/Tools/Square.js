@@ -1,5 +1,6 @@
 import Rectangle from "./Rectangle";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Square extends Rectangle {
 
@@ -13,9 +14,9 @@ class Square extends Rectangle {
                 x: this.x,
                 y: this.y,
                 side: this.side,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
-                fillColor: this._fillColor,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                fillColor: toolState.fillColor,
                 id: this.shape.id,
             }
         })
@@ -48,9 +49,9 @@ class Square extends Rectangle {
         this.shape.setAttributeNS(null, 'y', this.y.toString());
         this.shape.setAttributeNS(null, 'width', this.side.toString());
         this.shape.setAttributeNS(null, 'height', this.side.toString());
-        this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
-        this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
-        this.shape.setAttributeNS(null, 'fill', this._fillColor);
+        this.shape.setAttributeNS(null, 'stroke',toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', toolState.fillColor);
         this.canvas.appendChild(this.shape);
     }
 

@@ -6,26 +6,6 @@ class Tool{
         this.clear();
     }
 
-    set fillColor(color) {
-        this._fillColor = color;
-    }
-
-    set strokeColor(color) {
-        this._strokeColor = color;
-    }
-
-    set lineWidth(width) {
-        this._strokeWidth = width
-    }
-
-    set fontSize(fontSize){
-        this._fontSize = fontSize;
-    }
-
-    set fontFamily(fontFamily) {
-        this._fontFamily = fontFamily
-    }
-
     clear() {
         this.canvas.onmouseup = null;
         this.canvas.onmousemove = null;

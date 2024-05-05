@@ -1,5 +1,6 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Line extends Tool{
     constructor(canvas, socket, id) {
@@ -24,8 +25,8 @@ class Line extends Tool{
                 yS: this.yStart,
                 xF: this.xFinish,
                 yF: this.yFinish,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
                 id: this.shape.id,
             }
         })
@@ -55,8 +56,8 @@ class Line extends Tool{
         this.shape.setAttributeNS(null, 'y1', yS);
         this.shape.setAttributeNS(null, 'x2', xF);
         this.shape.setAttributeNS(null, 'y2', yF);
-        this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
-        this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
         this.canvas.appendChild(this.shape);
     }
 

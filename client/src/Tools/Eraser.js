@@ -1,6 +1,7 @@
 import Brush from "./Brush";
 import {sendMessage} from "../Handlers/SendHandler";
 import canvasState from "../Store/CanvasState";
+import toolState from "../Store/ToolState";
 
 class Eraser extends Brush{
 
@@ -18,8 +19,8 @@ class Eraser extends Brush{
                 type: 'brushStart',
                 x: this.x,
                 y: this.y,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
                 id: this.shape.id,
             }
         })
@@ -37,8 +38,8 @@ class Eraser extends Brush{
                     type: 'eraser',
                     x: this.x,
                     y:this.y,
-                    strokeColor: this._strokeColor,
-                    strokeWidth: this._strokeWidth,
+                    strokeColor: toolState.strokeColor,
+                    strokeWidth: toolState.strokeWidth,
                     id: this.shape.id,
                 }
             })

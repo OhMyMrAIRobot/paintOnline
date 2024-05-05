@@ -1,5 +1,6 @@
 import Ellipse from "./Ellipse";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Circle extends Ellipse{
 
@@ -13,9 +14,9 @@ class Circle extends Ellipse{
                 x: this.xStart,
                 y: this.yStart,
                 r: this.radius,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
-                fillColor: this._fillColor,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                fillColor: toolState.fillColor,
                 id: this.shape.id,
             }
         })
@@ -29,9 +30,9 @@ class Circle extends Ellipse{
         this.shape.setAttributeNS(null, 'cy', yS);
         this.shape.setAttributeNS(null, 'rx', this.radius.toString());
         this.shape.setAttributeNS(null, 'ry', this.radius.toString());
-        this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
-        this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
-        this.shape.setAttributeNS(null, 'fill', this._fillColor);
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', toolState.fillColor);
 
         this.canvas.appendChild(this.shape);
     }

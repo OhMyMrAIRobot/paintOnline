@@ -1,6 +1,7 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
 import canvasState from "../Store/CanvasState";
+import toolState from "../Store/ToolState";
 
 class Text extends Tool {
     constructor(canvas, socket, id) {
@@ -51,9 +52,9 @@ class Text extends Tool {
                         x: this.xStart,
                         y: this.yStart,
                         text: this.text,
-                        fontSize: this._fontSize,
-                        fontFamily: this._fontFamily,
-                        strokeColor: this._strokeColor,
+                        fontSize: toolState.fontSize,
+                        fontFamily: toolState.fontFamily,
+                        strokeColor: toolState.strokeColor,
                     }
                 })
             }

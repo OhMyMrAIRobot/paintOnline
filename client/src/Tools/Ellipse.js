@@ -1,5 +1,6 @@
 import {sendMessage} from "../Handlers/SendHandler";
 import Tool from "./Tool";
+import toolState from "../Store/ToolState";
 
 class Ellipse extends Tool{
 
@@ -25,9 +26,9 @@ class Ellipse extends Tool{
                 yS: this.yStart,
                 xF: this.xFinish,
                 yF: this.yFinish,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
-                fillColor: this._fillColor,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                fillColor: toolState.fillColor,
                 id: this.shape.id,
             }
         })
@@ -57,9 +58,9 @@ class Ellipse extends Tool{
         this.shape.setAttributeNS(null, 'cy', yS);
         this.shape.setAttributeNS(null, 'rx', Math.abs(xF - xS).toString());
         this.shape.setAttributeNS(null, 'ry', Math.abs(yF - yS).toString());
-        this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
-        this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
-        this.shape.setAttributeNS(null, 'fill', this._fillColor);
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', toolState.fillColor);
 
         this.canvas.appendChild(this.shape);
     }

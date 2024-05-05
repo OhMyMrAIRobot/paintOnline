@@ -1,5 +1,6 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Brush extends Tool {
     constructor(canvas, socket, id) {
@@ -31,8 +32,8 @@ class Brush extends Tool {
                 type: 'brushStart',
                 x: this.x,
                 y: this.y,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
                 id: this.shape.id,
             }
         })
@@ -50,8 +51,8 @@ class Brush extends Tool {
                     type: 'brushDraw',
                     x: this.x,
                     y:this.y,
-                    strokeColor: this._strokeColor,
-                    strokeWidth: this._strokeWidth,
+                    strokeColor: toolState.strokeColor,
+                    strokeWidth: toolState.strokeWidth,
                     id: this.shape.id,
                 }
             })

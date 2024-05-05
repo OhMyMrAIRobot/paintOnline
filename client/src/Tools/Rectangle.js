@@ -1,5 +1,6 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Rectangle extends Tool{
     constructor(canvas, socket, id) {
@@ -24,9 +25,9 @@ class Rectangle extends Tool{
                 yS: this.yStart,
                 xF: this.xFinish,
                 yF: this.yFinish,
-                strokeColor: this._strokeColor,
-                strokeWidth: this._strokeWidth,
-                fillColor: this._fillColor,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                fillColor: toolState.fillColor,
                 id: this.shape.id,
             }
         })
@@ -56,9 +57,9 @@ class Rectangle extends Tool{
         this.shape.setAttributeNS(null, 'y', Math.min(yS, yF).toString());
         this.shape.setAttributeNS(null, 'width', Math.abs(xS - xF).toString());
         this.shape.setAttributeNS(null, 'height', Math.abs(yS - yF).toString());
-        this.shape.setAttributeNS(null, 'stroke', this._strokeColor);
-        this.shape.setAttributeNS(null, 'stroke-width', this._strokeWidth);
-        this.shape.setAttributeNS(null, 'fill', this._fillColor);
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', toolState.fillColor);
         this.canvas.appendChild(this.shape);
     }
 

@@ -72,7 +72,7 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     min = {1}
                     max = {100}
                     defaultValue={1}
-                    onChange={e => toolState.setLineWidth(e.target.value)}
+                    onChange={e => toolState.setStrokeWidth(e.target.value)}
                 />
 
                 <input

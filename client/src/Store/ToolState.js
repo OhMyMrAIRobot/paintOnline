@@ -2,6 +2,7 @@ import {makeAutoObservable} from "mobx";
 
 class ToolState {
     tool = null;
+
     constructor() {
         makeAutoObservable(this)
     }
@@ -11,23 +12,23 @@ class ToolState {
     }
 
     setFillColor(color){
-        this.tool.fillColor = color;
+        this.fillColor = color;
     }
 
     setStrokeColor(color){
-        this.tool.strokeColor = color;
+        this.strokeColor = color;
     }
 
-    setLineWidth(width) {
-        this.tool.lineWidth = width
+    setStrokeWidth(width) {
+        this.strokeWidth = width
     }
 
     setFontSize(fontSize){
-        this.tool.fontSize = fontSize;
+        this.fontSize = fontSize;
     }
 
     setFontFamily(fontFamily) {
-        this.tool.fontFamily = fontFamily;
+        this.fontFamily = fontFamily;
     }
 
 }

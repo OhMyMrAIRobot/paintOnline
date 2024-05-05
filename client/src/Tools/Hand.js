@@ -2,7 +2,7 @@ import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
 import canvasState from "../Store/CanvasState";
 
-class Pointer extends Tool{
+class Hand extends Tool{
 
     shapes = document.querySelectorAll('line, rect, ellipse, text');
     isMouseDown = false;
@@ -52,4 +52,4 @@ class Pointer extends Tool{
 
 }
 
-export default Pointer;
+export default Hand;
