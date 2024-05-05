@@ -5,6 +5,7 @@ import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import canvasState from "../Store/CanvasState";
 import Brush from "../Tools/Brush";
+import Eraser from "../Tools/Eraser";
 
 export const drawHandler = (msg) => {
     const figure = msg.figure;
@@ -20,7 +21,7 @@ export const drawHandler = (msg) => {
             Brush.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.strokeWidth, figure.strokeColor);
             break;
         case "eraser":
-      //      Eraser.Draw(ctx, figure.x, figure.y, figure.lineWidth);
+            Eraser.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.strokeWidth, figure.strokeColor);
             break;
         case "line":
             Line.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor);
