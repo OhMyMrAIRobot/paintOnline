@@ -1,83 +1,55 @@
-import Tool from "./Tool";
+import Ellipse from "./Ellipse";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
-class Circle extends Tool{
-    constructor(canvas, socket, id) {
-        super(canvas, socket, id);
-        this.Listen();
-    }
+class Circle extends Ellipse{
 
-    Listen(){
-        this.canvas.onmouseup = this.MouseUpHandler.bind(this);
-        this.canvas.onmousedown = this.MouseDownHandler.bind(this);
-        this.canvas.onmousemove = this.MouseMoveHandler.bind(this);
-    }
-
-    MouseUpHandler(e){
+    MouseUpHandler() {
         this.isMouseDown = false;
-        sendMessage(this.socket,{
+        sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'circle',
                 x: this.xStart,
                 y: this.yStart,
-                radius: this.radius,
-                strokeColor: this.ctx.strokeStyle,
-                fillColor: this.ctx.fillStyle,
-                lineWidth: this.ctx.lineWidth,
+                r: this.radius,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                fillColor: toolState.fillColor,
+                id: this.shape.id,
             }
         })
+        try {
+            this.canvas.removeChild(this.shape);
+        } catch (e) {}
     }
 
-    MouseDownHandler(e){
-        this.isMouseDown = true;
-        this.ctx.beginPath();
-        this.xStart = e.pageX - e.target.offsetLeft;
-        this.yStart = e.pageY - e.target.offsetTop;
-        this.oldCanvas = this.canvas.toDataURL();
+    Draw(xS, yS, xF, yF) {
+        this.radius = Math.sqrt(Math.pow(xF - xS, 2) + Math.pow(yF - yS, 2));
+
+        this.shape.setAttributeNS(null, 'cx', xS);
+        this.shape.setAttributeNS(null, 'cy', yS);
+        this.shape.setAttributeNS(null, 'rx', this.radius.toString());
+        this.shape.setAttributeNS(null, 'ry', this.radius.toString());
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', toolState.fillColor);
+
+        this.canvas.appendChild(this.shape);
     }
 
-    MouseMoveHandler(e){
-        if (this.isMouseDown){
-            let x = e.pageX - e.target.offsetLeft;
-            let y = e.pageY - e.target.offsetTop;
-            let width = x - this.xStart;
-            let height = y - this.yStart;
-            this.radius = Math.sqrt(width*width + height*height);
-            this.Draw(this.xStart, this.yStart, this.radius);
-        }
-    }
-
-    Draw(x, y, r){
-        const img = new Image();
-        img.src = this.oldCanvas;
-        img.onload = () => {
-            this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(img, 0 ,0, this.canvas.width, this.canvas.height);
-            this.ctx.beginPath();
-            this.ctx.arc(x, y, r, 0, 2 * Math.PI);
-            this.ctx.stroke();
-            this.ctx.fill();
-        }
-    }
-
-    static StaticDraw(ctx, x, y, r, strokeColor, fillColor, lineWidth){
-        let oldStrokeWidth = ctx.lineWidth;
-        let oldStrokeColor = ctx.strokeStyle;
-        let oldFillColor = ctx.fillStyle;
-
-        ctx.beginPath();
-        ctx.strokeStyle = strokeColor;
-        ctx.fillStyle = fillColor;
-        ctx.lineWidth = lineWidth;
-        ctx.arc(x, y, r, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fill();
-
-        ctx.lineWidth = oldStrokeWidth;
-        ctx.strokeStyle = oldStrokeColor;
-        ctx.fillStyle = oldFillColor;
+    static StaticDraw(canvas, id, x, y, r, strokeWidth, strokeColor, fillColor){
+        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        shape.id = id;
+        shape.setAttributeNS(null, 'cx', x);
+        shape.setAttributeNS(null, 'cy', y);
+        shape.setAttributeNS(null, 'rx', r.toString());
+        shape.setAttributeNS(null, 'ry', r.toString());
+        shape.setAttributeNS(null, 'stroke', strokeColor);
+        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
+        shape.setAttributeNS(null, 'fill', fillColor);
+        canvas.appendChild(shape);
     }
 }
 

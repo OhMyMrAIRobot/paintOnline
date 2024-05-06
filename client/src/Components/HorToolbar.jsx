@@ -6,28 +6,63 @@ import {useNavigate} from "react-router-dom";
 import '../Style/InviteModal.css'
 import InviteModal from "./InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
+import {autorun} from "mobx";
 
 const HorToolbar = ({width, height, chatActive, setChatActive}) => {
     const fontSizeRef = useRef(null);
     const fontFamilyRef = useRef(null);
     const widthRef = useRef(null);
     const heightRef = useRef(null);
+    const textRef = useRef(null);
+
+    const stroke = useRef(null);
+    const strokeColor = useRef(null);
+    const fill = useRef(null);
 
     const navigate = useNavigate()
 
     const [ModalActive, setModalActive] = useState(false)
 
-    // обновление размера полотна в тулбаре
     useEffect(() => {
         widthRef.current.value = width;
         heightRef.current.value = height;
     }, [width, height]);
 
-    const ChangeFontHandler = () => {
-        toolState.setFont(`${fontSizeRef.current.value}px ${fontFamilyRef.current.value}`);
+    autorun(() => {
+        if (canvasState.curFigure) {
+            fill.current.value = canvasState.curFigure.getAttributeNS(null, 'fill') ?? toolState.fillColor;
+            strokeColor.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke') ?? toolState.strokeColor;
+            stroke.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke-width') ?? toolState.strokeWidth;
+            textRef.current.value = canvasState.curFigure.textContent ?? "";
+            fontSizeRef.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'font-size') ?? toolState.fontSize);
+            fontFamilyRef.current.value = canvasState.curFigure.getAttributeNS(null, 'font-family') ?? toolState.fontFamily;
+            toolState.setStrokeWidth(stroke.current.value)
+            toolState.setStrokeColor(strokeColor.current.value)
+            toolState.setFillColor(fill.current.value)
+            toolState.setFontSize(fontSizeRef.current.value)
+            toolState.setFontFamily(fontFamilyRef.current.value)
+        }
+    });
+
+    const changeFigureParams = () => {
+        if (canvasState.curFigure) {
+            sendMessage(canvasState.socket, {
+                method: 'draw',
+                id: canvasState.session,
+                figure: {
+                    type: 'changeFigure',
+                    shapeId: canvasState.curFigure.id,
+                    strokeWidth: toolState.strokeWidth,
+                    stroke: toolState.strokeColor,
+                    fill: toolState.fillColor,
+                    text: textRef.current.value,
+                    fontSize: toolState.fontSize,
+                    fontFamily: toolState.fontFamily,
+                }
+            })
+        }
     }
 
-    // обновление размера полотна
     const changeResolutionHandler = () => {
         sendMessage(canvasState.socket,{
             method: 'changeResolution',
@@ -37,7 +72,6 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         })
     }
 
-    // обновление цвета полотна
     const changeBackgroundHandler = (color) => {
         sendMessage(canvasState.socket,{
             id: canvasState.session,
@@ -46,7 +80,6 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
         })
     }
 
-    // обработка нажатия на кнопку выйти
     const leaveRoomHandler = () => {
         sendMessage(canvasState.socket,{
             method: 'close',
@@ -64,23 +97,35 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
             <div id = "hor" className = "horToolbar">
 
                 <input
+                    ref = {stroke}
                     type = "number"
                     min = {1}
                     max = {100}
                     defaultValue={1}
-                    onChange={e => toolState.setLineWidth(e.target.value)}
+                    onChange={e => {
+                        toolState.setStrokeWidth(e.target.value)
+                        changeFigureParams()
+                    }}
                 />
 
                 <input
+                    ref = {strokeColor}
                     type = "color"
                     defaultValue = "#000000"
-                    onChange={e => toolState.setStrokeColor(e.target.value)}
+                    onChange={e => {
+                        toolState.setStrokeColor(e.target.value)
+                        changeFigureParams()
+                    }}
                 />
 
                 <input
+                    ref = {fill}
                     type = "color"
                     defaultValue = "#FFFFFF"
-                    onChange={e => toolState.setFillColor(e.target.value)}
+                    onChange={e => {
+                        toolState.setFillColor(e.target.value)
+                        changeFigureParams()
+                    }}
                 />
 
                 <input
@@ -89,12 +134,26 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     min = {1}
                     max = {50}
                     defaultValue={16}
-                    onChange={() => ChangeFontHandler()}
+                    onChange={(e) => {
+                        toolState.setFontSize(e.target.value);
+                        changeFigureParams()
+                    }}
+                />
+
+                <input
+                    ref={textRef}
+                    className="textInput"
+                    onChange={() => {
+                        changeFigureParams()
+                    }}
                 />
 
                 <select
                     ref={fontFamilyRef}
-                    onChange={() => ChangeFontHandler()}
+                    onChange={(e) => {
+                        toolState.setFontFamily(e.target.value)
+                        changeFigureParams()
+                    }}
                 >
                     <option value = "Arial">Arial</option>
                     <option value = "Helvetica">Helvetica</option>

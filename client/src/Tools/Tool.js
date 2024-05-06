@@ -1,30 +1,11 @@
+import canvasState from "../Store/CanvasState";
+
 class Tool{
     constructor(canvas, socket, id) {
         this.canvas = canvas;
         this.socket = socket;
         this.id = id;
-        this.ctx = canvas.getContext('2d');
         this.clear();
-    }
-
-    // заливка
-    set fillColor(color) {
-        this.ctx.fillStyle = color
-    }
-
-    // цвет обводки
-    set strokeColor(color) {
-        this.ctx.strokeStyle = color
-    }
-
-    // ширина обводки
-    set lineWidth(width) {
-        this.ctx.lineWidth = width
-    }
-
-    // шрифт
-    set font(font){
-        this.ctx.font = font;
     }
 
     clear() {
@@ -35,6 +16,19 @@ class Tool{
         inputs.forEach(node => {
             document.body.removeChild(node);
         })
+        const shapes = document.querySelectorAll('line, rect, ellipse, text');
+        shapes.forEach(shape => {
+
+            console.log('deleted')
+        });
+
+    }
+
+    getPoint(e) {
+        let p = this.canvas.createSVGPoint();
+        p.x = e.clientX;
+        p.y = e.clientY;
+        return p.matrixTransform(this.canvas.getScreenCTM().inverse())
     }
 }
 

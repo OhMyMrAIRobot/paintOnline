@@ -1,5 +1,6 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Brush extends Tool {
     constructor(canvas, socket, id) {
@@ -13,45 +14,59 @@ class Brush extends Tool {
         this.canvas.onmousedown = this.MouseDownHandler.bind(this);
     }
 
-    MouseUpHandler(e) {
+    MouseUpHandler() {
         this.isMouseDown = false;
-        sendMessage(this.socket,{id: this.id, method: 'draw', figure: {type: 'finish'}})
     }
 
     MouseDownHandler(e) {
         this.isMouseDown = true;
-        this.ctx.beginPath();
-        this.ctx.moveTo(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop);
+        this.shape = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        this.shape.id = 'Brush' + Math.random().toString();
+        const p = this.getPoint(e)
+        this.x = p.x;
+        this.y = p.y;
+        sendMessage(this.socket, {
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'brushStart',
+                x: this.x,
+                y: this.y,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                id: this.shape.id,
+            }
+        })
     }
 
     MouseMoveHandler(e) {
         if (this.isMouseDown){
+            const p = this.getPoint(e)
+            this.x = p.x;
+            this.y = p.y;
             sendMessage(this.socket, {
                 method: 'draw',
                 id: this.id,
                 figure: {
-                    type: 'brush',
-                    x: e.pageX - e.target.offsetLeft,
-                    y: e.pageY - e.target.offsetTop,
-                    strokeColor: this.ctx.strokeStyle,
-                    lineWidth: this.ctx.lineWidth,
+                    type: 'brushDraw',
+                    x: this.x,
+                    y:this.y,
+                    strokeColor: toolState.strokeColor,
+                    strokeWidth: toolState.strokeWidth,
+                    id: this.shape.id,
                 }
             })
         }
     }
 
-    static Draw(ctx, x, y, color, width) {
-        let oldWidth = ctx.lineWidth;
-        let oldColor = ctx.strokeStyle;
-
-        ctx.lineWidth = width;
-        ctx.strokeStyle = color;
-        ctx.lineTo(x,y);
-        ctx.stroke();
-
-        ctx.lineWidth = oldWidth;
-        ctx.strokeStyle = oldColor;
-
+    static Draw(canvas, id, x, y, strokeWidth, strokeColor) {
+        const shape = document.getElementById(id);
+        let currentPath = shape.getAttributeNS(null, 'd');
+        currentPath += ' L ' + x + ' ' + y;
+        shape.setAttributeNS(null, 'd', currentPath);
+        shape.setAttributeNS(null, 'stroke', strokeColor);
+        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
+        shape.setAttributeNS(null, 'fill', 'none');
     }
 }
 

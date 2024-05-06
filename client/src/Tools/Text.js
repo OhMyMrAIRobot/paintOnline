@@ -1,5 +1,7 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
+import canvasState from "../Store/CanvasState";
+import toolState from "../Store/ToolState";
 
 class Text extends Tool {
     constructor(canvas, socket, id) {
@@ -16,12 +18,14 @@ class Text extends Tool {
     }
 
     MouseDownHandler(e) {
-        this.ctx.beginPath();
-        this.xStart = e.pageX - e.target.offsetLeft;
-        this.yStart = e.pageY - e.target.offsetTop;
+        const p = this.getPoint(e)
+        this.xStart = p.x;
+        this.yStart = p.y;
 
-        this.input.style.left = `${e.pageX}px`;
-        this.input.style.top = `${e.pageY}px`;
+        const offsetX = parseInt(window.getComputedStyle(canvasState.canvas).marginLeft);
+        const offsetY = parseInt(window.getComputedStyle(canvasState.canvas).marginTop);
+        this.input.style.left = `${this.xStart + offsetX}px`;
+        this.input.style.top = `${this.yStart + offsetY}px`;
         this.input.style.display = 'inline-block';
         this.input.value = '';
         this.input.focus();
@@ -47,9 +51,12 @@ class Text extends Tool {
                         type: 'text',
                         x: this.xStart,
                         y: this.yStart,
+                        id: 'Text' + Math.random(),
                         text: this.text,
-                        font: this.ctx.font,
-                        fillColor: this.ctx.fillStyle,
+                        fontSize: toolState.fontSize,
+                        fontFamily: toolState.fontFamily,
+                        fillColor: toolState.fillColor,
+                        strokeColor: toolState.strokeColor,
                     }
                 })
             }
@@ -57,17 +64,24 @@ class Text extends Tool {
         }
     }
 
-    static Draw(ctx, x, y, text, font, fillColor) {
-        let oldFont = ctx.font;
-        let oldFillColor = ctx.fillStyle;
+    static Draw(canvas, id, x, y, text, fontSize, fontFamily, fillColor, strokeColor) {
+        const shape = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        shape.id = id;
+        shape.setAttributeNS(null, 'x', x);
+        shape.setAttributeNS(null, 'y', y);
+        shape.setAttributeNS(null, 'fill', fillColor);
+        shape.setAttributeNS(null, 'stroke', strokeColor);
+        shape.setAttributeNS(null, 'font-size', fontSize);
+        shape.setAttributeNS(null, 'font-family', fontFamily);
+        shape.textContent = text;
+        canvas.appendChild(shape);
+    }
 
-        ctx.font = font;
-        ctx.fillStyle = fillColor;
-        ctx.beginPath();
-        ctx.fillText(text, x, y);
-
-        ctx.font = oldFont;
-        ctx.fillStyle = oldFillColor;
+    static moveShape(line, dx, dy) {
+        let x = parseFloat(line.getAttributeNS(null, 'x')) + dx;
+        let y = parseFloat(line.getAttributeNS(null, 'y')) + dy;
+        line.setAttributeNS(null, 'x', x);
+        line.setAttributeNS(null, 'y', y);
     }
 }
 

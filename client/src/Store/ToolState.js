@@ -1,29 +1,36 @@
 import {makeAutoObservable} from "mobx";
+import canvasState from "./CanvasState";
 
 class ToolState {
     tool = null;
+
     constructor() {
         makeAutoObservable(this)
     }
 
     setTool(tool){
         this.tool = tool;
+        canvasState.setCurFigure(null);
     }
 
     setFillColor(color){
-        this.tool.fillColor = color;
+        this.fillColor = color;
     }
 
     setStrokeColor(color){
-        this.tool.strokeColor = color;
+        this.strokeColor = color;
     }
 
-    setLineWidth(width) {
-        this.tool.lineWidth = width
+    setStrokeWidth(width) {
+        this.strokeWidth = width
     }
 
-    setFont(font){
-        this.tool.font = font;
+    setFontSize(fontSize){
+        this.fontSize = fontSize;
+    }
+
+    setFontFamily(fontFamily) {
+        this.fontFamily = fontFamily;
     }
 
 }

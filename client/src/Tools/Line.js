@@ -1,5 +1,6 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
+import toolState from "../Store/ToolState";
 
 class Line extends Tool{
     constructor(canvas, socket, id) {
@@ -13,65 +14,77 @@ class Line extends Tool{
         this.canvas.onmousemove = this.MouseMoveHandler.bind(this);
     }
 
-    MouseUpHandler(e){
+    MouseUpHandler(){
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'line',
-                Xs: this.xStart,
-                Ys: this.yStart,
-                Xf: e.pageX - e.target.offsetLeft,
-                Yf: e.pageY - e.target.offsetTop,
-                strokeColor: this.ctx.strokeStyle,
-                lineWidth: this.ctx.lineWidth,
+                xS: this.xStart,
+                yS: this.yStart,
+                xF: this.xFinish,
+                yF: this.yFinish,
+                strokeColor: toolState.strokeColor,
+                strokeWidth: toolState.strokeWidth,
+                id: this.shape.id,
             }
         })
+
+        try {
+            this.canvas.removeChild(this.shape);
+        } catch (e) {}
     }
 
     MouseDownHandler(e){
         this.isMouseDown = true;
-        this.ctx.beginPath()
-        this.oldCanvas = this.canvas.toDataURL();
-        this.xStart = e.pageX - e.target.offsetLeft;
-        this.yStart = e.pageY - e.target.offsetTop;
+        const p = this.getPoint(e)
+        this.xStart = p.x;
+        this.yStart = p.y;
+        this.shape = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        this.shape.id = 'Line' + Math.random().toString();
     }
 
     MouseMoveHandler(e){
         if(this.isMouseDown){
-            let x = e.pageX - e.target.offsetLeft;
-            let y = e.pageY - e.target.offsetTop;
-            this.Draw(this.xStart, this.yStart, x, y);
+            const p = this.getPoint(e)
+            this.xFinish = p.x;
+            this.yFinish = p.y;
+            this.Draw(this.xStart, this.yStart, this.xFinish, this.yFinish);
         }
     }
 
-    Draw(Xs,Ys, Xf, Yf){
-        const img = new Image();
-        img.src = this.oldCanvas;
-        img.onload = () => {
-            this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-            this.ctx.drawImage(img, 0,0, this.canvas.width, this.canvas.height);
-            this.ctx.beginPath();
-            this.ctx.moveTo(Xs, Ys);
-            this.ctx.lineTo(Xf,Yf);
-            this.ctx.stroke();
-        }
+    Draw(xS, yS, xF, yF) {
+        this.shape.setAttributeNS(null, 'x1', xS);
+        this.shape.setAttributeNS(null, 'y1', yS);
+        this.shape.setAttributeNS(null, 'x2', xF);
+        this.shape.setAttributeNS(null, 'y2', yF);
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.canvas.appendChild(this.shape);
     }
 
-    static StaticDraw(ctx, Xs, Ys, Xf, Yf, lineWidth, strokeColor){
-        let oldWidth = ctx.lineWidth;
-        let oldColor = ctx.strokeStyle;
+    static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor) {
+        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        shape.id = id;
+        shape.setAttributeNS(null, 'x1', xS);
+        shape.setAttributeNS(null, 'y1', yS);
+        shape.setAttributeNS(null, 'x2', xF);
+        shape.setAttributeNS(null, 'y2', yF);
+        shape.setAttributeNS(null, 'stroke', strokeColor);
+        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
+        canvas.appendChild(shape);
+    }
 
-        ctx.beginPath();
-        ctx.lineWidth = lineWidth;
-        ctx.strokeStyle = strokeColor;
-        ctx.moveTo(Xs, Ys);
-        ctx.lineTo(Xf,Yf);
-        ctx.stroke();
-
-        ctx.lineWidth = oldWidth;
-        ctx.strokeStyle = oldColor;
+    static moveShape(line, dx, dy) {
+        let x1 = parseFloat(line.getAttributeNS(null, 'x1')) + dx;
+        let y1 = parseFloat(line.getAttributeNS(null, 'y1')) + dy;
+        let x2 = parseFloat(line.getAttributeNS(null, 'x2')) + dx;
+        let y2 = parseFloat(line.getAttributeNS(null, 'y2')) + dy;
+        line.setAttributeNS(null, 'x1', x1);
+        line.setAttributeNS(null, 'y1', y1);
+        line.setAttributeNS(null, 'x2', x2);
+        line.setAttributeNS(null, 'y2', y2);
     }
 }
 
