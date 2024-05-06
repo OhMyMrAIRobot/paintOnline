@@ -13,6 +13,7 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
     const fontFamilyRef = useRef(null);
     const widthRef = useRef(null);
     const heightRef = useRef(null);
+    const textRef = useRef(null);
 
     const stroke = useRef(null);
     const strokeColor = useRef(null);
@@ -22,27 +23,45 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
 
     const [ModalActive, setModalActive] = useState(false)
 
-    // обновление размера полотна в тулбаре
     useEffect(() => {
         widthRef.current.value = width;
         heightRef.current.value = height;
     }, [width, height]);
 
-    const ChangeFontSizeHandler = () => {
-        toolState.setFontSize(fontSizeRef.current.value);
-    }
-
-    const ChangeFontFamilyHandler = () => {
-        toolState.setFontFamily(fontFamilyRef.current.value)
-    }
-
     autorun(() => {
         if (canvasState.curFigure) {
-            fill.current.value = (canvasState.curFigure.getAttributeNS(null, 'fill')) ?? "#FFFFFF";
-            strokeColor.current.value = (canvasState.curFigure.getAttributeNS(null, 'stroke')) ?? "#FFFFFF";
-            stroke.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'stroke-width'));
+            fill.current.value = canvasState.curFigure.getAttributeNS(null, 'fill') ?? toolState.fillColor;
+            strokeColor.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke') ?? toolState.strokeColor;
+            stroke.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke-width') ?? toolState.strokeWidth;
+            textRef.current.value = canvasState.curFigure.textContent ?? "";
+            fontSizeRef.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'font-size') ?? toolState.fontSize);
+            fontFamilyRef.current.value = canvasState.curFigure.getAttributeNS(null, 'font-family') ?? toolState.fontFamily;
+            toolState.setStrokeWidth(stroke.current.value)
+            toolState.setStrokeColor(strokeColor.current.value)
+            toolState.setFillColor(fill.current.value)
+            toolState.setFontSize(fontSizeRef.current.value)
+            toolState.setFontFamily(fontFamilyRef.current.value)
         }
     });
+
+    const changeFigureParams = () => {
+        if (canvasState.curFigure) {
+            sendMessage(canvasState.socket, {
+                method: 'draw',
+                id: canvasState.session,
+                figure: {
+                    type: 'changeFigure',
+                    shapeId: canvasState.curFigure.id,
+                    strokeWidth: toolState.strokeWidth,
+                    stroke: toolState.strokeColor,
+                    fill: toolState.fillColor,
+                    text: textRef.current.value,
+                    fontSize: toolState.fontSize,
+                    fontFamily: toolState.fontFamily,
+                }
+            })
+        }
+    }
 
     const changeResolutionHandler = () => {
         sendMessage(canvasState.socket,{
@@ -85,9 +104,7 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     defaultValue={1}
                     onChange={e => {
                         toolState.setStrokeWidth(e.target.value)
-                        if (canvasState.curFigure) {
-                            canvasState.curFigure.setAttributeNS(null, 'stroke-width', e.target.value);
-                        }
+                        changeFigureParams()
                     }}
                 />
 
@@ -97,9 +114,7 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     defaultValue = "#000000"
                     onChange={e => {
                         toolState.setStrokeColor(e.target.value)
-                        if (canvasState.curFigure) {
-                            canvasState.curFigure.setAttributeNS(null, 'stroke', e.target.value);
-                        }
+                        changeFigureParams()
                     }}
                 />
 
@@ -109,9 +124,7 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     defaultValue = "#FFFFFF"
                     onChange={e => {
                         toolState.setFillColor(e.target.value)
-                        if (canvasState.curFigure) {
-                            canvasState.curFigure.setAttributeNS(null, 'fill', e.target.value);
-                        }
+                        changeFigureParams()
                     }}
                 />
 
@@ -121,12 +134,26 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     min = {1}
                     max = {50}
                     defaultValue={16}
-                    onChange={() => ChangeFontSizeHandler()}
+                    onChange={(e) => {
+                        toolState.setFontSize(e.target.value);
+                        changeFigureParams()
+                    }}
+                />
+
+                <input
+                    ref={textRef}
+                    className="textInput"
+                    onChange={() => {
+                        changeFigureParams()
+                    }}
                 />
 
                 <select
                     ref={fontFamilyRef}
-                    onChange={() => ChangeFontFamilyHandler()}
+                    onChange={(e) => {
+                        toolState.setFontFamily(e.target.value)
+                        changeFigureParams()
+                    }}
                 >
                     <option value = "Arial">Arial</option>
                     <option value = "Helvetica">Helvetica</option>

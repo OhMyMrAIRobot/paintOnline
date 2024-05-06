@@ -1,3 +1,5 @@
+import canvasState from "../Store/CanvasState";
+
 class Tool{
     constructor(canvas, socket, id) {
         this.canvas = canvas;
@@ -14,6 +16,12 @@ class Tool{
         inputs.forEach(node => {
             document.body.removeChild(node);
         })
+        const shapes = document.querySelectorAll('line, rect, ellipse, text');
+        shapes.forEach(shape => {
+
+            console.log('deleted')
+        });
+
     }
 
     getPoint(e) {

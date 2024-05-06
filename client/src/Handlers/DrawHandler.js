@@ -7,6 +7,8 @@ import canvasState from "../Store/CanvasState";
 import Brush from "../Tools/Brush";
 import Eraser from "../Tools/Eraser";
 import Text from "../Tools/Text"
+import {MoveFigureHandler} from "./MoveFigureHandler";
+import {changeFigureParams} from "./ChangeFigureParams";
 
 export const drawHandler = (msg) => {
     const figure = msg.figure;
@@ -36,31 +38,19 @@ export const drawHandler = (msg) => {
             Circle.StaticDraw(canvasState.canvas, figure.id, figure.x, figure.y, figure.r, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
         case "ellipse":
-           Ellipse.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
+            Ellipse.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
             break;
         case "text":
-            Text.Draw(canvasState.canvas, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily,figure.strokeColor);
+            Text.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily, figure.fillColor, figure.strokeColor);
             break;
         case 'move':
-            const shapeType = figure.shapeId.substring(0, 4); // Получаем тип фигуры из shapeId
+            const shapeType = figure.shapeId.substring(0, 4);
             const shape = document.getElementById(figure.shapeId);
-            switch (shapeType) {
-                case 'Line':
-                    Line.moveShape(shape, figure.dx, figure.dy);
-                    break;
-                case 'Rect':
-                    Rectangle.moveShape(shape, figure.dx, figure.dy);
-                    break;
-                case 'Elli':
-                    Ellipse.moveShape(shape, figure.dx, figure.dy);
-                    break;
-                case 'Text':
-                    Text.moveShape(shape, figure.dx, figure.dy);
-                    break;
-                default:
-                    break;
-            }
+            MoveFigureHandler(shapeType, shape, figure.dx, figure.dy);
             break
+        case 'changeFigure':
+            changeFigureParams(figure.shapeId, figure.strokeWidth, figure.stroke, figure.fill, figure.fontSize, figure.fontFamily, figure.text)
+            break;
         default:
             break;
     }

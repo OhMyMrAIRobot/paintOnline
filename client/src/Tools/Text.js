@@ -51,9 +51,11 @@ class Text extends Tool {
                         type: 'text',
                         x: this.xStart,
                         y: this.yStart,
+                        id: 'Text' + Math.random(),
                         text: this.text,
                         fontSize: toolState.fontSize,
                         fontFamily: toolState.fontFamily,
+                        fillColor: toolState.fillColor,
                         strokeColor: toolState.strokeColor,
                     }
                 })
@@ -62,12 +64,13 @@ class Text extends Tool {
         }
     }
 
-    static Draw(canvas, x, y, text, fontSize, fontFamily, strokeColor) {
+    static Draw(canvas, id, x, y, text, fontSize, fontFamily, fillColor, strokeColor) {
         const shape = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        shape.id = "Text" + Math.random();
+        shape.id = id;
         shape.setAttributeNS(null, 'x', x);
         shape.setAttributeNS(null, 'y', y);
-        shape.setAttributeNS(null, 'fill', strokeColor);
+        shape.setAttributeNS(null, 'fill', fillColor);
+        shape.setAttributeNS(null, 'stroke', strokeColor);
         shape.setAttributeNS(null, 'font-size', fontSize);
         shape.setAttributeNS(null, 'font-family', fontFamily);
         shape.textContent = text;

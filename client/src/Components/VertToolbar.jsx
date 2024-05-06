@@ -62,7 +62,6 @@ const HorToolbar = () => {
                 className="toolbarBtn "
                 onClick={() => {
                     toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session));
-                    console.log(toolState)
                 }}
             >
                 Line
