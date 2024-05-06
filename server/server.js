@@ -160,27 +160,27 @@ const saveCanvasHandler = (ws,msg) => {
 }
 
 const changeResolutionHandler = (ws, msg) => {
-    let query = `UPDATE room_config SET width = ${msg.width}, height = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
-    db.query(query, (error, result) => {
-        if (error) {
-            console.error('Ошибка выполнения запроса: ', error);
-            throw error;
-        }
-        else
-            console.log('resolution loaded');
-    })
+    // let query = `UPDATE room_config SET width = ${msg.width}, height = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
+    // db.query(query, (error, result) => {
+    //     if (error) {
+    //         console.error('Ошибка выполнения запроса: ', error);
+    //         throw error;
+    //     }
+    //     else
+    //         console.log('resolution loaded');
+    // })
     broadcast(ws, msg)
 }
 
 const changeBackgroundHandler = (ws,msg) => {
-    let query = `UPDATE room_config SET color = ${JSON.stringify(msg.color)} WHERE session = ${JSON.stringify(msg.id)}`
-    db.query(query, (error, result) => {
-        if (error) {
-            console.error('Ошибка выполнения запроса: ', error);
-            throw error;
-        }
-        else
-            console.log('background loaded');
-    })
+    // let query = `UPDATE room_config SET color = ${JSON.stringify(msg.color)} WHERE session = ${JSON.stringify(msg.id)}`
+    // db.query(query, (error, result) => {
+    //     if (error) {
+    //         console.error('Ошибка выполнения запроса: ', error);
+    //         throw error;
+    //     }
+    //     else
+    //         console.log('background loaded');
+    // })
     broadcast(ws, msg)
 }

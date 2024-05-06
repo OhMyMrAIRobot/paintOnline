@@ -36,9 +36,9 @@ const Canvas = observer(() => {
             id="canvas"
             className = "canvas"
             ref={canvasRef}
-            height='700px'
-            width='700px'
-            style={{background: 'red'}}
+            height={canvasState.height}
+            width={canvasState.width}
+            style={{background: canvasState.background}}
             onMouseDown={() => MouseDownHandler()}
             onMouseUp={() => MouseUpHandler()}
             >

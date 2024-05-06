@@ -1,7 +1,7 @@
 import canvasState from "../Store/CanvasState";
 import {drawHandler} from "./DrawHandler";
 
-export const MessageHandler = (setMsgArr, setWidth, setHeight) => {
+export const MessageHandler = (setMsgArr) => {
     canvasState.socket.onmessage = (event) => {
         let msg = JSON.parse(event.data);
         switch (msg.method){
@@ -23,8 +23,6 @@ export const MessageHandler = (setMsgArr, setWidth, setHeight) => {
             case 'changeResolution':
                 canvasState.setWidth(msg.width);
                 canvasState.setHeight(msg.height);
-                setWidth(msg.width);
-                setHeight(msg.height)
                 break;
             case 'changeBackground':
                 canvasState.setBackground(msg.color);

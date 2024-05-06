@@ -10,6 +10,9 @@ class CanvasState {
     session = "";
 
     curFigure = null;
+    width = 1280;
+    height = 720;
+    background = 'red';
 
     constructor() {
         makeAutoObservable(this)
@@ -32,33 +35,18 @@ class CanvasState {
     }
 
     setWidth(width) {
-        let oldWidth = this.canvas.width;
-        let oldHeight = this.canvas.height;
-        let Url = this.canvas.toDataURL();
-        let img = new Image();
-        img.src = Url;
-        this.canvas.width = width;
-        let ctx = this.canvas.getContext('2d');
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0, oldWidth, oldHeight);
-        };
-    }
-
-    setBackground(color){
-        this.canvas.style.backgroundColor = color;
+        this.width = width;
+        this.canvas.style.width = width;
     }
 
     setHeight(height){
-        let oldWidth = this.canvas.width;
-        let oldHeight = this.canvas.height;
-        let Url = this.canvas.toDataURL();
-        let img = new Image();
-        img.src = Url;
-        this.canvas.height = height;
-        let ctx = this.canvas.getContext('2d');
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0, oldWidth, oldHeight);
-        };
+        this.height = height;
+        this.canvas.style.height = height;
+    }
+
+    setBackground(color){
+        this.background = color;
+        this.canvas.style.backgroundColor = color;
     }
 
     pushToUndo(state){

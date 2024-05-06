@@ -8,12 +8,13 @@ import InviteModal from "./InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
 import {autorun} from "mobx";
 
-const HorToolbar = ({width, height, chatActive, setChatActive}) => {
+const HorToolbar = ({chatActive, setChatActive}) => {
     const fontSizeRef = useRef(null);
     const fontFamilyRef = useRef(null);
     const widthRef = useRef(null);
     const heightRef = useRef(null);
     const textRef = useRef(null);
+    const canvasColorRef = useRef(null);
 
     const stroke = useRef(null);
     const strokeColor = useRef(null);
@@ -23,12 +24,9 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
 
     const [ModalActive, setModalActive] = useState(false)
 
-    useEffect(() => {
-        widthRef.current.value = width;
-        heightRef.current.value = height;
-    }, [width, height]);
-
     autorun(() => {
+
+        // update figure params
         if (canvasState.curFigure) {
             fill.current.value = canvasState.curFigure.getAttributeNS(null, 'fill') ?? toolState.fillColor;
             strokeColor.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke') ?? toolState.strokeColor;
@@ -42,6 +40,11 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
             toolState.setFontSize(fontSizeRef.current.value)
             toolState.setFontFamily(fontFamilyRef.current.value)
         }
+
+        // update canvas params
+        widthRef.current.value = canvasState.width;
+        heightRef.current.value = canvasState.height;
+        canvasColorRef.current.value = canvasState.background;
     });
 
     const changeFigureParams = () => {
@@ -165,7 +168,9 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     type = "number"
                     min = {100}
                     max = {5000}
-                    defaultValue = "0"
+                    onChange={() => {
+                        changeResolutionHandler()
+                    }}
                 />
 
                 <input
@@ -173,12 +178,13 @@ const HorToolbar = ({width, height, chatActive, setChatActive}) => {
                     type = "number"
                     min = {100}
                     max = {5000}
-                    defaultValue = "0"
+                    onChange={() => {
+                        changeResolutionHandler()
+                    }}
                 />
 
-                <button onClick={() => changeResolutionHandler()}>change</button>
-
                 <input
+                    ref = {canvasColorRef}
                     type = "color"
                     defaultValue = "#FFFFFF"
                     onChange={(e) => changeBackgroundHandler(e.target.value)}
