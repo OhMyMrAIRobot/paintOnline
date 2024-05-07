@@ -12,49 +12,18 @@ class Eraser extends Brush{
         const p = this.getPoint(e)
         this.x = p.x;
         this.y = p.y;
-        sendMessage(this.socket, {
-            method: 'draw',
-            id: this.id,
-            figure: {
-                type: 'brushStart',
-                x: this.x,
-                y: this.y,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
-                id: this.shape.id,
-            }
-        })
+        this.shape.setAttributeNS(null, 'd', 'M ' + this.x + ' ' + this.y);
+        this.canvas.appendChild(this.shape);
     }
 
-    MouseMoveHandler(e) {
-        if (this.isMouseDown){
-            const p = this.getPoint(e)
-            this.x = p.x;
-            this.y = p.y;
-            sendMessage(this.socket, {
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'eraser',
-                    x: this.x,
-                    y:this.y,
-                    strokeColor: toolState.strokeColor,
-                    strokeWidth: toolState.strokeWidth,
-                    id: this.shape.id,
-                }
-            })
-        }
-    }
-
-    static Draw(canvas, id, x, y, strokeWidth, strokeColor) {
+    Draw(x, y) {
         const backgroundColor = window.getComputedStyle(canvasState.canvas).backgroundColor;
-        const shape = document.getElementById(id);
-        let currentPath = shape.getAttributeNS(null, 'd');
+        let currentPath = this.shape.getAttributeNS(null, 'd');
         currentPath += ' L ' + x + ' ' + y;
-        shape.setAttributeNS(null, 'd', currentPath);
-        shape.setAttributeNS(null, 'stroke', backgroundColor);
-        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
-        shape.setAttributeNS(null, 'fill', 'none');
+        this.shape.setAttributeNS(null, 'd', currentPath);
+        this.shape.setAttributeNS(null, 'stroke', backgroundColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', 'none');
     }
 
 }

@@ -1,8 +1,7 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../Style/Canvas.css'
 import {observer} from "mobx-react-lite";
 import canvasState from "../Store/CanvasState";
-import {sendMessage} from "../Handlers/SendHandler";
 
 const Canvas = observer(() => {
     const canvasRef = useRef(null);
@@ -11,36 +10,13 @@ const Canvas = observer(() => {
         canvasState.setCanvas(canvasRef.current);
     }, [])
 
-    // Сохранение полотна для отмены
-    const MouseDownHandler = () => {
-        // sendMessage(canvasState.socket,{
-        //     method: 'pushUndo',
-        //     id: canvasState.session,
-        //     data: canvasState.canvas.toDataURL()
-        // })
-    }
-
-    // Сохранение полотна на сервер
-    const MouseUpHandler = () => {
-        // sendMessage(canvasState.socket,{
-        //     method: 'saveCanvas',
-        //     id: canvasState.session,
-        //     data: canvasState.canvas.toDataURL(),
-        //     width: canvasState.canvas.width,
-        //     height: canvasState.canvas.height,
-        // })
-    }
 
     return (
         <svg
             id="canvas"
             className = "canvas"
             ref={canvasRef}
-            height='700px'
-            width='700px'
-            style={{background: 'red'}}
-            onMouseDown={() => MouseDownHandler()}
-            onMouseUp={() => MouseUpHandler()}
+            style={{background: canvasState.background, width: canvasState.width, height: canvasState.height}}
             >
         </svg>
     );

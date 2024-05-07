@@ -1,6 +1,7 @@
 import Tool from "./Tool";
 import {sendMessage} from "../Handlers/SendHandler";
 import toolState from "../Store/ToolState";
+import canvasState from "../Store/CanvasState";
 
 class Brush extends Tool {
     constructor(canvas, socket, id) {
@@ -15,7 +16,17 @@ class Brush extends Tool {
     }
 
     MouseUpHandler() {
+        const serializer = new XMLSerializer();
         this.isMouseDown = false;
+        sendMessage(this.socket, {
+            method: 'draw',
+            id: this.id,
+            figure: {
+                type: 'brush',
+                shape:serializer.serializeToString(this.shape)
+            }
+        })
+        this.canvas.removeChild(this.shape);
     }
 
     MouseDownHandler(e) {
@@ -25,18 +36,8 @@ class Brush extends Tool {
         const p = this.getPoint(e)
         this.x = p.x;
         this.y = p.y;
-        sendMessage(this.socket, {
-            method: 'draw',
-            id: this.id,
-            figure: {
-                type: 'brushStart',
-                x: this.x,
-                y: this.y,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
-                id: this.shape.id,
-            }
-        })
+        this.shape.setAttributeNS(null, 'd', 'M ' + this.x + ' ' + this.y);
+        this.canvas.appendChild(this.shape);
     }
 
     MouseMoveHandler(e) {
@@ -44,29 +45,17 @@ class Brush extends Tool {
             const p = this.getPoint(e)
             this.x = p.x;
             this.y = p.y;
-            sendMessage(this.socket, {
-                method: 'draw',
-                id: this.id,
-                figure: {
-                    type: 'brushDraw',
-                    x: this.x,
-                    y:this.y,
-                    strokeColor: toolState.strokeColor,
-                    strokeWidth: toolState.strokeWidth,
-                    id: this.shape.id,
-                }
-            })
+            this.Draw(this.x, this.y);
         }
     }
 
-    static Draw(canvas, id, x, y, strokeWidth, strokeColor) {
-        const shape = document.getElementById(id);
-        let currentPath = shape.getAttributeNS(null, 'd');
+    Draw(x, y) {
+        let currentPath = this.shape.getAttributeNS(null, 'd');
         currentPath += ' L ' + x + ' ' + y;
-        shape.setAttributeNS(null, 'd', currentPath);
-        shape.setAttributeNS(null, 'stroke', strokeColor);
-        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
-        shape.setAttributeNS(null, 'fill', 'none');
+        this.shape.setAttributeNS(null, 'd', currentPath);
+        this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
+        this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
+        this.shape.setAttributeNS(null, 'fill', 'none');
     }
 }
 

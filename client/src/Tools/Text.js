@@ -32,7 +32,6 @@ class Text extends Tool {
         this.input.addEventListener('keydown', this.TextInputKeydownHandler.bind(this));
     }
 
-    // Скрытие формы при клике вне полотна
     MouseClickHandler(e){
         if (!this.canvas.contains(e.target) && e.target !== this.input) {
             this.input.style.display = 'none';

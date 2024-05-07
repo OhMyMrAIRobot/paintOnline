@@ -15,19 +15,14 @@ class Rectangle extends Tool{
     }
 
     MouseUpHandler() {
+        const serializer = new XMLSerializer();
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'rectangle',
-                xS: this.xStart,
-                yS: this.yStart,
-                xF: this.xFinish,
-                yF: this.yFinish,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
-                fillColor: toolState.fillColor,
+                shape:serializer.serializeToString(this.shape),
                 id: this.shape.id,
             }
         })
@@ -63,19 +58,6 @@ class Rectangle extends Tool{
         this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
         this.shape.setAttributeNS(null, 'fill', toolState.fillColor);
         this.canvas.appendChild(this.shape);
-    }
-
-    static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor, fillColor){
-        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        shape.id = id;
-        shape.setAttributeNS(null, 'x', Math.min(xS, xF).toString());
-        shape.setAttributeNS(null, 'y', Math.min(yS, yF).toString());
-        shape.setAttributeNS(null, 'width', Math.abs(xS - xF).toString());
-        shape.setAttributeNS(null, 'height', Math.abs(yS - yF).toString());
-        shape.setAttributeNS(null, 'stroke', strokeColor);
-        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
-        shape.setAttributeNS(null, 'fill', fillColor);
-        canvas.appendChild(shape);
     }
 
     static moveShape(rect, dx, dy) {

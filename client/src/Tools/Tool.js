@@ -16,11 +16,10 @@ class Tool{
         inputs.forEach(node => {
             document.body.removeChild(node);
         })
-        const shapes = document.querySelectorAll('line, rect, ellipse, text');
-        shapes.forEach(shape => {
-
-            console.log('deleted')
-        });
+        // const shapes = document.querySelectorAll('line, rect, ellipse, text');
+        // shapes.forEach(shape => {
+        //
+        // });
 
     }
 

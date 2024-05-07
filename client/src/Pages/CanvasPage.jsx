@@ -13,8 +13,6 @@ import Chat from "../Components/Chat";
 import {InitializeTools} from "../Handlers/InitializeTools";
 
 const CanvasPage = () => {
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
     const [chatActive, setChatActive] = useState(false);
     const [msgArr, setMsgArr] = useState([]);
     const [usernameModalActive, setUsernameModalActive] = useState(true);
@@ -52,14 +50,15 @@ const CanvasPage = () => {
 
     useEffect(() => {
         if (canvasState.username){
-           // InitialiseCanvas(canvasState.canvas, setWidth, setHeight, canvasState.username, canvasState.session);
-            InitializeTools();
+            InitialiseCanvas()
+                .then(() => InitializeTools());
+
             sendMessage(canvasState.socket,{
                 method: "connection",
                 id:params.id,
                 username: canvasState.username
             })
-            MessageHandler(setMsgArr, setWidth, setHeight);
+            MessageHandler(setMsgArr);
         }
     }, [canvasState.username])
 
@@ -70,15 +69,11 @@ const CanvasPage = () => {
                 modalActive={usernameModalActive}
             />
             <HorToolbar
-                width={width}
-                height={height}
                 chatActive={chatActive}
                 setChatActive={setChatActive}/>
-            <div style = {{display: 'flex'}}>
+            <div>
                 <VertToolbar />
                 <Canvas
-                    setWidth={setWidth}
-                    setHeight={setHeight}
                     chatActive={chatActive}
                 />
             </div>
