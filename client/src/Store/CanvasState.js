@@ -12,7 +12,7 @@ class CanvasState {
     curFigure = null;
     width = 1280;
     height = 720;
-    background = 'red';
+    background = '#ffffff';
 
     constructor() {
         makeAutoObservable(this)
@@ -48,7 +48,6 @@ class CanvasState {
         this.background = color;
         this.canvas.style.backgroundColor = color;
         const shapes = document.querySelectorAll('path');
-        console.log(shapes);
         shapes.forEach((shape) => {
             if (shape.id.startsWith('Eraser'))
                 shape.setAttributeNS(null, 'stroke', color);

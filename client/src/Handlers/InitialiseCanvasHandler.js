@@ -1,32 +1,34 @@
 import canvasState from "../Store/CanvasState";
 import axios from "axios";
 
-export const InitialiseCanvas = (Canvas, setWidth, setHeight, Username, id) => {
-    axios.get(`http://localhost:3000/initialise?id=${id}`)
+export const InitialiseCanvas = () => {
+    axios.get(`http://localhost:3000/initialise?id=${canvasState.session}`)
         .then(response => {
-            canvasState.setWidth(response.data.width);
-            canvasState.setHeight(response.data.height);
-            canvasState.setBackground(response.data.color);
-            const dataUrl = response.data.url;
+            const saveHTML = response.data.canvas; // Строка HTML
 
-            // загрузка изображения полотна
-            if (dataUrl !== ''){
-                let ctx = Canvas.getContext('2d');
-                const img = new Image()
-                img.src = dataUrl;
-                img.onload = () => {
-                    ctx.clearRect(0, 0, Canvas.width, Canvas.height)
-                    ctx.drawImage(img, 0, 0, response.data.urlWidth, response.data.urlHeight);
-                }
+            if (saveHTML) {
+                console.log('intiialise')
+                const parser = new DOMParser();
+                const newSVGElement = parser.parseFromString(saveHTML, 'image/svg+xml').documentElement;
+                const parent = canvasState.canvas.parentNode;
+                parent.removeChild(canvasState.canvas);
+                parent.appendChild(newSVGElement);
+                canvasState.setCanvas(newSVGElement);
+                canvasState.setWidth(parseInt(window.getComputedStyle(canvasState.canvas).width));
+                canvasState.setHeight(parseInt(window.getComputedStyle(canvasState.canvas).height));
+                canvasState.setBackground(rgbToHex(window.getComputedStyle(canvasState.canvas).backgroundColor));
             }
 
-            // изменение размеров в тулбаре
-            setWidth(response.data.width);
-            setHeight(response.data.height);
-
-            // прочие настройки
-            canvasState.setUsername(Username);
-            document.title = `${id} | ${canvasState.username}`;
+            document.title = `${canvasState.session} | ${canvasState.username}`;
         }
     )
+}
+
+function rgbToHex(rgb) {
+    const rgbArray = rgb.match(/\d+/g);
+
+    return "#" +
+        ("0" + parseInt(rgbArray[0], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgbArray[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgbArray[2], 10).toString(16)).slice(-2);
 }

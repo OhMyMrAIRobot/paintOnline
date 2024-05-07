@@ -25,7 +25,6 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     const [ModalActive, setModalActive] = useState(false)
 
     autorun(() => {
-
         // update figure params
         if (canvasState.curFigure) {
             fill.current.value = canvasState.curFigure.getAttributeNS(null, 'fill') ?? toolState.fillColor;
@@ -42,9 +41,13 @@ const HorToolbar = ({chatActive, setChatActive}) => {
         }
 
         // update canvas params
-        widthRef.current.value = canvasState.width;
-        heightRef.current.value = canvasState.height;
-        canvasColorRef.current.value = canvasState.background;
+        if (widthRef.current)
+            widthRef.current.value = canvasState.width ?? 0;
+        if (heightRef.current)
+            heightRef.current.value = canvasState.height ?? 0;
+        if (canvasColorRef.current)
+            canvasColorRef.current.value = canvasState.background ?? '#ffffff';
+
     });
 
     const changeFigureParams = () => {

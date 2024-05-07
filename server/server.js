@@ -10,6 +10,8 @@ const mysql = require('mysql2')
 app.use(cors())
 app.use(express.json())
 
+const canvas = []
+
 const db = mysql.createConnection(config);
 db.connect(function(err){
     if (err) {
@@ -110,28 +112,30 @@ app.get('/getRoom', (req, res) => {
 })
 
 app.get('/initialise', (req, res) => {
-    try {
-        let query = `SELECT *, url FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
-        db.query(query, (error, result) => {
-            if (error) {
-                console.error('Ошибка выполнения запроса: ', error);
-                throw error;
-            }
-            console.log(result[0]);
-            const data = {
-                width: result[0].width,
-                height: result[0].height,
-                color: result[0].color,
-                url: result[0].url,
-                urlWidth: result[0].urlWidth,
-                urlHeight: result[0].urlHeight,
-            }
-            res.json(data)
-        })
-
-    } catch (e) {
-        return res.status(500).json({message: e})
-    }
+    // try {
+    //     let query = `SELECT *, url FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
+    //     db.query(query, (error, result) => {
+    //         if (error) {
+    //             console.error('Ошибка выполнения запроса: ', error);
+    //             throw error;
+    //         }
+    //         console.log(result[0]);
+    //         const data = {
+    //             width: result[0].width,
+    //             height: result[0].height,
+    //             color: result[0].color,
+    //             url: result[0].url,
+    //             urlWidth: result[0].urlWidth,
+    //             urlHeight: result[0].urlHeight,
+    //         }
+    //         res.json(data)
+    //     })
+    //
+    // } catch (e) {
+    //     return res.status(500).json({message: e})
+    // }
+    const data = {canvas: canvas[0]}
+    res.json(data);
 })
 
 const broadcast = (ws, msg) => {
@@ -148,15 +152,17 @@ const connectionHandler = (ws, msg) => {
 }
 
 const saveCanvasHandler = (ws,msg) => {
-    let query = `UPDATE room_config SET url = ${JSON.stringify(msg.data)}, urlWidth = ${msg.width}, urlHeight = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
-    db.query(query, (error, result) => {
-        if (error) {
-            console.error('Ошибка выполнения запроса: ', error);
-            throw error;
-        }
-        else
-            console.log('url loaded');
-    })
+    // let query = `UPDATE room_config SET url = ${JSON.stringify(msg.data)}, urlWidth = ${msg.width}, urlHeight = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
+    // db.query(query, (error, result) => {
+    //     if (error) {
+    //         console.error('Ошибка выполнения запроса: ', error);
+    //         throw error;
+    //     }
+    //     else
+    //         console.log('url loaded');
+    // })
+    canvas[0] = msg.canvas;
+    console.log(msg);
 }
 
 const changeResolutionHandler = (ws, msg) => {

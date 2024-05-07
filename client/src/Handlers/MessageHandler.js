@@ -1,5 +1,7 @@
 import canvasState from "../Store/CanvasState";
 import {drawHandler} from "./DrawHandler";
+import {sendMessage} from "./SendHandler";
+import {SaveCanvasHandler} from "./SaveCanvasHandler";
 
 export const MessageHandler = (setMsgArr) => {
     canvasState.socket.onmessage = (event) => {
@@ -10,22 +12,27 @@ export const MessageHandler = (setMsgArr) => {
                 break;
             case 'draw':
                 drawHandler(msg);
+                SaveCanvasHandler()
                 break;
             case 'pushUndo':
                 canvasState.pushToUndo(msg.data)
                 break;
             case 'undo':
                 canvasState.undo();
+                SaveCanvasHandler()
                 break;
             case 'redo':
                 canvasState.redo();
+                SaveCanvasHandler()
                 break;
             case 'changeResolution':
                 canvasState.setWidth(msg.width);
                 canvasState.setHeight(msg.height);
+                SaveCanvasHandler()
                 break;
             case 'changeBackground':
                 canvasState.setBackground(msg.color);
+                SaveCanvasHandler()
                 break;
             case 'message':
                 setMsgArr(prev => [...prev, {

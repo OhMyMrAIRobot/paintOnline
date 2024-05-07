@@ -50,7 +50,7 @@ const CanvasPage = () => {
 
     useEffect(() => {
         if (canvasState.username){
-           // InitialiseCanvas(canvasState.canvas, setWidth, setHeight, canvasState.username, canvasState.session);
+            InitialiseCanvas();
             InitializeTools();
             sendMessage(canvasState.socket,{
                 method: "connection",
@@ -70,7 +70,7 @@ const CanvasPage = () => {
             <HorToolbar
                 chatActive={chatActive}
                 setChatActive={setChatActive}/>
-            <div style = {{display: 'flex'}}>
+            <div>
                 <VertToolbar />
                 <Canvas
                     chatActive={chatActive}

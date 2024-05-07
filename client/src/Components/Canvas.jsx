@@ -1,8 +1,10 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../Style/Canvas.css'
 import {observer} from "mobx-react-lite";
 import canvasState from "../Store/CanvasState";
 import {sendMessage} from "../Handlers/SendHandler";
+import {InitialiseCanvas} from "../Handlers/InitialiseCanvasHandler";
+import axios from "axios";
 
 const Canvas = observer(() => {
     const canvasRef = useRef(null);
@@ -11,33 +13,17 @@ const Canvas = observer(() => {
         canvasState.setCanvas(canvasRef.current);
     }, [])
 
-    const MouseDownHandler = () => {
-        // sendMessage(canvasState.socket,{
-        //     method: 'pushUndo',
-        //     id: canvasState.session,
-        //     data: canvasState.canvas.toDataURL()
-        // })
+    const MouseUpHandler = () => {
+        // undo
     }
 
-    const MouseUpHandler = () => {
-        // sendMessage(canvasState.socket,{
-        //     method: 'saveCanvas',
-        //     id: canvasState.session,
-        //     data: canvasState.canvas.toDataURL(),
-        //     width: canvasState.canvas.width,
-        //     height: canvasState.canvas.height,
-        // })
-    }
 
     return (
         <svg
             id="canvas"
             className = "canvas"
             ref={canvasRef}
-            height={canvasState.height}
-            width={canvasState.width}
-            style={{background: canvasState.background}}
-            onMouseDown={() => MouseDownHandler()}
+            style={{background: canvasState.background, width: canvasState.width, height: canvasState.height}}
             onMouseUp={() => MouseUpHandler()}
             >
         </svg>
