@@ -9,6 +9,7 @@ import Eraser from "../Tools/Eraser";
 import Text from "../Tools/Text"
 import {MoveFigureHandler} from "./MoveFigureHandler";
 import {changeFigureParams} from "./ChangeFigureParams";
+import {PushUndoHandler} from "./PushUndoHandler";
 
 export const drawHandler = (msg) => {
     const figure = msg.figure;
@@ -42,6 +43,7 @@ export const drawHandler = (msg) => {
             break;
         case "text":
             Text.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily, figure.fillColor, figure.strokeColor);
+            PushUndoHandler();
             break;
         case 'move':
             const shapeType = figure.shapeId.substring(0, 4);

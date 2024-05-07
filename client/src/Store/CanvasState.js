@@ -1,4 +1,5 @@
 import {makeAutoObservable} from "mobx";
+import {LoadCanvas} from "../Handlers/LoadCanvas";
 
 class CanvasState {
     canvas = null;
@@ -54,8 +55,8 @@ class CanvasState {
         })
     }
 
-    pushToUndo(state){
-        this.undoList.push(state);
+    pushToUndo(data){
+        this.undoList.push(data);
     }
 
     pushToRedo(state){
@@ -67,30 +68,20 @@ class CanvasState {
     }
 
     undo(){
-        let ctx = this.canvas.getContext('2d');
-        if (this.undoList.length > 0){
-            let Url = this.undoList.pop();
-            this.pushToRedo(this.canvas.toDataURL());
-            let img = new Image();
-            img.src = Url;
-            img.onload = () => {
-                ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-                ctx.drawImage(img,0,0, this.canvas.width, this.canvas.height);
-            }
+        if (this.undoList.length > 0) {
+            const serializer = new XMLSerializer();
+            const saveHTML = this.undoList.pop();
+            this.pushToRedo(serializer.serializeToString(this.canvas));
+            LoadCanvas(saveHTML);
         }
     }
 
     redo(){
-        let ctx = this.canvas.getContext('2d');
-        if (this.redoList.length > 0){
-            let Url = this.redoList.pop();
-            this.pushToUndo(this.canvas.toDataURL());
-            let img = new Image();
-            img.src = Url;
-            img.onload = () => {
-                ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
-                ctx.drawImage(img,0,0, this.canvas.width, this.canvas.height);
-            }
+        if (this.redoList.length > 0) {
+            const serializer = new XMLSerializer();
+            const saveHTML = this.redoList.pop();
+            this.pushToUndo(serializer.serializeToString(this.canvas));
+            LoadCanvas(saveHTML);
         }
     }
 }

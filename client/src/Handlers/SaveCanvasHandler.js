@@ -3,7 +3,6 @@ import canvasState from "../Store/CanvasState";
 
 export const SaveCanvasHandler = () => {
     if (canvasState.username) {
-        console.log('sended');
         const serializer = new XMLSerializer();
         sendMessage(canvasState.socket,{
             method: 'saveCanvas',
