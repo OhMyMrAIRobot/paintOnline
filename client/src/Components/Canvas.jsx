@@ -11,7 +11,6 @@ const Canvas = observer(() => {
         canvasState.setCanvas(canvasRef.current);
     }, [])
 
-    // Сохранение полотна для отмены
     const MouseDownHandler = () => {
         // sendMessage(canvasState.socket,{
         //     method: 'pushUndo',
@@ -20,7 +19,6 @@ const Canvas = observer(() => {
         // })
     }
 
-    // Сохранение полотна на сервер
     const MouseUpHandler = () => {
         // sendMessage(canvasState.socket,{
         //     method: 'saveCanvas',

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import '../Style/Toolbar.css'
 import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";

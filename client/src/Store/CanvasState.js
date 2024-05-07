@@ -47,6 +47,12 @@ class CanvasState {
     setBackground(color){
         this.background = color;
         this.canvas.style.backgroundColor = color;
+        const shapes = document.querySelectorAll('path');
+        console.log(shapes);
+        shapes.forEach((shape) => {
+            if (shape.id.startsWith('Eraser'))
+                shape.setAttributeNS(null, 'stroke', color);
+        })
     }
 
     pushToUndo(state){

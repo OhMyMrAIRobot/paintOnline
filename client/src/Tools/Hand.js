@@ -18,7 +18,6 @@ class Hand extends Tool{
 
         this.shapes.forEach(shape => {
             shape.addEventListener('mousedown', (e) => {
-                canvasState.setCurFigure(shape);
                 this.shape = shape;
                 this.startCoords = this.getPoint(e)
                 this.isMouseDown = true;
@@ -48,7 +47,6 @@ class Hand extends Tool{
             this.startCoords = endCoords;
         }
     }
-
 }
 
 export default Hand;
