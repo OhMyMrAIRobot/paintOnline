@@ -2,7 +2,7 @@ import canvasState from "../Store/CanvasState";
 
 class Tool{
     constructor(canvas, socket, id) {
-        this.canvas = canvasState.canvas;
+        this.canvas = canvas;
         this.socket = socket;
         this.id = id;
         this.clear();

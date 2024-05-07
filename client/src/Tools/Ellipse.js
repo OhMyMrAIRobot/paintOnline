@@ -16,19 +16,14 @@ class Ellipse extends Tool{
     }
 
     MouseUpHandler(){
+        const serializer = new XMLSerializer();
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'ellipse',
-                xS: this.xStart,
-                yS: this.yStart,
-                xF: this.xFinish,
-                yF: this.yFinish,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
-                fillColor: toolState.fillColor,
+                shape:serializer.serializeToString(this.shape),
                 id: this.shape.id,
             }
         })
@@ -68,18 +63,18 @@ class Ellipse extends Tool{
         this.canvas.appendChild(this.shape);
     }
 
-    static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor, fillColor){
-        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-        shape.id = id;
-        shape.setAttributeNS(null, 'cx', xS);
-        shape.setAttributeNS(null, 'cy', yS);
-        shape.setAttributeNS(null, 'rx', Math.abs(xF - xS).toString());
-        shape.setAttributeNS(null, 'ry', Math.abs(yF - yS).toString());
-        shape.setAttributeNS(null, 'stroke', strokeColor);
-        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
-        shape.setAttributeNS(null, 'fill', fillColor);
-        canvas.appendChild(shape);
-    }
+    // static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor, fillColor){
+    //     const shape = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+    //     shape.id = id;
+    //     shape.setAttributeNS(null, 'cx', xS);
+    //     shape.setAttributeNS(null, 'cy', yS);
+    //     shape.setAttributeNS(null, 'rx', Math.abs(xF - xS).toString());
+    //     shape.setAttributeNS(null, 'ry', Math.abs(yF - yS).toString());
+    //     shape.setAttributeNS(null, 'stroke', strokeColor);
+    //     shape.setAttributeNS(null, 'stroke-width', strokeWidth);
+    //     shape.setAttributeNS(null, 'fill', fillColor);
+    //     canvas.appendChild(shape);
+    // }
 
     static moveShape(ellipse, dx, dy) {
         let cx = parseFloat(ellipse.getAttributeNS(null, 'cx')) + dx;

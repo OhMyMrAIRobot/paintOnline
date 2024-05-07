@@ -5,18 +5,14 @@ import toolState from "../Store/ToolState";
 class Square extends Rectangle {
 
     MouseUpHandler() {
+        const serializer = new XMLSerializer();
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'square',
-                x: this.x,
-                y: this.y,
-                side: this.side,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
-                fillColor: toolState.fillColor,
+                shape:serializer.serializeToString(this.shape),
                 id: this.shape.id,
             }
         })

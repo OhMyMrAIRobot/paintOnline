@@ -5,18 +5,14 @@ import toolState from "../Store/ToolState";
 class Circle extends Ellipse{
 
     MouseUpHandler() {
+        const serializer = new XMLSerializer();
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'circle',
-                x: this.xStart,
-                y: this.yStart,
-                r: this.radius,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
-                fillColor: toolState.fillColor,
+                shape:serializer.serializeToString(this.shape),
                 id: this.shape.id,
             }
         })
@@ -39,18 +35,6 @@ class Circle extends Ellipse{
         this.canvas.appendChild(this.shape);
     }
 
-    static StaticDraw(canvas, id, x, y, r, strokeWidth, strokeColor, fillColor){
-        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
-        shape.id = id;
-        shape.setAttributeNS(null, 'cx', x);
-        shape.setAttributeNS(null, 'cy', y);
-        shape.setAttributeNS(null, 'rx', r.toString());
-        shape.setAttributeNS(null, 'ry', r.toString());
-        shape.setAttributeNS(null, 'stroke', strokeColor);
-        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
-        shape.setAttributeNS(null, 'fill', fillColor);
-        canvas.appendChild(shape);
-    }
 }
 
 export default Circle;

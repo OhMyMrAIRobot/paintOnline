@@ -15,18 +15,14 @@ class Line extends Tool{
     }
 
     MouseUpHandler(){
+        const serializer = new XMLSerializer();
         this.isMouseDown = false;
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
             figure: {
                 type: 'line',
-                xS: this.xStart,
-                yS: this.yStart,
-                xF: this.xFinish,
-                yF: this.yFinish,
-                strokeColor: toolState.strokeColor,
-                strokeWidth: toolState.strokeWidth,
+                shape:serializer.serializeToString(this.shape),
                 id: this.shape.id,
             }
         })
@@ -62,18 +58,6 @@ class Line extends Tool{
         this.shape.setAttributeNS(null, 'stroke', toolState.strokeColor);
         this.shape.setAttributeNS(null, 'stroke-width', toolState.strokeWidth);
         this.canvas.appendChild(this.shape);
-    }
-
-    static StaticDraw(canvas, id, xS, yS, xF, yF, strokeWidth, strokeColor) {
-        const shape = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        shape.id = id;
-        shape.setAttributeNS(null, 'x1', xS);
-        shape.setAttributeNS(null, 'y1', yS);
-        shape.setAttributeNS(null, 'x2', xF);
-        shape.setAttributeNS(null, 'y2', yF);
-        shape.setAttributeNS(null, 'stroke', strokeColor);
-        shape.setAttributeNS(null, 'stroke-width', strokeWidth);
-        canvas.appendChild(shape);
     }
 
     static moveShape(line, dx, dy) {

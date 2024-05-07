@@ -10,40 +10,15 @@ import Text from "../Tools/Text"
 import {MoveFigureHandler} from "./MoveFigureHandler";
 import {changeFigureParams} from "./ChangeFigureParams";
 import {PushUndoHandler} from "./PushUndoHandler";
+import {SaveCanvasHandler} from "./SaveCanvasHandler";
 
 export const drawHandler = (msg) => {
+    const parser = new DOMParser();
     const figure = msg.figure;
     switch (figure.type){
-        case "brushStart":
-            const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            line.id = figure.id;
-            line.setAttributeNS(null, 'd', 'M ' + figure.x + ' ' + figure.y);
-            canvasState.canvas.appendChild(line);
-            break;
-        case "brushDraw":
-            Brush.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.strokeWidth, figure.strokeColor);
-            break;
-        case "eraser":
-            Eraser.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.strokeWidth, figure.strokeColor);
-            break;
-        case "line":
-            Line.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor);
-            break;
-        case "rectangle":
-            Rectangle.StaticDraw(canvasState.canvas,figure.id,figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
-            break;
-        case "square":
-            Square.StaticDraw(canvasState.canvas, figure.id, figure.x, figure.y, figure.side, figure.strokeWidth, figure.strokeColor, figure.fillColor);
-            break;
-        case "circle":
-            Circle.StaticDraw(canvasState.canvas, figure.id, figure.x, figure.y, figure.r, figure.strokeWidth, figure.strokeColor, figure.fillColor);
-            break;
-        case "ellipse":
-            Ellipse.StaticDraw(canvasState.canvas,figure.id, figure.xS, figure.yS, figure.xF, figure.yF, figure.strokeWidth, figure.strokeColor, figure.fillColor);
-            break;
         case "text":
             Text.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily, figure.fillColor, figure.strokeColor);
-            PushUndoHandler();
+            SaveCanvasHandler();
             break;
         case 'move':
             const shapeType = figure.shapeId.substring(0, 4);
@@ -54,6 +29,7 @@ export const drawHandler = (msg) => {
             changeFigureParams(figure.shapeId, figure.strokeWidth, figure.stroke, figure.fill, figure.fontSize, figure.fontFamily, figure.text)
             break;
         default:
-            break;
+            const newSVGElement = parser.parseFromString(figure.shape, 'image/svg+xml').documentElement;
+            canvasState.canvas.appendChild(newSVGElement);
     }
 }

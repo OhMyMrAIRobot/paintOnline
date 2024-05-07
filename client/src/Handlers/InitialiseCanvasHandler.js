@@ -4,7 +4,7 @@ import {PushUndoHandler} from "./PushUndoHandler";
 import {LoadCanvas} from "./LoadCanvas";
 
 export const InitialiseCanvas = () => {
-    axios.get(`http://localhost:3000/initialise?id=${canvasState.session}`)
+    return axios.get(`http://localhost:3000/initialise?id=${canvasState.session}`)
         .then(response => {
             const saveHTML = response.data.canvas;
 

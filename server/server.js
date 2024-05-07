@@ -162,7 +162,6 @@ const saveCanvasHandler = (ws,msg) => {
     //         console.log('url loaded');
     // })
     canvas[0] = msg.canvas;
-    console.log(msg);
 }
 
 const changeResolutionHandler = (ws, msg) => {

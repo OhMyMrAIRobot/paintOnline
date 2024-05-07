@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx";
 import {LoadCanvas} from "../Handlers/LoadCanvas";
+import toolState from "./ToolState";
 
 class CanvasState {
     canvas = null;
@@ -73,6 +74,10 @@ class CanvasState {
             const saveHTML = this.undoList.pop();
             this.pushToRedo(serializer.serializeToString(this.canvas));
             LoadCanvas(saveHTML);
+            // console.log(toolState.tool.canvas)
+            // console.log(this.canvas)
+            // toolState.tool.canvas = this.canvas
+            // console.log(toolState.tool.canvas)
         }
     }
 

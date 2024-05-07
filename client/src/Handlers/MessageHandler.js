@@ -1,6 +1,5 @@
 import canvasState from "../Store/CanvasState";
 import {drawHandler} from "./DrawHandler";
-import {sendMessage} from "./SendHandler";
 import {SaveCanvasHandler} from "./SaveCanvasHandler";
 import {PushUndoHandler} from "./PushUndoHandler";
 
