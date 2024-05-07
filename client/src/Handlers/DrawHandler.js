@@ -1,16 +1,8 @@
-import Line from "../Tools/Line";
-import Rectangle from "../Tools/Rectangle";
-import Square from "../Tools/Square";
-import Circle from "../Tools/Circle";
-import Ellipse from "../Tools/Ellipse";
 import canvasState from "../Store/CanvasState";
-import Brush from "../Tools/Brush";
-import Eraser from "../Tools/Eraser";
 import Text from "../Tools/Text"
-import {MoveFigureHandler} from "./MoveFigureHandler";
 import {changeFigureParams} from "./ChangeFigureParams";
-import {PushUndoHandler} from "./PushUndoHandler";
 import {SaveCanvasHandler} from "./SaveCanvasHandler";
+import Hand from "../Tools/Hand";
 
 export const drawHandler = (msg) => {
     const parser = new DOMParser();
@@ -23,7 +15,7 @@ export const drawHandler = (msg) => {
         case 'move':
             const shapeType = figure.shapeId.substring(0, 4);
             const shape = document.getElementById(figure.shapeId);
-            MoveFigureHandler(shapeType, shape, figure.dx, figure.dy);
+            Hand.moveShape(shapeType, shape, figure.dx, figure.dy);
             break
         case 'changeFigure':
             changeFigureParams(figure.shapeId, figure.strokeWidth, figure.stroke, figure.fill, figure.fontSize, figure.fontFamily, figure.text)
