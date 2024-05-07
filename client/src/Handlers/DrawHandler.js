@@ -1,8 +1,8 @@
 import canvasState from "../Store/CanvasState";
 import Text from "../Tools/Text"
-import {changeFigureParams} from "./ChangeFigureParams";
 import {SaveCanvasHandler} from "./SaveCanvasHandler";
 import Hand from "../Tools/Hand";
+import Pointer from "../Tools/Pointer";
 
 export const drawHandler = (msg) => {
     const parser = new DOMParser();
@@ -18,7 +18,7 @@ export const drawHandler = (msg) => {
             Hand.moveShape(shapeType, shape, figure.dx, figure.dy);
             break
         case 'changeFigure':
-            changeFigureParams(figure.shapeId, figure.strokeWidth, figure.stroke, figure.fill, figure.fontSize, figure.fontFamily, figure.text)
+            Pointer.changeFigureParams(figure.shapeId, figure.strokeWidth, figure.stroke, figure.fill, figure.fontSize, figure.fontFamily, figure.text)
             break;
         default:
             const newSVGElement = parser.parseFromString(figure.shape, 'image/svg+xml').documentElement;
