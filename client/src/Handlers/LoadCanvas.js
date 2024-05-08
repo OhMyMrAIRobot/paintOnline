@@ -24,7 +24,19 @@ export const LoadCanvas = (saveHTML) => {
     canvasState.setHeight(parseInt(window.getComputedStyle(canvasState.canvas).height));
     canvasState.setBackground(rgbToHex(window.getComputedStyle(canvasState.canvas).backgroundColor));
 
-    const tool = toolState.toolType.slice(0,4);
+    loadTool(toolState.toolType.slice(0,4));
+}
+
+const rgbToHex = (rgb) => {
+    const rgbArray = rgb.match(/\d+/g);
+
+    return "#" +
+        ("0" + parseInt(rgbArray[0], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgbArray[1], 10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgbArray[2], 10).toString(16)).slice(-2);
+}
+
+const loadTool = (tool) => {
     switch (tool) {
         case "Poin":
             toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session), "Pointer");
@@ -59,13 +71,4 @@ export const LoadCanvas = (saveHTML) => {
         default:
             break;
     }
-}
-
-const rgbToHex = (rgb) => {
-    const rgbArray = rgb.match(/\d+/g);
-
-    return "#" +
-        ("0" + parseInt(rgbArray[0], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgbArray[1], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgbArray[2], 10).toString(16)).slice(-2);
 }

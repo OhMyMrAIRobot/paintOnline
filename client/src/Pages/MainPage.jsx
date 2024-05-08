@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import "../Style/Mainpage.css"
+import "../Resources/Styles/Mainpage.css"
 import {useNavigate} from "react-router-dom";
 import JoinModal from "../Components/JoinModal";
 import {CreateRoomHandler} from "../Handlers/CreateRoomHandler";

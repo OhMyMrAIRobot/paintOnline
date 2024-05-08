@@ -1,5 +1,5 @@
 import React from 'react'
-import './Style/App.css'
+import './Resources/Styles/App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import MainPage from "./Pages/MainPage";
 import CanvasPage from "./Pages/CanvasPage";

@@ -1,4 +1,4 @@
-@import "./Variables.css";
+@import "Variables.css";
 
 .chat{
     width: var(--chat-width);

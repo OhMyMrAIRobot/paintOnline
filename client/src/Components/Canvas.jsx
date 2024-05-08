@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import '../Style/Canvas.css'
+import '../Resources/Styles/Canvas.css'
 import {observer} from "mobx-react-lite";
 import canvasState from "../Store/CanvasState";
 

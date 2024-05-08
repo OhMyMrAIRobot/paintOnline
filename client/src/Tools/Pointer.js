@@ -22,7 +22,6 @@ class Pointer extends Tool{
 
     static changeFigureParams (id, strokeWidth, stroke, fill, fontSize, fontFamily, text) {
         const shape = document.getElementById(id);
-        console.log(shape);
         if (shape.getAttributeNS(null, 'stroke')) {
             shape.setAttributeNS(null, 'stroke-width', strokeWidth);
         }

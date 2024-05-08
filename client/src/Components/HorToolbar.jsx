@@ -1,9 +1,9 @@
 import React, {useRef, useState} from 'react';
-import '../Style/Toolbar.css'
+import '../Resources/Styles/Toolbar.css'
 import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
 import {useNavigate} from "react-router-dom";
-import '../Style/InviteModal.css'
+import '../Resources/Styles/InviteModal.css'
 import InviteModal from "./InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
 import {autorun} from "mobx";

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Style/Toolbar.css'
+import '../Resources/Styles/Toolbar.css'
 import toolState from "../Store/ToolState";
 import Brush from "../Tools/Brush";
 import canvasState from "../Store/CanvasState";
@@ -17,13 +17,22 @@ import Pointer from "../Tools/Pointer";
 const HorToolbar = () => {
 
     const download = () => {
-        // const dataUrl = canvasState.canvas.toDataURL()
-        // const a = document.createElement('a')
-        // a.href = dataUrl
-        // a.download = `${canvasState.session}.jpg`
-        // document.body.appendChild(a)
-        // a.click()
-        // document.body.removeChild(a)
+        const svgData = new XMLSerializer().serializeToString(canvasState.canvas);
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+        img.onload = function() {
+            canvas.width = canvasState.canvas.width.baseVal.value;
+            canvas.height = canvasState.canvas.height.baseVal.value;
+            ctx.drawImage(img, 0, 0);
+            const a = document.createElement('a');
+            a.download = `${canvasState.session}.png`;
+            a.href = canvas.toDataURL('image/png');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
     }
 
     return (
