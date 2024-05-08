@@ -30,7 +30,9 @@ const HorToolbar = () => {
         <div className="vertToolbar">
             <button
                 className="toolbarBtn"
-                onClick={() => {toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session))}}
+                onClick={() => {
+                    toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session), "Pointer");
+                }}
             >
                 pointer
             </button>
@@ -38,7 +40,7 @@ const HorToolbar = () => {
             <button
                 className="toolbarBtn"
                 onClick={() => {
-                    toolState.setTool(new Hand(canvasState.canvas, canvasState.socket, canvasState.session))
+                    toolState.setTool(new Hand(canvasState.canvas, canvasState.socket, canvasState.session), "Hand");
                 }}
             >
                 Hand
@@ -46,14 +48,18 @@ const HorToolbar = () => {
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session), "Brush");
+                }}
             >
                 Brush
             </button>
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Eraser(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Eraser(canvasState.canvas, canvasState.socket, canvasState.session), "Eraser");
+                }}
             >
                 Eraser
             </button>
@@ -61,7 +67,7 @@ const HorToolbar = () => {
             <button
                 className="toolbarBtn "
                 onClick={() => {
-                    toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session));
+                    toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session), "Line");
                 }}
             >
                 Line
@@ -69,35 +75,45 @@ const HorToolbar = () => {
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Rectangle(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Rectangle(canvasState.canvas, canvasState.socket, canvasState.session), "Rect");
+                }}
             >
                 Rect
             </button>
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Square(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Square(canvasState.canvas, canvasState.socket, canvasState.session), "Square");
+                }}
             >
                 Square
             </button>
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Circle(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Circle(canvasState.canvas, canvasState.socket, canvasState.session), "Circle");
+                }}
             >
                 Circle
             </button>
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Ellipse(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Ellipse(canvasState.canvas, canvasState.socket, canvasState.session), "Ellipse");
+                }}
             >
                 Ellipse
             </button>
 
             <button
                 className="toolbarBtn "
-                onClick={() => toolState.setTool(new Text(canvasState.canvas, canvasState.socket, canvasState.session))}
+                onClick={() => {
+                    toolState.setTool(new Text(canvasState.canvas, canvasState.socket, canvasState.session), "Text");
+                }}
             >
                 Text
             </button>

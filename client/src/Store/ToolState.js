@@ -3,14 +3,16 @@ import canvasState from "./CanvasState";
 
 class ToolState {
     tool = null;
+    toolType = "";
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    setTool(tool){
+    setTool(tool, type){
         this.tool = tool;
         canvasState.setCurFigure(null);
+        this.toolType = type;
     }
 
     setFillColor(color){

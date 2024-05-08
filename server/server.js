@@ -103,7 +103,6 @@ app.get('/getRoom', (req, res) => {
                 console.error('Ошибка выполнения запроса: ', error);
                 throw error;
             }
-            console.log(result)
             return result.length ? res.status(200).json() : res.status(404).json()
         })
     } catch (e) {
