@@ -7,6 +7,8 @@ import '../Resources/Styles/InviteModal.css'
 import InviteModal from "./InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
 import {autorun} from "mobx";
+import Pointer from "../Tools/Pointer";
+import Canvas from "./Canvas";
 
 const HorToolbar = ({chatActive, setChatActive}) => {
     const fontSizeRef = useRef(null);
@@ -16,13 +18,16 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     const textRef = useRef(null);
     const canvasColorRef = useRef(null);
 
+    const timer = useRef(null)
+
     const stroke = useRef(null);
     const strokeColor = useRef(null);
     const fill = useRef(null);
 
     const navigate = useNavigate()
 
-    const [ModalActive, setModalActive] = useState(false)
+    const [ModalActive, setModalActive] = useState(false);
+
 
     autorun(() => {
         // update figure params
@@ -49,6 +54,17 @@ const HorToolbar = ({chatActive, setChatActive}) => {
             canvasColorRef.current.value = canvasState.background ?? '#ffffff';
 
     });
+
+    const handleSend = (callback) => {
+        if (canvasState.curFigure)
+            Pointer.changeFigureParams(canvasState.curFigure.id, stroke.current.value, strokeColor.current.value, fill.current.value, fontSizeRef.current.value, fontFamilyRef.current.value, textRef.current.value);
+        canvasState.setBackground(canvasColorRef.current.value);
+        canvasState.setWidth(widthRef.current.value);
+        canvasState.setHeight(heightRef.current.value);
+        clearTimeout(timer.current);
+
+        timer.current = setTimeout(callback, 500);
+    }
 
     const changeFigureParams = () => {
         if (canvasState.curFigure) {
@@ -78,11 +94,11 @@ const HorToolbar = ({chatActive, setChatActive}) => {
         })
     }
 
-    const changeBackgroundHandler = (color) => {
+    const changeBackgroundHandler = () => {
         sendMessage(canvasState.socket,{
             id: canvasState.session,
             method: 'changeBackground',
-            color: color
+            color: canvasColorRef.current.value
         })
     }
 
@@ -110,7 +126,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     defaultValue={1}
                     onChange={e => {
                         toolState.setStrokeWidth(e.target.value)
-                        changeFigureParams()
+                        if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 />
 
@@ -120,7 +136,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     defaultValue = "#000000"
                     onChange={e => {
                         toolState.setStrokeColor(e.target.value)
-                        changeFigureParams()
+                        if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 />
 
@@ -130,7 +146,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     defaultValue = "#FFFFFF"
                     onChange={e => {
                         toolState.setFillColor(e.target.value)
-                        changeFigureParams()
+                        if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 />
 
@@ -142,7 +158,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     defaultValue={16}
                     onChange={(e) => {
                         toolState.setFontSize(e.target.value);
-                        changeFigureParams()
+                        if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 />
 
@@ -150,7 +166,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     ref={textRef}
                     className="textInput"
                     onChange={() => {
-                        changeFigureParams()
+                        if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 />
 
@@ -158,7 +174,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     ref={fontFamilyRef}
                     onChange={(e) => {
                         toolState.setFontFamily(e.target.value)
-                        changeFigureParams()
+                        if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 >
                     <option value = "Arial">Arial</option>
@@ -172,7 +188,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     min = {100}
                     max = {5000}
                     onChange={() => {
-                        changeResolutionHandler()
+                        handleSend(changeResolutionHandler)
                     }}
                 />
 
@@ -182,7 +198,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     min = {100}
                     max = {5000}
                     onChange={() => {
-                        changeResolutionHandler()
+                        handleSend(changeResolutionHandler)
                     }}
                 />
 
@@ -190,7 +206,9 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     ref = {canvasColorRef}
                     type = "color"
                     defaultValue = "#FFFFFF"
-                    onChange={(e) => changeBackgroundHandler(e.target.value)}
+                    onChange={(e) =>
+                        handleSend(changeBackgroundHandler)
+                    }
                 />
 
                 <div className = "buttonChatContainer">
