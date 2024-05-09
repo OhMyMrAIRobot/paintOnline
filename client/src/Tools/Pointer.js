@@ -14,7 +14,7 @@ class Pointer extends Tool{
 
     Listen(){
         this.shapes.forEach(shape => {
-            shape.addEventListener('mousedown', (e) => {
+            shape.addEventListener('mouseup', (e) => {
                 canvasState.setCurFigure(shape);
             });
         });

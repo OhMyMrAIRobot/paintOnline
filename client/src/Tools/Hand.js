@@ -33,21 +33,23 @@ class Hand extends Tool{
 
     MouseUpHandler() {
         this.isMouseDown = false;
-        sendMessage(canvasState.socket, {
-            method: 'draw',
-            id: this.id,
-            figure: {
-                type: 'move',
-                shapeId: this.shape.id,
-                dx: this.endCoords.x - this.startCoords.x,
-                dy: this.endCoords.y - this.startCoords.y,
-            }
-        })
-        Hand.moveShape(this.shapeType, this.shape, this.startCoords.x - this.endCoords.x, this.startCoords.y - this.endCoords.y);
+        if (this.shape) {
+            sendMessage(canvasState.socket, {
+                method: 'draw',
+                id: canvasState.session,
+                figure: {
+                    type: 'move',
+                    shapeId: this.shape.id,
+                    dx: this.endCoords.x - this.startCoords.x,
+                    dy: this.endCoords.y - this.startCoords.y,
+                }
+            })
+            Hand.moveShape(this.shapeType, this.shape, this.startCoords.x - this.endCoords.x, this.startCoords.y - this.endCoords.y);
+        }
     }
 
     MouseMoveHandler(e) {
-        if (this.isMouseDown) {
+        if (this.isMouseDown && this.shape) {
             this.endCoords = this.getPoint(e)
             const dx = this.endCoords.x - this.curCoords.x;
             const dy = this.endCoords.y - this.curCoords.y;

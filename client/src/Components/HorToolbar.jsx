@@ -8,7 +8,6 @@ import InviteModal from "./InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
 import {autorun} from "mobx";
 import Pointer from "../Tools/Pointer";
-import Canvas from "./Canvas";
 
 const HorToolbar = ({chatActive, setChatActive}) => {
     const fontSizeRef = useRef(null);
@@ -17,6 +16,7 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     const heightRef = useRef(null);
     const textRef = useRef(null);
     const canvasColorRef = useRef(null);
+    const deleteRef = useRef(null);
 
     const timer = useRef(null)
 
@@ -38,12 +38,16 @@ const HorToolbar = ({chatActive, setChatActive}) => {
             textRef.current.value = canvasState.curFigure.textContent ?? "";
             fontSizeRef.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'font-size') ?? toolState.fontSize);
             fontFamilyRef.current.value = canvasState.curFigure.getAttributeNS(null, 'font-family') ?? toolState.fontFamily;
+            deleteRef.current.disabled = false;
             toolState.setStrokeWidth(stroke.current.value)
             toolState.setStrokeColor(strokeColor.current.value)
             toolState.setFillColor(fill.current.value)
             toolState.setFontSize(fontSizeRef.current.value)
             toolState.setFontFamily(fontFamilyRef.current.value)
         }
+
+        if (!canvasState.curFigure && deleteRef.current)
+            deleteRef.current.disabled = true;
 
         // update canvas params
         if (widthRef.current)
@@ -54,6 +58,17 @@ const HorToolbar = ({chatActive, setChatActive}) => {
             canvasColorRef.current.value = canvasState.background ?? '#ffffff';
 
     });
+
+    const deleteHandler = () => {
+        sendMessage(canvasState.socket, {
+            method: 'draw',
+            id: canvasState.session,
+            figure: {
+                type: 'removeFigure',
+                shapeId: canvasState.curFigure.id,
+            }
+        })
+    }
 
     const handleSend = (callback) => {
         if (canvasState.curFigure)
@@ -181,6 +196,14 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                     <option value = "Helvetica">Helvetica</option>
                     <option value = "Times New Roman">Times New Roman</option>
                 </select>
+
+                <button
+                    ref = {deleteRef}
+                    // disabled={true}
+                    onClick={() => deleteHandler()}
+                >
+                    Delete
+                </button>
 
                 <input
                     ref = {widthRef}
