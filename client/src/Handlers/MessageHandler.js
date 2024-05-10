@@ -27,11 +27,13 @@ export const MessageHandler = (setMsgArr) => {
                 SaveCanvasHandler()
                 break;
             case 'changeResolution':
+                PushUndoHandler();
                 canvasState.setWidth(msg.width);
                 canvasState.setHeight(msg.height);
                 SaveCanvasHandler()
                 break;
             case 'changeBackground':
+                PushUndoHandler();
                 canvasState.setBackground(msg.color);
                 SaveCanvasHandler()
                 break;

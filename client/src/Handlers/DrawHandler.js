@@ -12,6 +12,12 @@ export const drawHandler = (msg) => {
             Text.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily, figure.fillColor, figure.strokeColor);
             SaveCanvasHandler();
             break;
+        case "removeFigure":
+            canvasState.canvas.removeChild(document.getElementById(figure.shapeId));
+            if (canvasState.curFigure && canvasState.curFigure.id === figure.shapeId)
+                canvasState.setCurFigure(null);
+            SaveCanvasHandler();
+            break;
         case 'move':
             const shapeType = figure.shapeId.substring(0, 4);
             const shape = document.getElementById(figure.shapeId);

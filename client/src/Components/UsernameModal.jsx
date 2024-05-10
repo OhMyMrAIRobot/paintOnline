@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import Modal from "./Modal";
-import '../Style/UsernameModal.css'
+import '../Resources/Styles/UsernameModal.css'
 import canvasState from "../Store/CanvasState";
 
 const UsernameModal = ({modalActive, setModalActive}) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from "./Modal";
 import canvasState from "../Store/CanvasState";
-import '../Style/InviteModal.css'
+import '../Resources/Styles/InviteModal.css'
 
 const InviteModal = ({ModalActive, setModalActive}) => {
 

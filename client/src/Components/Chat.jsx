@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import '../Style/Chat.css'
+import '../Resources/Styles/Chat.css'
 import Draggable from "react-draggable";
 import {sendMessage} from "../Handlers/SendHandler";
 import canvasState from "../Store/CanvasState";

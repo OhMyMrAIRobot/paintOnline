@@ -4,23 +4,12 @@ const WSserver = require('express-ws')(app);
 const aWss = WSserver.getWss();
 const PORT = 3000;
 const cors = require('cors')
-const config = require('./config')
-const mysql = require('mysql2')
 
 app.use(cors())
 app.use(express.json())
 
-const canvas = []
-
-const db = mysql.createConnection(config);
-db.connect(function(err){
-    if (err) {
-        return console.error("Ошибка: " + err.message);
-    }
-    else{
-        console.log("Подключение к серверу MySQL успешно установлено");
-    }
-})
+const sequelize = require('./Database')
+const Room = require("./models/Room");
 
 app.ws('/', (ws,req) => {
     ws.on('message', (msg) => {
@@ -65,77 +54,56 @@ app.ws('/', (ws,req) => {
 
 app.listen(PORT, () => {
     console.log(`server is working on ${PORT}`);
+    dbConnect();
 })
 
-app.post('/createRoom',  (req, res) => {
+const dbConnect = async () => {
     try {
-        const id = req.body.id;
-
-        let query = `INSERT INTO rooms (session) VALUES (${JSON.stringify(id)})`;
-        db.query(query, (error) => {
-            if (error) {
-                console.error('Ошибка выполнения запроса: ', error);
-                throw error;
-            }
-            console.log('Значение успешно добавлено в таблицу');
-        })
-
-        query = `INSERT INTO room_config (session, url) VALUES (${JSON.stringify(id)}, "");`
-        db.query(query, (error) => {
-            if (error) {
-                console.error('Ошибка выполнения запроса: ', error);
-                throw error;
-            }
-            console.log('Значение успешно добавлено в таблицу');
-
-        })
-        return res.status(200).json({id: id})
+        await sequelize.authenticate()
+        console.log('Соединение с БД было успешно установлено')
     } catch (e) {
-        return res.status(500).json({message: e})
+        console.log('Невозможно выполнить подключение к БД: ', e)
     }
+}
+
+app.post('/createRoom',  (req, res) => {
+    const id = req.body.id;
+    Room.create({
+        Session: id,
+    }).then(() => {
+        res.status(200).json({id: id})
+    }).catch((e) => {
+        console.log(e);
+        res.status(500).json({message: e})
+    })
 })
 
 app.get('/getRoom', (req, res) => {
-    try {
-        let query = `SELECT id FROM rooms WHERE session = ${JSON.stringify(req.query.id)}`;
-        db.query(query, (error, result) => {
-            if (error) {
-                console.error('Ошибка выполнения запроса: ', error);
-                throw error;
-            }
-            console.log(result)
-            return result.length ? res.status(200).json() : res.status(404).json()
-        })
-    } catch (e) {
-        return res.status(500).json({message: e})
-    }
+    const id = req.query.id;
+    Room.findOne({
+        where: {
+            Session: id,
+        }
+    }).then((room) => {
+        room ? res.status(200).json() : res.status(404).json()
+    }).catch((e) => {
+        console.log(e);
+        res.status(500).json({message: e})
+    })
 })
 
 app.get('/initialise', (req, res) => {
-    // try {
-    //     let query = `SELECT *, url FROM room_config WHERE session = ${JSON.stringify(req.query.id)};`
-    //     db.query(query, (error, result) => {
-    //         if (error) {
-    //             console.error('Ошибка выполнения запроса: ', error);
-    //             throw error;
-    //         }
-    //         console.log(result[0]);
-    //         const data = {
-    //             width: result[0].width,
-    //             height: result[0].height,
-    //             color: result[0].color,
-    //             url: result[0].url,
-    //             urlWidth: result[0].urlWidth,
-    //             urlHeight: result[0].urlHeight,
-    //         }
-    //         res.json(data)
-    //     })
-    //
-    // } catch (e) {
-    //     return res.status(500).json({message: e})
-    // }
-    const data = {canvas: canvas[0]}
-    res.json(data);
+    const id = req.query.id;
+    Room.findOne({
+        where: {
+            Session: id,
+        }
+    }).then((room) => {
+        room ? res.status(200).json(room) : res.status(404).json()
+    }).catch((e) => {
+        console.log(e);
+        res.status(500).json({message: e})
+    })
 })
 
 const broadcast = (ws, msg) => {
@@ -152,40 +120,21 @@ const connectionHandler = (ws, msg) => {
 }
 
 const saveCanvasHandler = (ws,msg) => {
-    // let query = `UPDATE room_config SET url = ${JSON.stringify(msg.data)}, urlWidth = ${msg.width}, urlHeight = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
-    // db.query(query, (error, result) => {
-    //     if (error) {
-    //         console.error('Ошибка выполнения запроса: ', error);
-    //         throw error;
-    //     }
-    //     else
-    //         console.log('url loaded');
-    // })
-    canvas[0] = msg.canvas;
+    Room.update({ Canvas: msg.canvas }, {
+        where: {
+            Session: msg.id
+        }
+    }).then((result) => {
+        console.log(result)
+    }).catch((e) => {
+        console.log(e);
+    })
 }
 
 const changeResolutionHandler = (ws, msg) => {
-    // let query = `UPDATE room_config SET width = ${msg.width}, height = ${msg.height} WHERE session = ${JSON.stringify(msg.id)};`
-    // db.query(query, (error, result) => {
-    //     if (error) {
-    //         console.error('Ошибка выполнения запроса: ', error);
-    //         throw error;
-    //     }
-    //     else
-    //         console.log('resolution loaded');
-    // })
     broadcast(ws, msg)
 }
 
 const changeBackgroundHandler = (ws,msg) => {
-    // let query = `UPDATE room_config SET color = ${JSON.stringify(msg.color)} WHERE session = ${JSON.stringify(msg.id)}`
-    // db.query(query, (error, result) => {
-    //     if (error) {
-    //         console.error('Ошибка выполнения запроса: ', error);
-    //         throw error;
-    //     }
-    //     else
-    //         console.log('background loaded');
-    // })
     broadcast(ws, msg)
 }

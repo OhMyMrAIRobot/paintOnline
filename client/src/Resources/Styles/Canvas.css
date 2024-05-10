@@ -1,4 +1,4 @@
-@import "./Variables.css";
+@import "Variables.css";
 
 .canvas{
     margin-left: var(--canvas-offset-x);
