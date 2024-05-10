@@ -10,7 +10,6 @@ const Canvas = observer(() => {
         canvasState.setCanvas(canvasRef.current);
     }, [])
 
-
     return (
         <svg
             id="canvas"
