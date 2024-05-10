@@ -8,8 +8,8 @@ const cors = require('cors')
 app.use(cors())
 app.use(express.json())
 
-const db = require('./datebase/database')
-const rooms = db.rooms
+const sequelize = require('./Database')
+const Room = require("./models/Room");
 
 app.ws('/', (ws,req) => {
     ws.on('message', (msg) => {
@@ -54,11 +54,21 @@ app.ws('/', (ws,req) => {
 
 app.listen(PORT, () => {
     console.log(`server is working on ${PORT}`);
+    dbConnect();
 })
+
+const dbConnect = async () => {
+    try {
+        await sequelize.authenticate()
+        console.log('Соединение с БД было успешно установлено')
+    } catch (e) {
+        console.log('Невозможно выполнить подключение к БД: ', e)
+    }
+}
 
 app.post('/createRoom',  (req, res) => {
     const id = req.body.id;
-    rooms.create({
+    Room.create({
         Session: id,
     }).then(() => {
         res.status(200).json({id: id})
@@ -70,7 +80,7 @@ app.post('/createRoom',  (req, res) => {
 
 app.get('/getRoom', (req, res) => {
     const id = req.query.id;
-    rooms.findOne({
+    Room.findOne({
         where: {
             Session: id,
         }
@@ -84,7 +94,7 @@ app.get('/getRoom', (req, res) => {
 
 app.get('/initialise', (req, res) => {
     const id = req.query.id;
-    rooms.findOne({
+    Room.findOne({
         where: {
             Session: id,
         }
@@ -110,7 +120,7 @@ const connectionHandler = (ws, msg) => {
 }
 
 const saveCanvasHandler = (ws,msg) => {
-    rooms.update({ Canvas: msg.canvas }, {
+    Room.update({ Canvas: msg.canvas }, {
         where: {
             Session: msg.id
         }
