@@ -1,7 +1,5 @@
 import Tool from "./Tool";
-import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
-import {sendMessage} from "../Handlers/SendHandler";
 
 class Pointer extends Tool{
 
@@ -39,6 +37,32 @@ class Pointer extends Tool{
         }
         if (shape.textContent !== "")
             shape.textContent = text;
+    }
+
+    static downFigure(id) {
+        const children = Array.from(canvasState.canvas.children);
+        const index = children.findIndex(child => child.id === id);
+
+        if (index > 0) {
+            const movedElement = children.splice(index, 1)[0];
+            children.splice(index - 1, 0, movedElement);
+
+            canvasState.canvas.innerHTML = '';
+            children.forEach(child => canvasState.canvas.appendChild(child));
+        }
+    }
+
+    static upFigure(id) {
+        const children = Array.from(canvasState.canvas.children);
+
+        const index = children.findIndex(child => child.id === id);
+
+        if (index !== -1 && index < children.length - 1) {
+            const movedElement = children.splice(index, 1)[0];
+            children.splice(index + 1, 0, movedElement);
+            canvasState.canvas.innerHTML = '';
+            children.forEach(child => canvasState.canvas.appendChild(child));
+        }
     }
 
 }

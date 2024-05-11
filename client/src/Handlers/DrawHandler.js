@@ -10,13 +10,11 @@ export const drawHandler = (msg) => {
     switch (figure.type){
         case "text":
             Text.Draw(canvasState.canvas, figure.id, figure.x, figure.y, figure.text, figure.fontSize, figure.fontFamily, figure.fillColor, figure.strokeColor);
-            SaveCanvasHandler();
             break;
         case "removeFigure":
             canvasState.canvas.removeChild(document.getElementById(figure.shapeId));
             if (canvasState.curFigure && canvasState.curFigure.id === figure.shapeId)
                 canvasState.setCurFigure(null);
-            SaveCanvasHandler();
             break;
         case 'move':
             const shapeType = figure.shapeId.substring(0, 4);
@@ -25,6 +23,12 @@ export const drawHandler = (msg) => {
             break
         case 'changeFigure':
             Pointer.changeFigureParams(figure.shapeId, figure.strokeWidth, figure.stroke, figure.fill, figure.fontSize, figure.fontFamily, figure.text)
+            break;
+        case 'downFigure':
+            Pointer.downFigure(figure.shapeId)
+            break;
+        case 'upFigure':
+            Pointer.upFigure(figure.shapeId)
             break;
         default:
             const newSVGElement = parser.parseFromString(figure.shape, 'image/svg+xml').documentElement;

@@ -17,6 +17,8 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     const textRef = useRef(null);
     const canvasColorRef = useRef(null);
     const deleteRef = useRef(null);
+    const upRef = useRef(null);
+    const downRef = useRef(null);
 
     const timer = useRef(null)
 
@@ -39,6 +41,8 @@ const HorToolbar = ({chatActive, setChatActive}) => {
             fontSizeRef.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'font-size') ?? toolState.fontSize);
             fontFamilyRef.current.value = canvasState.curFigure.getAttributeNS(null, 'font-family') ?? toolState.fontFamily;
             deleteRef.current.disabled = false;
+            upRef.current.disabled = false;
+            downRef.current.disabled = false;
             toolState.setStrokeWidth(stroke.current.value)
             toolState.setStrokeColor(strokeColor.current.value)
             toolState.setFillColor(fill.current.value)
@@ -48,6 +52,12 @@ const HorToolbar = ({chatActive, setChatActive}) => {
 
         if (!canvasState.curFigure && deleteRef.current)
             deleteRef.current.disabled = true;
+
+        if (!canvasState.curFigure && upRef.current)
+            upRef.current.disabled = true;
+
+        if (!canvasState.curFigure && downRef.current)
+            downRef.current.disabled = true;
 
         // update canvas params
         if (widthRef.current)
@@ -65,6 +75,28 @@ const HorToolbar = ({chatActive, setChatActive}) => {
             id: canvasState.session,
             figure: {
                 type: 'removeFigure',
+                shapeId: canvasState.curFigure.id,
+            }
+        })
+    }
+
+    const downFigureHandler = () => {
+        sendMessage(canvasState.socket, {
+            method: 'draw',
+            id: canvasState.session,
+            figure: {
+                type: 'downFigure',
+                shapeId: canvasState.curFigure.id,
+            }
+        })
+    }
+
+    const upFigureHandler = () => {
+        sendMessage(canvasState.socket, {
+            method: 'draw',
+            id: canvasState.session,
+            figure: {
+                type: 'upFigure',
                 shapeId: canvasState.curFigure.id,
             }
         })
@@ -131,13 +163,13 @@ const HorToolbar = ({chatActive, setChatActive}) => {
         <div>
             <InviteModal ModalActive={ModalActive} setModalActive={setModalActive}/>
 
-            <div id = "hor" className = "horToolbar">
+            <div id="hor" className="horToolbar">
 
                 <input
-                    ref = {stroke}
-                    type = "number"
-                    min = {1}
-                    max = {100}
+                    ref={stroke}
+                    type="number"
+                    min={1}
+                    max={100}
                     defaultValue={1}
                     onChange={e => {
                         toolState.setStrokeWidth(e.target.value)
@@ -146,9 +178,9 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                 />
 
                 <input
-                    ref = {strokeColor}
-                    type = "color"
-                    defaultValue = "#000000"
+                    ref={strokeColor}
+                    type="color"
+                    defaultValue="#000000"
                     onChange={e => {
                         toolState.setStrokeColor(e.target.value)
                         if (canvasState.curFigure) handleSend(changeFigureParams)
@@ -156,9 +188,9 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                 />
 
                 <input
-                    ref = {fill}
-                    type = "color"
-                    defaultValue = "#FFFFFF"
+                    ref={fill}
+                    type="color"
+                    defaultValue="#FFFFFF"
                     onChange={e => {
                         toolState.setFillColor(e.target.value)
                         if (canvasState.curFigure) handleSend(changeFigureParams)
@@ -166,10 +198,10 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                 />
 
                 <input
-                    ref = {fontSizeRef}
-                    type = "number"
-                    min = {1}
-                    max = {50}
+                    ref={fontSizeRef}
+                    type="number"
+                    min={1}
+                    max={50}
                     defaultValue={16}
                     onChange={(e) => {
                         toolState.setFontSize(e.target.value);
@@ -192,69 +224,82 @@ const HorToolbar = ({chatActive, setChatActive}) => {
                         if (canvasState.curFigure) handleSend(changeFigureParams)
                     }}
                 >
-                    <option value = "Arial">Arial</option>
-                    <option value = "Helvetica">Helvetica</option>
-                    <option value = "Times New Roman">Times New Roman</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Times New Roman">Times New Roman</option>
                 </select>
 
                 <button
-                    ref = {deleteRef}
-                    // disabled={true}
+                    ref = {upRef}
+                    onClick={() => upFigureHandler()}
+                >
+                    Up
+                </button>
+
+                <button
+                    ref = {downRef}
+                    onClick={() => downFigureHandler()}
+                >
+                    Down
+                </button>
+
+                <button
+                    ref={deleteRef}
                     onClick={() => deleteHandler()}
                 >
-                    Delete
+                    Del
                 </button>
 
                 <input
-                    ref = {widthRef}
-                    type = "number"
-                    min = {100}
-                    max = {5000}
+                    ref={widthRef}
+                    type="number"
+                    min={100}
+                    max={5000}
                     onChange={() => {
                         handleSend(changeResolutionHandler)
                     }}
                 />
 
                 <input
-                    ref = {heightRef}
-                    type = "number"
-                    min = {100}
-                    max = {5000}
+                    ref={heightRef}
+                    type="number"
+                    min={100}
+                    max={5000}
                     onChange={() => {
                         handleSend(changeResolutionHandler)
                     }}
                 />
 
                 <input
-                    ref = {canvasColorRef}
-                    type = "color"
-                    defaultValue = "#FFFFFF"
+                    ref={canvasColorRef}
+                    type="color"
+                    defaultValue="#FFFFFF"
                     onChange={(e) =>
                         handleSend(changeBackgroundHandler)
                     }
                 />
 
-                <div className = "buttonChatContainer">
-                    <span id = "newMsgSpan" className = "newMsgSpan"></span>
-                    <button className = "buttonChat"
-                        onClick = {() => {
-                            setChatActive(!chatActive);
-                            document.getElementById('newMsgSpan').style.opacity = '0';
-                        }}
+                <div className="buttonChatContainer">
+                    <span id="newMsgSpan" className="newMsgSpan"></span>
+                    <button className="buttonChat"
+                            onClick={() => {
+                                setChatActive(!chatActive);
+                                document.getElementById('newMsgSpan').style.opacity = '0';
+                            }}
                     >
                         Chat
                     </button>
                 </div>
 
                 <button
-                    className = "buttonInvite"
-                    onClick = {() => setModalActive(true)}
+                    className="buttonInvite"
+                    onClick={() => setModalActive(true)}
                 >
                     Invite friends
                 </button>
 
                 <button
-                    className = "buttonLeave"
+                    className="buttonLeave"
                     onClick={() => leaveRoomHandler()}
                 >
                     Leave
