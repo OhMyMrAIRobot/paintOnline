@@ -4,13 +4,13 @@ import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
 import {useNavigate} from "react-router-dom";
 import '../Resources/Styles/InviteModal.css'
-import InviteModal from "./InviteModal";
+import InviteModal from "./Modals/InviteModal";
 import {sendMessage} from "../Handlers/SendHandler";
-import {autorun} from "mobx";
+import {autorun, reaction} from "mobx";
 import Pointer from "../Tools/Pointer";
+import NumberInput from "./NumberInput";
 
 const HorToolbar = ({chatActive, setChatActive}) => {
-    const fontSizeRef = useRef(null);
     const fontFamilyRef = useRef(null);
     const widthRef = useRef(null);
     const heightRef = useRef(null);
@@ -20,54 +20,63 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     const upRef = useRef(null);
     const downRef = useRef(null);
 
-    const timer = useRef(null)
-
-    const stroke = useRef(null);
     const strokeColor = useRef(null);
     const fill = useRef(null);
 
     const navigate = useNavigate()
 
     const [ModalActive, setModalActive] = useState(false);
-
+    const [strokeWidth, setStrokeWidth] = useState(1);
+    const [fontSize, setFontSize] = useState(16);
 
     autorun(() => {
-        // update figure params
-        if (canvasState.curFigure) {
-            fill.current.value = canvasState.curFigure.getAttributeNS(null, 'fill') ?? toolState.fillColor;
-            strokeColor.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke') ?? toolState.strokeColor;
-            stroke.current.value = canvasState.curFigure.getAttributeNS(null, 'stroke-width') ?? toolState.strokeWidth;
-            textRef.current.value = canvasState.curFigure.textContent ?? "";
-            fontSizeRef.current.value = parseInt(canvasState.curFigure.getAttributeNS(null, 'font-size') ?? toolState.fontSize);
-            fontFamilyRef.current.value = canvasState.curFigure.getAttributeNS(null, 'font-family') ?? toolState.fontFamily;
-            deleteRef.current.disabled = false;
-            upRef.current.disabled = false;
-            downRef.current.disabled = false;
-            toolState.setStrokeWidth(stroke.current.value)
-            toolState.setStrokeColor(strokeColor.current.value)
-            toolState.setFillColor(fill.current.value)
-            toolState.setFontSize(fontSizeRef.current.value)
-            toolState.setFontFamily(fontFamilyRef.current.value)
-        }
-
-        if (!canvasState.curFigure && deleteRef.current)
-            deleteRef.current.disabled = true;
-
-        if (!canvasState.curFigure && upRef.current)
-            upRef.current.disabled = true;
-
-        if (!canvasState.curFigure && downRef.current)
-            downRef.current.disabled = true;
-
-        // update canvas params
         if (widthRef.current)
             widthRef.current.value = canvasState.width ?? 0;
         if (heightRef.current)
             heightRef.current.value = canvasState.height ?? 0;
         if (canvasColorRef.current)
             canvasColorRef.current.value = canvasState.background ?? '#ffffff';
+    })
 
-    });
+    reaction(
+        () => canvasState.curFigure,
+        (curFigure) => {
+            if (curFigure) {
+                fill.current.value = curFigure.getAttributeNS(null, 'fill') ?? toolState.fillColor;
+                strokeColor.current.value = curFigure.getAttributeNS(null, 'stroke') ?? toolState.strokeColor;
+                textRef.current.value = curFigure.textContent ?? "";
+                setStrokeWidth(curFigure.getAttributeNS(null, 'stroke-width') ?? toolState.strokeWidth);
+                setFontSize(parseInt(curFigure.getAttributeNS(null, 'font-size') ?? toolState.fontSize));
+                fontFamilyRef.current.value = curFigure.getAttributeNS(null, 'font-family') ?? toolState.fontFamily;
+
+                deleteRef.current.disabled = false;
+                deleteRef.current.style.cursor ='pointer';
+                upRef.current.disabled = false;
+                upRef.current.style.cursor ='pointer';
+                downRef.current.disabled = false;
+                downRef.current.style.cursor ='pointer';
+                toolState.setStrokeWidth(strokeWidth);
+                toolState.setStrokeColor(strokeColor.current.value);
+                toolState.setFillColor(fill.current.value);
+                toolState.setFontSize(fontSize);
+                toolState.setFontFamily(fontFamilyRef.current.value);
+            } else {
+                fill.current.value = toolState.fillColor;
+                strokeColor.current.value = toolState.strokeColor;
+                textRef.current.value = "";
+                setStrokeWidth(toolState.strokeWidth);
+                setFontSize(toolState.fontSize);
+                fontFamilyRef.current.value = toolState.fontFamily;
+
+                deleteRef.current.disabled = true;
+                deleteRef.current.style.cursor ='not-allowed';
+                upRef.current.disabled = true;
+                upRef.current.style.cursor ='not-allowed';
+                downRef.current.disabled = true;
+                downRef.current.style.cursor ='not-allowed';
+            }
+        }
+    );
 
     const deleteHandler = () => {
         sendMessage(canvasState.socket, {
@@ -103,14 +112,14 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     }
 
     const handleSend = (callback) => {
-        if (canvasState.curFigure)
-            Pointer.changeFigureParams(canvasState.curFigure.id, stroke.current.value, strokeColor.current.value, fill.current.value, fontSizeRef.current.value, fontFamilyRef.current.value, textRef.current.value);
+        if (canvasState.curFigure){
+            Pointer.changeFigureParams(canvasState.curFigure.id, strokeWidth, strokeColor.current.value, fill.current.value, fontSize, fontFamilyRef.current.value, textRef.current.value);
+        }
         canvasState.setBackground(canvasColorRef.current.value);
         canvasState.setWidth(widthRef.current.value);
         canvasState.setHeight(heightRef.current.value);
-        clearTimeout(timer.current);
 
-        timer.current = setTimeout(callback, 500);
+        callback();
     }
 
     const changeFigureParams = () => {
@@ -164,146 +173,204 @@ const HorToolbar = ({chatActive, setChatActive}) => {
             <InviteModal ModalActive={ModalActive} setModalActive={setModalActive}/>
 
             <div id="hor" className="horToolbar">
+                <div className="groupBar">
+                    <div className="groupItems">
+                        <div style={{display: 'flex'}}>
+                            <NumberInput
+                                value={strokeWidth}
+                                setValue={(newValue) => {
+                                    setStrokeWidth(newValue);
+                                    toolState.setStrokeWidth(newValue);
+                                    if (canvasState.curFigure) handleSend(changeFigureParams);
+                                }}
+                                minValue={1}
+                                maxValue={16}
+                            />
+                            <label htmlFor="strokeInput" className="toolbarBtn stroke"></label>
+                        </div>
 
-                <input
-                    ref={stroke}
-                    type="number"
-                    min={1}
-                    max={100}
-                    defaultValue={1}
-                    onChange={e => {
-                        toolState.setStrokeWidth(e.target.value)
-                        if (canvasState.curFigure) handleSend(changeFigureParams)
-                    }}
-                />
+                        <div style={{display: 'flex'}}>
+                            <input
+                                className="colorInput"
+                                id="strokeColorInput"
+                                ref={strokeColor}
+                                type="color"
+                                defaultValue="#000000"
+                                onChange={e => {
+                                    toolState.setStrokeColor(e.target.value)
+                                    if (canvasState.curFigure) handleSend(changeFigureParams)
+                                }}
+                            />
+                            <label htmlFor="strokeColorInput" className="toolbarBtn strokeColor"></label>
+                        </div>
 
-                <input
-                    ref={strokeColor}
-                    type="color"
-                    defaultValue="#000000"
-                    onChange={e => {
-                        toolState.setStrokeColor(e.target.value)
-                        if (canvasState.curFigure) handleSend(changeFigureParams)
-                    }}
-                />
+                        <div style={{display: 'flex'}}>
+                            <input
+                                id="fillColor"
+                                className="colorInput"
+                                ref={fill}
+                                type="color"
+                                defaultValue="#FFFFFF"
+                                onChange={e => {
+                                    toolState.setFillColor(e.target.value)
+                                    if (canvasState.curFigure) handleSend(changeFigureParams)
+                                }}
+                            />
+                            <label htmlFor="fillColor" className="toolbarBtn fillColor"></label>
+                        </div>
 
-                <input
-                    ref={fill}
-                    type="color"
-                    defaultValue="#FFFFFF"
-                    onChange={e => {
-                        toolState.setFillColor(e.target.value)
-                        if (canvasState.curFigure) handleSend(changeFigureParams)
-                    }}
-                />
-
-                <input
-                    ref={fontSizeRef}
-                    type="number"
-                    min={1}
-                    max={50}
-                    defaultValue={16}
-                    onChange={(e) => {
-                        toolState.setFontSize(e.target.value);
-                        if (canvasState.curFigure) handleSend(changeFigureParams)
-                    }}
-                />
-
-                <input
-                    ref={textRef}
-                    className="textInput"
-                    onChange={() => {
-                        if (canvasState.curFigure) handleSend(changeFigureParams)
-                    }}
-                />
-
-                <select
-                    ref={fontFamilyRef}
-                    onChange={(e) => {
-                        toolState.setFontFamily(e.target.value)
-                        if (canvasState.curFigure) handleSend(changeFigureParams)
-                    }}
-                >
-                    <option value="Arial">Arial</option>
-                    <option value="Helvetica">Helvetica</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                </select>
-
-                <button
-                    ref = {upRef}
-                    onClick={() => upFigureHandler()}
-                >
-                    Up
-                </button>
-
-                <button
-                    ref = {downRef}
-                    onClick={() => downFigureHandler()}
-                >
-                    Down
-                </button>
-
-                <button
-                    ref={deleteRef}
-                    onClick={() => deleteHandler()}
-                >
-                    Del
-                </button>
-
-                <input
-                    ref={widthRef}
-                    type="number"
-                    min={100}
-                    max={5000}
-                    onChange={() => {
-                        handleSend(changeResolutionHandler)
-                    }}
-                />
-
-                <input
-                    ref={heightRef}
-                    type="number"
-                    min={100}
-                    max={5000}
-                    onChange={() => {
-                        handleSend(changeResolutionHandler)
-                    }}
-                />
-
-                <input
-                    ref={canvasColorRef}
-                    type="color"
-                    defaultValue="#FFFFFF"
-                    onChange={(e) =>
-                        handleSend(changeBackgroundHandler)
-                    }
-                />
-
-                <div className="buttonChatContainer">
-                    <span id="newMsgSpan" className="newMsgSpan"></span>
-                    <button className="buttonChat"
-                            onClick={() => {
-                                setChatActive(!chatActive);
-                                document.getElementById('newMsgSpan').style.opacity = '0';
-                            }}
-                    >
-                        Chat
-                    </button>
+                    </div>
+                    <p>Figure</p>
                 </div>
 
-                <button
-                    className="buttonInvite"
-                    onClick={() => setModalActive(true)}
-                >
-                    Invite friends
-                </button>
+                <span style={{height: '100%', borderRight: '1px solid black'}}></span>
 
-                <button
-                    className="buttonLeave"
-                    onClick={() => leaveRoomHandler()}
-                >
-                    Leave
-                </button>
+                <div className="groupBar">
+                    <div className="groupItems">
+
+                        <input
+                            ref={textRef}
+                            className="textInput"
+                            onChange={() => {
+                                if (canvasState.curFigure) handleSend(changeFigureParams)
+                            }}
+                        />
+                        <div style={{display: 'flex'}}>
+                            <NumberInput
+                                value={fontSize}
+                                minValue={8}
+                                maxValue={32}
+                                setValue={(newValue) => {
+                                    setFontSize(newValue);
+                                    toolState.setFontSize(fontSize);
+                                    if (canvasState.curFigure) handleSend(changeFigureParams)
+                                }}
+                            />
+                            <label htmlFor="fontSize" className="toolbarBtn fontSize"></label>
+                        </div>
+
+                        <select
+                            ref={fontFamilyRef}
+                            onChange={(e) => {
+                                toolState.setFontFamily(e.target.value)
+                                if (canvasState.curFigure) handleSend(changeFigureParams)
+                            }}
+                        >
+                            <option value="Arial">Arial</option>
+                            <option value="Helvetica">Helvetica</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                        </select>
+                    </div>
+                    <p>Text</p>
+                </div>
+
+                <span style={{height: '100%', borderRight: '1px solid black'}}></span>
+
+                <div className="groupBar">
+                    <div className="groupItems">
+                        <button
+                            className="toolbarBtn down"
+                            ref={downRef}
+                            onClick={() => downFigureHandler()}
+                        />
+
+                        <button
+                            className="toolbarBtn up"
+                            ref={upRef}
+                            onClick={() => upFigureHandler()}
+                        />
+
+
+                        <button
+                            className="toolbarBtn delete"
+                            ref={deleteRef}
+                            onClick={() => deleteHandler()}
+                        />
+                    </div>
+                    <p>Actions</p>
+                </div>
+
+                <span style={{height: '100%', borderRight: '1px solid black'}}></span>
+
+                <div className="groupBar">
+                    <div className="groupItems">
+                        <div style={{display: 'flex'}}>
+                            <input
+                                ref={widthRef}
+                                type="number"
+                                min={100}
+                                max={5000}
+                                onChange={() => {
+                                    handleSend(changeResolutionHandler)
+                                }}
+                            />
+                            <label htmlFor="" className="toolbarBtn width"></label>
+                        </div>
+
+                        <div style={{display: 'flex'}}>
+                            <input
+                                ref={heightRef}
+                                type="number"
+                                min={100}
+                                max={5000}
+                                onChange={() => {
+                                    handleSend(changeResolutionHandler)
+                                }}
+                            />
+                            <label htmlFor="" className="toolbarBtn height"></label>
+                        </div>
+
+                        <div style={{display: 'flex'}}>
+                            <input
+                                id="canvasFill"
+                                className="colorInput"
+                                ref={canvasColorRef}
+                                type="color"
+                                defaultValue="#FFFFFF"
+                                onChange={() =>
+                                    handleSend(changeBackgroundHandler)
+                                }
+                            />
+                            <label htmlFor="canvasFill" className="toolbarBtn fillColor"></label>
+                        </div>
+
+                    </div>
+                    <p>Canvas settings</p>
+                </div>
+
+                <span style={{height: '100%', borderRight: '1px solid black'}}></span>
+
+                <div className="groupBar">
+                    <div className="groupItems">
+                        <div className="buttonChatContainer">
+                        <span id="newMsgSpan" className="newMsgSpan"></span>
+                            <button className="buttonChat"
+                                    onClick={() => {
+                                        setChatActive(!chatActive);
+                                        document.getElementById('newMsgSpan').style.opacity = '0';
+                                    }}
+                            >
+                            Chat
+                            </button>
+                        </div>
+
+                        <button
+                            className="buttonInvite"
+                            onClick={() => setModalActive(true)}
+                        >
+                            Invite friends
+                        </button>
+
+                        <button
+                            className="buttonLeave"
+                            onClick={() => leaveRoomHandler()}
+                        >
+                            Leave
+                        </button>
+                    </div>
+                    <p>Navigation</p>
+                </div>
+
 
             </div>
         </div>

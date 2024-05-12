@@ -6,7 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import canvasState from "../Store/CanvasState";
 import {sendMessage} from "../Handlers/SendHandler";
 import {CheckIsRoomValid} from "../Handlers/CheckIsRoomValid";
-import UsernameModal from "../Components/UsernameModal";
+import UsernameModal from "../Components/Modals/UsernameModal";
 import {MessageHandler} from "../Handlers/MessageHandler";
 import {InitialiseCanvas} from "../Handlers/InitialiseCanvasHandler";
 import Chat from "../Components/Chat";

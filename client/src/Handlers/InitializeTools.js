@@ -1,9 +1,9 @@
 import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
-import Brush from "../Tools/Brush";
+import Pointer from "../Tools/Pointer";
 
 export const InitializeTools = () => {
-    toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session), "Brush");
+    toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session), "Pointer");
     toolState.setFillColor("#FFFFFF");
     toolState.setStrokeColor("#000000");
     toolState.setStrokeWidth(1);

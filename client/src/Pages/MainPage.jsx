@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "../Resources/Styles/Mainpage.css"
 import {useNavigate} from "react-router-dom";
-import JoinModal from "../Components/JoinModal";
+import JoinModal from "../Components/Modals/JoinModal";
 import {CreateRoomHandler} from "../Handlers/CreateRoomHandler";
 
 const MainPage = () => {

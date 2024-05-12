@@ -38,115 +38,89 @@ const HorToolbar = () => {
     return (
         <div className="vertToolbar">
             <button
-                className="toolbarBtn"
+                className="toolbarBtn edit"
                 onClick={() => {
                     toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session), "Pointer");
                 }}
-            >
-                pointer
-            </button>
+            />
 
             <button
-                className="toolbarBtn"
+                className="toolbarBtn move"
                 onClick={() => {
                     toolState.setTool(new Hand(canvasState.canvas, canvasState.socket, canvasState.session), "Hand");
                 }}
-            >
-                Hand
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
+                className="toolbarBtn brush"
                 onClick={() => {
                     toolState.setTool(new Brush(canvasState.canvas, canvasState.socket, canvasState.session), "Brush");
                 }}
-            >
-                Brush
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
+                className="toolbarBtn eraser"
                 onClick={() => {
                     toolState.setTool(new Eraser(canvasState.canvas, canvasState.socket, canvasState.session), "Eraser");
                 }}
-            >
-                Eraser
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
+                className="toolbarBtn line"
                 onClick={() => {
                     toolState.setTool(new Line(canvasState.canvas, canvasState.socket, canvasState.session), "Line");
                 }}
-            >
-                Line
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
+                className="toolbarBtn rectangle"
                 onClick={() => {
                     toolState.setTool(new Rectangle(canvasState.canvas, canvasState.socket, canvasState.session), "Rect");
                 }}
-            >
-                Rect
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
+                className="toolbarBtn square"
                 onClick={() => {
                     toolState.setTool(new Square(canvasState.canvas, canvasState.socket, canvasState.session), "Square");
                 }}
-            >
-                Square
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
-                onClick={() => {
-                    toolState.setTool(new Circle(canvasState.canvas, canvasState.socket, canvasState.session), "Circle");
-                }}
-            >
-                Circle
-            </button>
-
-            <button
-                className="toolbarBtn "
+                className="toolbarBtn ellipse"
                 onClick={() => {
                     toolState.setTool(new Ellipse(canvasState.canvas, canvasState.socket, canvasState.session), "Ellipse");
                 }}
-            >
-                Ellipse
-            </button>
+            />
 
             <button
-                className="toolbarBtn "
+                className="toolbarBtn circle"
+                onClick={() => {
+                    toolState.setTool(new Circle(canvasState.canvas, canvasState.socket, canvasState.session), "Circle");
+                }}
+            />
+
+            <button
+                className="toolbarBtn text"
                 onClick={() => {
                     toolState.setTool(new Text(canvasState.canvas, canvasState.socket, canvasState.session), "Text");
                 }}
-            >
-                Text
-            </button>
+            />
 
             <button
-                className="toolbarBtn next"
-                onClick={(e) => sendMessage(canvasState.socket, {id: canvasState.session, method: 'redo'})}
-            >
-                Next
-            </button>
-
-            <button
-                className="toolbarBtn "
+                className="toolbarBtn undo"
                 onClick={(e) => sendMessage(canvasState.socket, {id: canvasState.session, method: 'undo'})}
-            >
-                Prev
-            </button>
+            />
+
+            <button
+                className="toolbarBtn redo"
+                onClick={(e) => sendMessage(canvasState.socket, {id: canvasState.session, method: 'redo'})}
+            />
 
             <button
                 className="toolbarBtn save"
                 onClick={() => download()}
-            >
-                Save
-            </button>
+            />
         </div>
     );
 };

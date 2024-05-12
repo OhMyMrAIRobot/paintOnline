@@ -1,10 +1,10 @@
 :root{
     --background-color: #F6F6F6;
-    --toolbar-height: 40px;
-    --toolbar-offset: 50px;
-    --btn-size: 25px;
+    --toolbar-height: 60px;
+    --toolbar-offset: 60px;
+    --btn-size: 30px;
     --chat-width: 300px;
     --chat-height: 500px;
-    --canvas-offset-x: 60px;
-    --canvas-offset-y: 60px;
+    --canvas-offset-x: 70px;
+    --canvas-offset-y: 70px;
 }

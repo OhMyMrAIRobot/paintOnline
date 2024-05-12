@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import Modal from "./Modal";
-import "../Resources/Styles/JoinModal.css"
-import {CheckIsRoomValid} from "../Handlers/CheckIsRoomValid";
+import "../../Resources/Styles/JoinModal.css"
+import {CheckIsRoomValid} from "../../Handlers/CheckIsRoomValid";
 
 const JoinModal = ({ModalActive, setModalActive, jumpToRoom}) => {
 
