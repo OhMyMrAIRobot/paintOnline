@@ -1,6 +1,7 @@
 import Rectangle from "./Rectangle";
 import {sendMessage} from "../Handlers/SendHandler";
 import toolState from "../Store/ToolState";
+import canvasState from "../Store/CanvasState";
 
 class Square extends Rectangle {
 
@@ -10,6 +11,7 @@ class Square extends Rectangle {
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
+            canvas: serializer.serializeToString(canvasState.canvas),
             figure: {
                 type: 'square',
                 shape:serializer.serializeToString(this.shape),

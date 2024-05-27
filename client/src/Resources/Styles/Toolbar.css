@@ -2,7 +2,7 @@
 
 .vertToolbar{
     position: fixed;
-    height: 80%;
+    height: 90%;
     width: var(--toolbar-height);
     min-width: var(--toolbar-height);
     margin-top: var(--toolbar-offset);

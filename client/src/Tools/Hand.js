@@ -34,18 +34,25 @@ class Hand extends Tool{
     MouseUpHandler() {
         this.isMouseDown = false;
         if (this.shape) {
-            sendMessage(canvasState.socket, {
-                method: 'draw',
-                id: canvasState.session,
-                figure: {
-                    type: 'move',
-                    shapeId: this.shape.id,
-                    dx: this.endCoords.x - this.startCoords.x,
-                    dy: this.endCoords.y - this.startCoords.y,
-                }
-            })
-            Hand.moveShape(this.shapeType, this.shape, this.startCoords.x - this.endCoords.x, this.startCoords.y - this.endCoords.y);
-        }
+            try {
+                const serializer = new XMLSerializer();
+                sendMessage(canvasState.socket, {
+                    method: 'draw',
+                    id: canvasState.session,
+                    canvas: serializer.serializeToString(canvasState.canvas),
+                    figure: {
+                        type: 'move',
+                        shapeId: this.shape.id,
+                        dx: this.endCoords.x - this.startCoords.x,
+                        dy: this.endCoords.y - this.startCoords.y,
+                    }
+                })
+                Hand.moveShape(this.shapeType, this.shape, this.startCoords.x - this.endCoords.x, this.startCoords.y - this.endCoords.y);
+
+            } catch (e) {
+
+            }
+           }
     }
 
     MouseMoveHandler(e) {

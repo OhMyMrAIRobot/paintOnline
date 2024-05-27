@@ -1,6 +1,5 @@
 import {makeAutoObservable} from "mobx";
 import {LoadCanvas} from "../Handlers/LoadCanvas";
-import toolState from "./ToolState";
 
 class CanvasState {
     canvas = null;
@@ -15,6 +14,9 @@ class CanvasState {
     width = 1280;
     height = 720;
     background = '#ffffff';
+    oldWidth = 1280;
+    oldHeight = 720;
+    oldBackground = '#ffffff'
 
     constructor() {
         makeAutoObservable(this)
@@ -56,6 +58,18 @@ class CanvasState {
         })
     }
 
+    setOldWidth(width) {
+        this.oldWidth = width;
+    }
+
+    setOldHeight(height) {
+        this.oldHeight = height;
+    }
+
+    setOldBackground(color) {
+        this.oldBackground = color;
+    }
+
     pushToUndo(data){
         this.undoList.push(data);
     }
@@ -74,10 +88,6 @@ class CanvasState {
             const saveHTML = this.undoList.pop();
             this.pushToRedo(serializer.serializeToString(this.canvas));
             LoadCanvas(saveHTML);
-            // console.log(toolState.tool.canvas)
-            // console.log(this.canvas)
-            // toolState.tool.canvas = this.canvas
-            // console.log(toolState.tool.canvas)
         }
     }
 

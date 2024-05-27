@@ -21,6 +21,7 @@ class Brush extends Tool {
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
+            canvas: serializer.serializeToString(canvasState.canvas),
             figure: {
                 type: 'brush',
                 shape:serializer.serializeToString(this.shape)

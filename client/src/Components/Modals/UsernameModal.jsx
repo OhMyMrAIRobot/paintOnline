@@ -2,18 +2,29 @@ import React, {useRef} from 'react';
 import Modal from "./Modal";
 import '../../Resources/Styles/UsernameModal.css'
 import canvasState from "../../Store/CanvasState";
+import axios from "axios";
 
 const UsernameModal = ({modalActive, setModalActive}) => {
 
-    const usernameRef = useRef(null)
+    const usernameRef = useRef(null);
 
     const preConnectionHandler = () => {
-        if (usernameRef.current.value !== ""){
-            canvasState.setUsername(usernameRef.current.value)
-            setModalActive(false);
+        if (usernameRef.current.value === ""){
+            usernameRef.current.style.borderColor = "red"
         }
         else{
-            usernameRef.current.style.borderColor = "red"
+            axios.get(`http://localhost:3000/checkUsername?id=${canvasState.session}&user=${usernameRef.current.value}`)
+                .then((res) => {
+                    if (res.data.exists === false) {
+                        canvasState.setUsername(usernameRef.current.value)
+                        setModalActive(false);
+                    } else {
+                        usernameRef.current.style.borderColor = "red"
+                    }
+                })
+                .catch(() => {
+                    usernameRef.current.style.borderColor = "red"
+                })
         }
     }
     

@@ -6,8 +6,8 @@ const NumberInput = ({value, setValue, minValue, maxValue}) => {
         <div className="numberInputContainer">
             <span>{parseInt(value)} px</span>
             <div className="numberInputButtons">
-                <span onClick={() => setValue(value + 1 <= maxValue ? value + 1 : value)} className="numberInputButton">+</span>
-                <span onClick={() => setValue(value - 1 >= minValue ? value - 1 : value)} className="numberInputButton">-</span>
+                <span onClick={() => setValue(parseInt(value) + 1 <= maxValue ? parseInt(value) + 1 : value)} className="numberInputButton">+</span>
+                <span onClick={() => setValue(parseInt(value) - 1 >= minValue ? parseInt(value) - 1 : value)} className="numberInputButton">-</span>
             </div>
         </div>
     );

@@ -41,11 +41,13 @@ class Text extends Tool {
     TextInputKeydownHandler(e) {
         if (e.key === 'Enter') {
             this.text = this.input.value;
-
+            const serializer = new XMLSerializer();
             if (this.text.trim() !== '') {
+                Text.Draw(canvasState.canvas, canvasState.session, this.xStart, this.yStart, this.text, toolState.fontSize, toolState.fontFamily, toolState.fillColor, toolState.strokeColor);
                 sendMessage(this.socket, {
                     method: 'draw',
                     id: this.id,
+                    canvas: serializer.serializeToString(canvasState.canvas),
                     figure: {
                         type: 'text',
                         x: this.xStart,

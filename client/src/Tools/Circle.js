@@ -1,6 +1,7 @@
 import Ellipse from "./Ellipse";
 import {sendMessage} from "../Handlers/SendHandler";
 import toolState from "../Store/ToolState";
+import canvasState from "../Store/CanvasState";
 
 class Circle extends Ellipse{
 
@@ -10,6 +11,7 @@ class Circle extends Ellipse{
         sendMessage(this.socket, {
             method: 'draw',
             id: this.id,
+            canvas: serializer.serializeToString(canvasState.canvas),
             figure: {
                 type: 'circle',
                 shape:serializer.serializeToString(this.shape),

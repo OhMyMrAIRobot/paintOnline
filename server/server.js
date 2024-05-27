@@ -11,7 +11,9 @@ app.use(express.json())
 const sequelize = require('./Database')
 const Room = require("./models/Room");
 
-app.ws('/', (ws,req) => {
+let usernames = [];
+
+app.ws('/', (ws) => {
     ws.on('message', (msg) => {
         msg = JSON.parse(msg);
         switch (msg.method){
@@ -19,34 +21,37 @@ app.ws('/', (ws,req) => {
                 connectionHandler(ws, msg);
                 break;
             case 'draw':
-                broadcast(ws, msg);
+                saveCanvasHandler(msg);
+                broadcast(msg);
                 break;
             case 'move':
-                broadcast(ws,msg);
+                broadcast(msg);
                 break;
             case 'pushUndo':
-                broadcast(ws,msg);
+                broadcast(msg);
                 break;
             case 'undo':
-                broadcast(ws,msg);
+                saveCanvasHandler(msg);
+                broadcast(msg);
                 break;
             case 'redo':
-                broadcast(ws,msg);
+                saveCanvasHandler(msg);
+                broadcast(msg);
                 break;
             case 'changeResolution':
-                changeResolutionHandler(ws,msg);
+                broadcast(msg);
                 break;
             case 'changeBackground':
-                changeBackgroundHandler(ws, msg);
+                broadcast(msg);
                 break;
             case 'message':
-                broadcast(ws, msg);
+                broadcast(msg);
                 break;
             case "close":
-                broadcast(ws, msg);
+                closeHandler(msg);
                 break;
             case 'saveCanvas':
-                saveCanvasHandler(ws,msg);
+                saveCanvasHandler(msg);
                 break;
         }
     })
@@ -92,6 +97,23 @@ app.get('/getRoom', (req, res) => {
     })
 })
 
+app.get(`/checkUsername`, (req, res) => {
+    const username = req.query.user;
+    const roomId = req.query.id;
+    const room = usernames.find(r => r.roomId === roomId);
+    if (room) {
+        if (room.usernames.includes(username)) {
+            res.status(200).json({exists: true});
+        } else {
+            room.usernames.push(username);
+            res.status(200).json({exists: false});
+        }
+    } else {
+        usernames.push({roomId: roomId, usernames: [username]});
+        res.status(200).json({exists: false});
+    }
+})
+
 app.get('/initialise', (req, res) => {
     const id = req.query.id;
     Room.findOne({
@@ -106,7 +128,7 @@ app.get('/initialise', (req, res) => {
     })
 })
 
-const broadcast = (ws, msg) => {
+const broadcast = (msg) => {
     aWss.clients.forEach(client => {
         if (client.id === msg.id){
             client.send(JSON.stringify(msg))
@@ -116,25 +138,70 @@ const broadcast = (ws, msg) => {
 
 const connectionHandler = (ws, msg) => {
     ws.id = msg.id;
-    broadcast(ws, msg);
+    broadcast(msg);
 }
 
-const saveCanvasHandler = (ws,msg) => {
-    Room.update({ Canvas: msg.canvas }, {
-        where: {
-            Session: msg.id
+const saveCanvasHandler = (msg) => {
+    if (msg.canvas !== null) {
+        Room.update({ Canvas: msg.canvas }, {
+            where: {
+                Session: msg.id
+            }
+        }).catch((e) => {
+            console.log(e);
+        })
+    }
+}
+
+// const closeHandler = (msg) => {
+//     const roomId = msg.id;
+//     const username = msg.username;
+//
+//     const room = usernames.find(r => r.roomId === roomId);
+//     if (room) {
+//         room.usernames = room.usernames.filter(user => user !== username);
+//         if (room.usernames.length === 0) {
+//             usernames.splice(usernames.indexOf(room), 1);
+//         }
+//     }
+//     broadcast(msg);
+// }
+const closeHandler = (msg) => {
+    const roomId = msg.id;
+    const username = msg.username;
+
+    let roomIndex = -1;
+    let room = null;
+
+    // Поиск комнаты по roomId
+    for (let i = 0; i < usernames.length; i++) {
+        if (usernames[i].roomId === roomId) {
+            room = usernames[i];
+            roomIndex = i;
         }
-    }).then((result) => {
-        console.log(result)
-    }).catch((e) => {
-        console.log(e);
-    })
-}
+    }
 
-const changeResolutionHandler = (ws, msg) => {
-    broadcast(ws, msg)
-}
+    if (room !== null) {
+        let newUsernames = [];
+        // Фильтрация имен пользователей
+        for (let i = 0; i < room.usernames.length; i++) {
+            if (room.usernames[i] !== username) {
+                newUsernames.push(room.usernames[i]);
+            }
+        }
+        room.usernames = newUsernames;
 
-const changeBackgroundHandler = (ws,msg) => {
-    broadcast(ws, msg)
+        // Удаление комнаты, если в ней больше нет пользователей
+        if (room.usernames.length === 0) {
+            let newUsernamesList = [];
+            for (let i = 0; i < usernames.length; i++) {
+                if (i !== roomIndex) {
+                    newUsernamesList.push(usernames[i]);
+                }
+            }
+            usernames = newUsernamesList;
+        }
+    }
+
+    broadcast(msg);
 }

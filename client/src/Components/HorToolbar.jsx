@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../Resources/Styles/Toolbar.css'
 import toolState from "../Store/ToolState";
 import canvasState from "../Store/CanvasState";
@@ -9,6 +9,7 @@ import {sendMessage} from "../Handlers/SendHandler";
 import {autorun, reaction} from "mobx";
 import Pointer from "../Tools/Pointer";
 import NumberInput from "./NumberInput";
+import {SaveCanvasHandler} from "../Handlers/SaveCanvasHandler";
 
 const HorToolbar = ({chatActive, setChatActive}) => {
     const fontFamilyRef = useRef(null);
@@ -22,6 +23,8 @@ const HorToolbar = ({chatActive, setChatActive}) => {
 
     const strokeColor = useRef(null);
     const fill = useRef(null);
+
+    const timer = useRef(null)
 
     const navigate = useNavigate()
 
@@ -37,6 +40,15 @@ const HorToolbar = ({chatActive, setChatActive}) => {
         if (canvasColorRef.current)
             canvasColorRef.current.value = canvasState.background ?? '#ffffff';
     })
+
+    useEffect(() => {
+        deleteRef.current.disabled = true;
+        deleteRef.current.style.cursor ='not-allowed';
+        upRef.current.disabled = true;
+        upRef.current.style.cursor ='not-allowed';
+        downRef.current.disabled = true;
+        downRef.current.style.cursor ='not-allowed';
+    }, [])
 
     reaction(
         () => canvasState.curFigure,
@@ -112,14 +124,15 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     }
 
     const handleSend = (callback) => {
-        if (canvasState.curFigure){
+        if (canvasState.curFigure)
             Pointer.changeFigureParams(canvasState.curFigure.id, strokeWidth, strokeColor.current.value, fill.current.value, fontSize, fontFamilyRef.current.value, textRef.current.value);
-        }
+
         canvasState.setBackground(canvasColorRef.current.value);
         canvasState.setWidth(widthRef.current.value);
         canvasState.setHeight(heightRef.current.value);
+        clearTimeout(timer.current);
 
-        callback();
+        timer.current = setTimeout(callback, 500);
     }
 
     const changeFigureParams = () => {
@@ -142,20 +155,33 @@ const HorToolbar = ({chatActive, setChatActive}) => {
     }
 
     const changeResolutionHandler = () => {
+        const width = widthRef.current.value;
+        const height = heightRef.current.value;
+        canvasState.setWidth(canvasState.oldWidth);
+        canvasState.setHeight(canvasState.oldHeight);
         sendMessage(canvasState.socket,{
             method: 'changeResolution',
             id: canvasState.session,
-            width: widthRef.current.value,
-            height: heightRef.current.value
+            width: width,
+            height: height,
+            oldCanvas: new XMLSerializer().serializeToString(canvasState.canvas),
         })
+        canvasState.setWidth(width);
+        canvasState.setHeight(height);
+        SaveCanvasHandler()
     }
 
     const changeBackgroundHandler = () => {
+        const color = canvasColorRef.current.value;
+        canvasState.setBackground(canvasState.oldBackground);
         sendMessage(canvasState.socket,{
             id: canvasState.session,
             method: 'changeBackground',
-            color: canvasColorRef.current.value
+            color: color,
+            oldCanvas: new XMLSerializer().serializeToString(canvasState.canvas)
         })
+        canvasState.setBackground(color)
+        SaveCanvasHandler()
     }
 
     const leaveRoomHandler = () => {

@@ -1,7 +1,5 @@
 import canvasState from "../Store/CanvasState";
 import {drawHandler} from "./DrawHandler";
-import {SaveCanvasHandler} from "./SaveCanvasHandler";
-import {PushUndoHandler} from "./PushUndoHandler";
 
 export const MessageHandler = (setMsgArr) => {
     canvasState.socket.onmessage = (event) => {
@@ -11,31 +9,27 @@ export const MessageHandler = (setMsgArr) => {
                 setMsgArr(prev => [...prev, {type: "connect", user: msg.username}])
                 break;
             case 'draw':
-                PushUndoHandler();
+                canvasState.pushToUndo(new XMLSerializer().serializeToString(canvasState.canvas))
                 drawHandler(msg);
-                SaveCanvasHandler()
-                break;
-            case 'pushUndo':
-                canvasState.pushToUndo(msg.data)
                 break;
             case 'undo':
                 canvasState.undo();
-                SaveCanvasHandler()
                 break;
             case 'redo':
                 canvasState.redo();
-                SaveCanvasHandler()
                 break;
             case 'changeResolution':
-                PushUndoHandler();
+                canvasState.pushToUndo(msg.oldCanvas)
                 canvasState.setWidth(msg.width);
                 canvasState.setHeight(msg.height);
-                SaveCanvasHandler()
+                canvasState.setOldWidth(msg.width);
+                canvasState.setOldHeight(msg.height);
                 break;
             case 'changeBackground':
-                PushUndoHandler();
+                console.log(msg);
+                canvasState.pushToUndo(msg.oldCanvas)
                 canvasState.setBackground(msg.color);
-                SaveCanvasHandler()
+                canvasState.setOldBackground(msg.color);
                 break;
             case 'message':
                 setMsgArr(prev => [...prev, {

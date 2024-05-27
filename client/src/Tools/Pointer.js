@@ -43,10 +43,9 @@ class Pointer extends Tool{
         const children = Array.from(canvasState.canvas.children);
         const index = children.findIndex(child => child.id === id);
 
-        if (index > 0) {
+        if (index !== -1) {
             const movedElement = children.splice(index, 1)[0];
-            children.splice(index - 1, 0, movedElement);
-
+            children.unshift(movedElement);
             canvasState.canvas.innerHTML = '';
             children.forEach(child => canvasState.canvas.appendChild(child));
         }
@@ -54,12 +53,11 @@ class Pointer extends Tool{
 
     static upFigure(id) {
         const children = Array.from(canvasState.canvas.children);
-
         const index = children.findIndex(child => child.id === id);
 
-        if (index !== -1 && index < children.length - 1) {
+        if (index !== -1) {
             const movedElement = children.splice(index, 1)[0];
-            children.splice(index + 1, 0, movedElement);
+            children.push(movedElement);
             canvasState.canvas.innerHTML = '';
             children.forEach(child => canvasState.canvas.appendChild(child));
         }

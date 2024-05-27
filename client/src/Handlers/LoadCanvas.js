@@ -11,9 +11,9 @@ import Circle from "../Tools/Circle";
 import Ellipse from "../Tools/Ellipse";
 import Text from "../Tools/Text";
 
-export const LoadCanvas = (saveHTML) => {
+export const LoadCanvas = (HTML) => {
     const parser = new DOMParser();
-    const newSVGElement = parser.parseFromString(saveHTML, 'image/svg+xml').documentElement;
+    const newSVGElement = parser.parseFromString(HTML, 'image/svg+xml').documentElement;
 
     const parent = canvasState.canvas.parentNode;
     parent.removeChild(canvasState.canvas);
@@ -23,7 +23,9 @@ export const LoadCanvas = (saveHTML) => {
     canvasState.setWidth(parseInt(window.getComputedStyle(canvasState.canvas).width));
     canvasState.setHeight(parseInt(window.getComputedStyle(canvasState.canvas).height));
     canvasState.setBackground(rgbToHex(window.getComputedStyle(canvasState.canvas).backgroundColor));
-
+    canvasState.setOldWidth(parseInt(window.getComputedStyle(canvasState.canvas).width));
+    canvasState.setOldHeight(parseInt(window.getComputedStyle(canvasState.canvas).height));
+    canvasState.setOldBackground(rgbToHex(window.getComputedStyle(canvasState.canvas).backgroundColor));
     loadTool(toolState.toolType.slice(0,4));
 }
 
@@ -37,6 +39,7 @@ const rgbToHex = (rgb) => {
 }
 
 const loadTool = (tool) => {
+
     switch (tool) {
         case "Poin":
             toolState.setTool(new Pointer(canvasState.canvas, canvasState.socket, canvasState.session), "Pointer");

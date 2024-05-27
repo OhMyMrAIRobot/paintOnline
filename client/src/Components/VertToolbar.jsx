@@ -109,12 +109,20 @@ const HorToolbar = () => {
 
             <button
                 className="toolbarBtn undo"
-                onClick={(e) => sendMessage(canvasState.socket, {id: canvasState.session, method: 'undo'})}
+                onClick={(e) => sendMessage(canvasState.socket, {
+                    id: canvasState.session,
+                    method: 'undo',
+                    canvas: canvasState.undoList.length > 0 ? canvasState.undoList.at(-1) : null,
+                })}
             />
 
             <button
                 className="toolbarBtn redo"
-                onClick={(e) => sendMessage(canvasState.socket, {id: canvasState.session, method: 'redo'})}
+                onClick={(e) => sendMessage(canvasState.socket, {
+                    id: canvasState.session,
+                    method: 'redo',
+                    canvas: canvasState.redoList.length > 0 ? canvasState.redoList.at(-1) : null,
+                })}
             />
 
             <button

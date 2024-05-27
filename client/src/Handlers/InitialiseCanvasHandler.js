@@ -11,7 +11,7 @@ export const InitialiseCanvas = () => {
                 LoadCanvas(saveHTML)
             }
 
-            document.title = `${canvasState.session} | ${canvasState.username}`;
+            document.title = `${canvasState.username} | ${canvasState.session}`;
         }
     )
 }

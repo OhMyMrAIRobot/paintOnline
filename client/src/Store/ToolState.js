@@ -34,7 +34,6 @@ class ToolState {
     setFontFamily(fontFamily) {
         this.fontFamily = fontFamily;
     }
-
 }
 
 export default new ToolState();

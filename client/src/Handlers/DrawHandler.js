@@ -1,6 +1,5 @@
 import canvasState from "../Store/CanvasState";
 import Text from "../Tools/Text"
-import {SaveCanvasHandler} from "./SaveCanvasHandler";
 import Hand from "../Tools/Hand";
 import Pointer from "../Tools/Pointer";
 
